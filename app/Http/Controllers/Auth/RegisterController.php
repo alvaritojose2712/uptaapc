@@ -29,13 +29,20 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    protected $redirectTo = "/admin";
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
+
+    public function showRegistrationForm()
+    {
+        return view('auth.register',["carreras"=>\App\carrera::all()]);
+    }
+
+
     public function __construct()
     {
         $this->middleware('guest');
@@ -51,6 +58,8 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'cedula' => ['required', 'integer', 'unique:users'],
+            'role' => ['required'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -66,6 +75,9 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'cedula' => $data['cedula'],
+            'role' => $data['role'],
+            'carrera' => isset($data['carrera'])?$data['carrera']:1,
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);

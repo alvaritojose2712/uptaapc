@@ -12,4 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+   .sass('resources/sass/app.scss', 'public/css')
+   .react('resources/js/components/nominaconfig.jsx', 'public/js/nominaconfig.js');
+
+mix.react('resources/js/components/ce.asignatura.jsx', 'public/js/ce.asignatura.js');

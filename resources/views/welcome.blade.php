@@ -4,10 +4,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/png" href="{{ asset('uptaapc.png') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
         <title>UPT del Alto Apure "Pedro Camejo"</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <!-- Styles -->
         <style>
@@ -68,7 +68,7 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ route('admin') }}">Inicio</a>
                     @else
                         <a href="{{ route('login') }}">Ingresar</a>
 
@@ -93,7 +93,7 @@
                     <a href="https://nova.laravel.com">Nova</a>
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://vapor.laravel.com">Vapor</a> --}}
-                    <a href="/seminario/unirse">Seminario</a>
+                    
                 </div>
             </div>
         </div>

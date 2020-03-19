@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\estudiante;
+use App\user;
 use Illuminate\Http\Request;
 use Dompdf\Dompdf;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
+use Auth;
 
 class EstudianteController extends Controller
 {
@@ -37,7 +39,8 @@ class EstudianteController extends Controller
      */
     public function index()
     {
-        return view("estudiante.index");
+        return view("estudiante.dashboard");
+        
     }
 
     /**
@@ -45,9 +48,9 @@ class EstudianteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function primerainscripcion()
     {
-        return view("estudiante.create");
+        return view("estudiante.primerainscripcion");
     }
 
     /**
@@ -56,27 +59,43 @@ class EstudianteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $nameFolder = "docsSeminario/".$request->cedula . " " . date("Y-m-d")." ".time();
 
-        $file_cedula = $request->file('file_cedula')->storeAs($nameFolder,"file_cedula".".".$request->file('file_cedula')->extension());
-        $file_fondo_negro = $request->file('file_fondo_negro')->storeAs($nameFolder,"file_fondo_negro".".".$request->file('file_fondo_negro')->extension());
-        $file_notas = $request->file('file_notas')->storeAs($nameFolder,"file_notas".".".$request->file('file_notas')->extension());
-        $file_foto = $request->file('file_foto')->storeAs($nameFolder,"file_foto".".".$request->file('file_foto')->extension());
-        $file_const_traba = $request->file('file_const_traba')->storeAs($nameFolder,"file_const_traba".".".$request->file('file_const_traba')->extension());
-        $file_sintesis = $request->file('file_sintesis')->storeAs($nameFolder,"file_sintesis".".".$request->file('file_sintesis')->extension());
-        $file_pago = $request->file('file_pago')->storeAs($nameFolder,"file_pago".".".$request->file('file_pago')->extension());
+    public function primerainscripcionStore(Request $request){
 
-
-
-
-
+        
+        $request->validate([
+            'nombres' => 'required|string|max:255',
+            'apellidos' => 'required|string|max:255',
+            'nacimiento' => 'required|date',
+            'sexo' => 'required|string|max:255',
+            'estado_civil' => 'required',
+            'direccion' => 'required|string|max:255',
+            'ciudad' => 'required|string|max:255',
+            'estado' => 'required|string|max:255',
+            'telefono' => 'required|digits:11',
+            'trabaja' => 'required|boolean',
+            'hijos' => 'required|integer',
+            'file_cedula' => "required|mimes:jpg,jpeg,png,pdf|max:10240",
+            'file_fondo_negro' => "required|mimes:jpg,jpeg,png,pdf|max:10240",
+            'file_notas' => "required|mimes:jpg,jpeg,png,pdf|max:10240",
+            'file_foto' => "required|mimes:jpg,jpeg,png|max:10240",
+        ]);
+        $nameFolder = "public/docsEstudiante/".$request->cedula . " " . date("Y-m-d")." ".time();
         try {
+            
+
+
+            $file_cedula = $request->file('file_cedula')->storeAs($nameFolder,"file_cedula".".".$request->file('file_cedula')->extension());
+            $file_fondo_negro = $request->file('file_fondo_negro')->storeAs($nameFolder,"file_fondo_negro".".".$request->file('file_fondo_negro')->extension());
+            $file_notas = $request->file('file_notas')->storeAs($nameFolder,"file_notas".".".$request->file('file_notas')->extension());
+            $file_foto = $request->file('file_foto')->storeAs($nameFolder,"file_foto".".".$request->file('file_foto')->extension());
+
+
             $obj = new estudiante;
             $obj->nombres = $request->nombres;
             $obj->apellidos = $request->apellidos;
-            $obj->cedula = $request->cedula;
+            $obj->cedula = Auth::user()->cedula;
+
             $obj->nacimiento = $request->nacimiento;
             $obj->sexo = $request->sexo;
             $obj->l_trabajo = $request->l_trabajo;
@@ -88,47 +107,28 @@ class EstudianteController extends Controller
             $obj->trabaja = $request->trabaja;
             $obj->hijos = $request->hijos;
             $obj->observacion = $request->observacion;
-            
-
 
             $obj->nameFolder = $nameFolder;
-            $obj->file_cedula = $file_cedula;
-            $obj->file_pago = $file_pago;
-
-            $obj->file_fondo_negro = $file_fondo_negro;
-            $obj->file_notas = $file_notas;
-            $obj->file_foto = $file_foto;
-            $obj->file_const_traba = $file_const_traba;
-            $obj->file_sintesis = $file_sintesis;
             
-            
-            
-            
+            $obj->file_cedula = preg_replace("/public\//","storage/",$file_cedula,1);
+            $obj->file_fondo_negro = preg_replace("/public\//","storage/",$file_fondo_negro,1);
+            $obj->file_notas = preg_replace("/public\//","storage/",$file_notas,1);
+            $obj->file_foto = preg_replace("/public\//","storage/",$file_foto,1);
             
             $obj->save();
-            if($obj){
-                
-                // if($request->egresos) $obj->egresos_hogar()->createMany($request->egresos);
-                // if($request->servicios) $obj->vivienda_servicios()->createMany($request->servicios);
-                // if($request->enfermos) $obj->familiares_enfer()->createMany($request->enfermos);
-                // if($request->familiares) $obj->familiares()->createMany($request->familiares);
-                // if($request->discapacitados) $obj->discapacidad_estudiante()->createMany($request->discapacitados);
-            }
-          
 
-            return "¡Guardado Correctamente!";
+            $user = User::where("cedula",Auth::user()->cedula)->update(["inscrito"=>1]);
+
+
+            return redirect("estudiante")->with('msj', 'Los datos han sido enviados satisfactoriamente.');
         } catch (\Exception $e) {
             Storage::deleteDirectory($nameFolder);
-            
-            if($e->errorInfo[1] == 1062){
-                
-                return "Error: ¡Número de cédula ya existe!";
-            }else{
-
-                return "Error al Guardar ".$e->getMessage();
-            }
-                // return "Error al Guardar ".$e->getMessage();
+            return redirect()->back()->withInput()->withErrors($e->getMessage());
         }
+           
+    }
+    public function store(Request $request)
+    {
     }
 
     /**

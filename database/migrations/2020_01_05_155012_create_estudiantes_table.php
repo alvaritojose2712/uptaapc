@@ -17,7 +17,6 @@ class CreateEstudiantesTable extends Migration
             $table->increments('id');
             $table->string('nombres');
             $table->string('apellidos');
-            $table->integer('cedula')->unique();
             $table->date('nacimiento');
             $table->enum('sexo',["Masculino","Femenino"]);
             $table->string('l_trabajo')->nullable();
@@ -26,7 +25,9 @@ class CreateEstudiantesTable extends Migration
             $table->string('ciudad');
             $table->string('estado');
             $table->string('telefono');
-            $table->string('email')->unique();
+            $table->integer("cedula")->unsigned();
+            $table->foreign("cedula")->references("cedula")->on("users")->onUpdate("cascade")->onDelete("cascade");
+
             $table->boolean('trabaja');
             $table->integer('hijos');
 

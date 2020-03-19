@@ -1,10 +1,16 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+//@import url('https://fonts.googleapis.com/css?family=Nunito');
+@font-face {
+	font-family: "Nunito";
+	src: url("../fonts/Nunito-Regular.ttf") format("trueType");
+}
 
 // Variables
 @import 'variables';
 
 // Bootstrap
-//@import '~bootstrap/scss/bootstrap';
-//@import '~font-awesome/scss/font-awesome';
-@import '~mdb-pro_4.8.10/scss/mdb';
+@import '~bootstrap/scss/bootstrap';
+//@import '~mdbootstrap/scss/mdb-lite-free';
+@import '~font-awesome/scss/font-awesome';
+@import './custom.css';
+

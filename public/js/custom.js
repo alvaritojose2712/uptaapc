@@ -9,9 +9,6 @@ function toggleNoti() {
         top:"0%",
     },200)
 }
-$(document).ready(function() {
-	$('.mdb-select').materialSelect();
-});
 
 $(document).on("click",".autoHide",function(){
 	let name = $(this).data("handle")
@@ -24,7 +21,9 @@ $(document).on("click",".autoHide",function(){
 	}
 })
 
-
+$(document).on("keyup",'.numero',function (){
+    this.value = (this.value + '').replace(/[^0-9]/g, '');
+});
  function req(data,url,id,type="GET",callback=null,before=null){
     $.ajaxSetup({
         headers: {
@@ -35,8 +34,8 @@ $(document).on("click",".autoHide",function(){
         url: url,
         data: data,
         type: type,
-        processData: false,
-        contentType: false,
+        // processData: false,
+        // contentType: false,
         beforeSend(){
             if(before)before()            
             let spinner = '<div class="d-flex justify-content-center"><div class="spinner-grow" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div></div>'
@@ -47,7 +46,8 @@ $(document).on("click",".autoHide",function(){
             if(callback)callback()            
         },
         error: function(err){
-            throw err
+            alert(err.responseJSON.message)
+            console.log(err)
         }
     });
     // console.log(data)
