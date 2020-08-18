@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
@@ -39,7 +40,7 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        return view('auth.register',["carreras"=>\App\carrera::all()]);
+        return view('auth.register');
     }
 
 
@@ -54,7 +55,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    public function validator(array $data)
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
@@ -71,15 +72,16 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
+    public function create(Request $req)
     {
-        return User::create([
-            'name' => $data['name'],
-            'cedula' => $data['cedula'],
-            'role' => $data['role'],
-            'carrera' => isset($data['carrera'])?$data['carrera']:1,
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return $req->all();
+        // return User::create([
+        //     'name' => $data['name'],
+        //     'cedula' => $data['cedula'],
+        //     'role' => $data['role'],
+        //     'carrera' => isset($data['carrera'])?$data['carrera']:1,
+        //     'email' => $data['email'],
+        //     'password' => Hash::make($data['password']),
+        // ]);
     }
 }

@@ -13,15 +13,18 @@ class CreateCarrerasTable extends Migration
             $table->increments('id');
             $table->string('nombre')->unique();
             $table->boolean('disponible')->default(1);
+            $table->boolean('proximamente')->default(0);
             $table->timestamps();
         });
 
         DB::table("carreras")->insert([
-            ["nombre"=>"PNF Informática"],
-            ["nombre"=>"PNF Mecánica"],
-            ["nombre"=>"PNF Civil"],
-            ["nombre"=>"PNF Agroalimentación"],
-            ["nombre"=>"PNF Veterinaria"],
+            ["nombre"=>"PNF Informática","proximamente"=>0],
+            ["nombre"=>"PNF Mecánica","proximamente"=>0],
+            ["nombre"=>"PNF Civil","proximamente"=>0],
+            ["nombre"=>"PNF Agroalimentación","proximamente"=>0],
+            ["nombre"=>"PNF Veterinaria","proximamente"=>0],
+
+            ["nombre"=>"Odontología","proximamente"=>1],
         ]);
     }
 

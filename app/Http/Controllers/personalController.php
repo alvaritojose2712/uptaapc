@@ -5,15 +5,67 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\personal;
 use Illuminate\Support\Facades\Blade;
+use Response;
 
 
 class personalController extends Controller
 {
-    use \App\Traits\ControllerAsyn;
-    protected $model = personal::class;
-    protected $view = "";
-    protected $validate = ['nombre' => 'required|string|max:255'];
-    protected $where = ["id","cedula","apellido","nombre"];
+    
+   public function view()
+   {
+       return view("recursos_humanos.personal.index");
+   }
+    public function index(Request $req)
+    {
+        
+        $data = personal::with(["hijos"])->where(function($q) use ($req){
+            foreach (["id","cedula","apellido","nombre"] as $val) {
+                $q->orWhere($val,"LIKE",$req->q."%");
+            }
+        })->take(10)->orderBy("created_at","desc")->get();
+        
+        return Response::json( $data );
+    }
+    public function store(Request $req){
+        try {
+            $c = new personal;
+            // $c->id_uc = $req->id_uc;
+            // $c->id_profesor = $req->id_profesor;
+            // $c->id_estudiante = $req->id_estudiante;
+            // $c->id_seccion = $req->id_seccion;
+            $c->save();
+            
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["error"=>$e->getMessage()] );
+        }
+
+    }
+    
+    public function update(Request $req){
+        try {
+            $c = personal::find($req->id);
+            // $c->id_uc = $req->id_uc;
+            // $c->id_profesor = $req->id_profesor;
+            // $c->id_estudiante = $req->id_estudiante;
+            // $c->id_seccion = $req->id_seccion;
+            $c->save();
+            
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["error"=>$e->getMessage()] );
+        }
+    }
+
+    public function destroy(Request $req){
+        try {
+            personal::find($req->id)->delete();
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["error"=>$e->getMessage()] );
+        }
+
+    }
     // public function index()
     // {
     //     return personal::with("hijos")->get();

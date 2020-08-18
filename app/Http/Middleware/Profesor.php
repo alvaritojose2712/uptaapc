@@ -16,17 +16,17 @@ class Profesor
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::check()) {
+        if (!session()->has('role')) {
             return redirect()->route("login");
         }
         
-        if (Auth::user()->role == 1) {
+        if (session('role') == 1) {
             return redirect()->route("admin");
         }
-        if (Auth::user()->role == 2) {
+        if (session('role') == 2) {
             return $next($request);
         }
-        if (Auth::user()->role == 3) {
+        if (session('role') == 3) {
             return redirect()->route("estudiante");
         }
     }

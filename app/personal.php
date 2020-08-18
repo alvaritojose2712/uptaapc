@@ -38,4 +38,10 @@ class personal extends Model
     public function hijos() { 
         return $this->hasMany('App\hijos_personal',"cedula_representante","cedula"); 
     }
+    public function nombrecarrera() { 
+        return $this->hasOne('App\carrera',"id","carrera"); 
+    }
+    public function trayecto() { 
+        return $this->hasMany('App\trayecto',"id_estudiante","id"); 
+    }
 }

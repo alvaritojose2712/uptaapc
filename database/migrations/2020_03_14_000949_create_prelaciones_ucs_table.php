@@ -20,6 +20,8 @@ class CreatePrelacionesUcsTable extends Migration
 
             $table->integer("prela")->unsigned();
             $table->foreign("prela")->references("id")->on("ucs")->onUpdate("cascade");
+
+            $table->unique(["id_uc","prela"]);
             $table->timestamps();
         });
     }

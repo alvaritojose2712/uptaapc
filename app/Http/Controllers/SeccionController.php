@@ -4,82 +4,55 @@ namespace App\Http\Controllers;
 
 use App\seccion;
 use Illuminate\Http\Request;
+use Response;
 
 class SeccionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    
+    public function index(Request $req)
     {
-        //
+        
+        $data = seccion::with(["carrera"])->where(function($q) use ($req){
+            foreach (["nombre"] as $val) {
+                $q->orWhere($val,"LIKE",$req->q."%");
+            }
+        })->take(10)->orderBy("id_carrera","asc")->get();
+        
+        return Response::json( $data );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function store(Request $req){
+        try {
+            $c = new seccion;
+            $c->nombre = $req->nombre;
+            $c->id_carrera = $req->id_carrera;
+            $c->save();
+            
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["error"=>$e->getMessage()] );
+        }
+
+    }
+    public function update(Request $req){
+        try {
+            $c = seccion::find($req->id);
+            $c->nombre = $req->nombre;
+            $c->save();
+            
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["error"=>$e->getMessage()] );
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function destroy(Request $req){
+        try {
+            seccion::find($req->id)->delete();
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["error"=>$e->getMessage()] );
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\seccion  $seccion
-     * @return \Illuminate\Http\Response
-     */
-    public function show(seccion $seccion)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\seccion  $seccion
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(seccion $seccion)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\seccion  $seccion
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, seccion $seccion)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\seccion  $seccion
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(seccion $seccion)
-    {
-        //
     }
 }

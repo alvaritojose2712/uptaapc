@@ -20,6 +20,14 @@ class CreateSeccionsTable extends Migration
             $table->foreign("id_carrera")->references("id")->on("carreras")->onUpdate("cascade");
             $table->timestamps();
         });
+        DB::table("seccions")->insert([
+            ["nombre"=>"Vietnam I", "id_carrera"=>1],
+            ["nombre"=>"Vietnam II", "id_carrera"=>1],
+            ["nombre"=>"Portugal I", "id_carrera"=>1],
+            ["nombre"=>"Portugal II", "id_carrera"=>1],
+            ["nombre"=>"Vietnam III", "id_carrera"=>1],
+            ["nombre"=>"La estacada I", "id_carrera"=>1],
+        ]);
     }
 
     /**

@@ -12,4 +12,9 @@ class carrera extends Model
     {
     	return $this->hasMany('App\categoria',"id_carrera","id");
     }
+
+    public function secciones()
+    {
+    	return $this->hasMany('App\seccion',"id_carrera","id");
+    }
 }

@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\sno_valores_personal;
 use Illuminate\Http\Request;
+use Response;
 
 class SnoValoresPersonalController extends Controller
 {
     
-    use \App\Traits\ControllerAsyn;
-    protected $model = sno_valores_personal::class;
-    protected $view = "";
-    protected $validate = ['nombre' => 'required|string|max:255'];
-    protected $where = ["campo","valor"];
+    public function index(Request $req)
+    {
+    	return Response::json(sno_valores_personal::where("campo","LIKE",$req->campo)->get());
+    }
 }

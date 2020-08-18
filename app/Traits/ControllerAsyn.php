@@ -18,14 +18,14 @@ trait ControllerAsyn {
                 foreach ($this->where as $val) {
                     $q->orWhere($val,"LIKE",$req->q."%");
                 }
-            })->take(10)->get();
+            })->orderBy("created_at","desc")->take(10)->get();
             
         }else{
     		$data = $this->model::where(function($q) use ($req,$whe){
     			foreach ($this->where as $val) {
     				$q->orWhere($val,"LIKE",$req->q."%");
     			}
-    		})->take(10)->get();
+    		})->orderBy("created_at","desc")->take(10)->get();
         }
 		
 		return Response::json( $data );

@@ -6,7 +6,7 @@
 
 require('jquery');
 require('./bootstrap');
-// require('./assets/custom.js');
+// require('./custom.js');
 // require('./assets/post.js');
 // require('../../node_modules/mdb-pro_4.8.10/js/mdb.min.js');
 

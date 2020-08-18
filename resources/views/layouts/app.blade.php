@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,11 +7,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('uptaapc.png') }}">
+    <title>UPT del Alto Apure "Pedro Camejo"</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/custom.js') }}"></script>
 
     <!-- Fonts -->
     {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -19,22 +19,73 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <style type="text/css">
-        html, body {
-            background-color: #F5F8FF;
-            color: #636b6f;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 200;
-        }
-    </style>
+   
     @yield("scripts")
 </head>
 <body>
-    <div id="errSection">
-        @include("layouts.error") 
+    <div class="wrapper">
+      <nav class="nav-app">
+        <div class="nav-left"><img src="{{ asset('images/sinapsis/sinapsis.svg') }}" alt="logo sinapsis" height="100%"></div>
+        <div class="nav-right">
+            @if (!session()->has('role'))
+                
+                    <a class="mr-2 btn btn-outline-primary" href="{{ route('home') }}">Inicio</a>
+                
+
+                @if (Route::currentRouteName()!='register')
+                    <a class="mr-2 btn btn-primary" href="{{ route('register') }}">Nuevo ingreso</a>
+                @endif
+            @else
+                <ul class="navbar-nav mr-2">
+                  <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        <span class="badge badge-primary">
+                            {{ session("carrera") }}
+                        </span>
+                        <span class="badge badge-dark">
+                            {{ session("role")==1?"Administrativo":"" }}
+                            {{ session("role")==2?"Profesor":"" }}
+                            {{ session("role")==3?"Estudiante":"" }}
+                        </span>
+                        {{ session("usuario") }}
+                        <span class="caret"></span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        @if (session("role")==3)
+                            @if (session("verificado"))
+                                <a class="dropdown-item bg-success text-light">Verificado</a>
+                            @else
+                                <a class="dropdown-item bg-primary text-light">En espera</a>
+                            @endif
+                        @endif
+                        <a class="dropdown-item text-muted" href="#">
+                            
+                        </a>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                         document.getElementById('logout-form').submit();">
+                            Cerrar Sesión
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                  </li>
+                </ul>
+            @endif
+            
+         
+        </div>
+      </nav>
+      <section id="errSection">@include("layouts.error")</section>
+      <section class="content">
+        @yield('nav')
+        <div id="appreact"></div>
+        @yield('content')
+      </section> 
     </div>
-    <div id="app">
-      <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+     {{--  <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -52,7 +103,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        @guest
+                        @if(!session()->has('role'))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a>
                             </li>
@@ -64,23 +115,28 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                    {{ \Session::get("nombrecarrera") }}
+                                    <span class="badge badge-primary">
+                                        {{ session("carrera") }}
+                                    </span>
+                                    <span class="badge badge-dark">
+                                        {{ session("role")==1?"Administrativo":"" }}
+                                        {{ session("role")==2?"Profesor":"" }}
+                                        {{ session("role")==3?"Estudiante":"" }}
+                                    </span>
+                                    {{ session("usuario") }}
                                     <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @if (Auth::user()->role!=1)
-                                        @if (Auth::user()->verificado)
+                                    @if (session("role")==3)
+                                        @if (session("verificado"))
                                             <a class="dropdown-item bg-success text-light">Verificado</a>
                                         @else
                                             <a class="dropdown-item bg-primary text-light">En espera</a>
                                         @endif
                                     @endif
                                     <a class="dropdown-item text-muted" href="#">
-                                        {{ Auth::user()->role==1?"Administrativo":"" }}
-                                        {{ Auth::user()->role==2?"Profesor":"" }}
-                                        {{ Auth::user()->role==3?"Estudiante":"" }}
+                                        
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -96,10 +152,7 @@
                     </ul>
                 </div>
             </div>
-      </nav>
-      <div class="p-3">
-        @yield('content')
-      </div>
-    </div>
+      </nav> --}}
+    
 </body>
 </html>

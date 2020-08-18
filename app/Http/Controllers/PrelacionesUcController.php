@@ -4,82 +4,36 @@ namespace App\Http\Controllers;
 
 use App\prelaciones_uc;
 use Illuminate\Http\Request;
-
+use Response;
 class PrelacionesUcController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+   
+    use \App\Traits\ControllerAsyn;
+    protected $model = prelaciones_uc::class;
+    protected $view = "";
+    protected $where = ["id"];
+
+    public function store(Request $req){
+        try {
+            $c = new prelaciones_uc;
+            $c->id_uc = $req->id_uc;
+            $c->prela = $req->prela;
+            $c->save();
+            
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["error"=>$e->getMessage()] );
+        }
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+    public function destroy(Request $req){
+        try {
+            prelaciones_uc::find($req->id)->delete();
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["error"=>$e->getMessage()] );
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\prelaciones_uc  $prelaciones_uc
-     * @return \Illuminate\Http\Response
-     */
-    public function show(prelaciones_uc $prelaciones_uc)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\prelaciones_uc  $prelaciones_uc
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(prelaciones_uc $prelaciones_uc)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\prelaciones_uc  $prelaciones_uc
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, prelaciones_uc $prelaciones_uc)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\prelaciones_uc  $prelaciones_uc
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(prelaciones_uc $prelaciones_uc)
-    {
-        //
     }
 }

@@ -1,6 +1,13 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/js/ce.asignatura.js": "/js/ce.asignatura.js",
-    "/js/nominaconfig.js": "/js/nominaconfig.js"
+    "/js/ce.carreras.js": "/js/ce.carreras.js",
+    "/js/ce.estudiantes.js": "/js/ce.estudiantes.js",
+    "/js/ce.trayecto.js": "/js/ce.trayecto.js",
+    "/js/estudiante.primerainscripcion.js": "/js/estudiante.primerainscripcion.js",
+    "/js/estudiantes.academico.js": "/js/estudiantes.academico.js",
+    "/js/login.js": "/js/login.js",
+    "/js/nominaconfig.js": "/js/nominaconfig.js",
+    "/js/pre-inscripcion.js": "/js/pre-inscripcion.js",
+    "/js/profesor.cargarnotas.js": "/js/profesor.cargarnotas.js"
 }

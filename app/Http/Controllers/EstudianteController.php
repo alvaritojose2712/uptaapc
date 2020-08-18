@@ -2,184 +2,208 @@
 
 namespace App\Http\Controllers;
 
-use App\estudiante;
-use App\user;
+use App\personal;
+use App\trayecto;
+use App\carrera;
 use Illuminate\Http\Request;
-use Dompdf\Dompdf;
-use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
-use Auth;
+use Response;
+use App\Http\Controllers\Auth\LoginController;
 
 class EstudianteController extends Controller
 {
-    public function __construct()
+    public function index(Request $req)
     {
-        $this->middleware('auth');
+        $data = personal::with(["trayecto"=>function($q){
+            $q->with(["notas","profesor","uc","seccion"]);
+        },"nombrecarrera"])
+        ->where(function($q) use ($req){
+            foreach (["id","cedula","apellido","nombre"] as $val) {
+                $q->orWhere($val,"LIKE",$req->q."%");
+            }
+        })
+        ->where("role",3)
+        ->take(10)
+        ->orderBy("created_at","desc")
+        ->get()
+        ->map(function($q){
+            $q->academico = $q->trayecto->groupBy(["trayecto","trimestre"]);
+            return $q;
+        })
+        ->groupBy("nombrecarrera.nombre");
+        return Response::json( $data );
     }
-    public function pdf($id){
-        // $data = estudiante::find($id);
-        // $view = view("estudiante.showCrudo",compact("data"));
-        // $dompdf = new DOMPDF();
-        // $dompdf->load_html($view);
-        // $dompdf->render();
-        // return $dompdf->stream("ReporteEstudiante-".date("Y-m-d").".pdf");
-
-    }
-    public function items(Request $req)
-    {
-        $data = estudiante::orWhere("id","LIKE",$req->q."%")
-        ->orWhere("cedula","LIKE",$req->q."%")
-        ->get();
-        return view("estudiante.items",compact("data"));
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function dashboard()
     {
         return view("estudiante.dashboard");
-        
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function primerainscripcion()
+    public function viewIndex()
     {
-        return view("estudiante.primerainscripcion");
+        return view("admin.estudiantes.index");
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
-    public function primerainscripcionStore(Request $request){
-
-        
-        $request->validate([
-            'nombres' => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'nacimiento' => 'required|date',
-            'sexo' => 'required|string|max:255',
-            'estado_civil' => 'required',
-            'direccion' => 'required|string|max:255',
-            'ciudad' => 'required|string|max:255',
-            'estado' => 'required|string|max:255',
-            'telefono' => 'required|digits:11',
-            'trabaja' => 'required|boolean',
-            'hijos' => 'required|integer',
-            'file_cedula' => "required|mimes:jpg,jpeg,png,pdf|max:10240",
-            'file_fondo_negro' => "required|mimes:jpg,jpeg,png,pdf|max:10240",
-            'file_notas' => "required|mimes:jpg,jpeg,png,pdf|max:10240",
-            'file_foto' => "required|mimes:jpg,jpeg,png|max:10240",
-        ]);
-        $nameFolder = "public/docsEstudiante/".$request->cedula . " " . date("Y-m-d")." ".time();
-        try {
-            
-
-
-            $file_cedula = $request->file('file_cedula')->storeAs($nameFolder,"file_cedula".".".$request->file('file_cedula')->extension());
-            $file_fondo_negro = $request->file('file_fondo_negro')->storeAs($nameFolder,"file_fondo_negro".".".$request->file('file_fondo_negro')->extension());
-            $file_notas = $request->file('file_notas')->storeAs($nameFolder,"file_notas".".".$request->file('file_notas')->extension());
-            $file_foto = $request->file('file_foto')->storeAs($nameFolder,"file_foto".".".$request->file('file_foto')->extension());
-
-
-            $obj = new estudiante;
-            $obj->nombres = $request->nombres;
-            $obj->apellidos = $request->apellidos;
-            $obj->cedula = Auth::user()->cedula;
-
-            $obj->nacimiento = $request->nacimiento;
-            $obj->sexo = $request->sexo;
-            $obj->l_trabajo = $request->l_trabajo;
-            $obj->estado_civil = $request->estado_civil;
-            $obj->direccion = $request->direccion;
-            $obj->ciudad = $request->ciudad;
-            $obj->estado = $request->estado;
-            $obj->telefono = $request->telefono;
-            $obj->trabaja = $request->trabaja;
-            $obj->hijos = $request->hijos;
-            $obj->observacion = $request->observacion;
-
-            $obj->nameFolder = $nameFolder;
-            
-            $obj->file_cedula = preg_replace("/public\//","storage/",$file_cedula,1);
-            $obj->file_fondo_negro = preg_replace("/public\//","storage/",$file_fondo_negro,1);
-            $obj->file_notas = preg_replace("/public\//","storage/",$file_notas,1);
-            $obj->file_foto = preg_replace("/public\//","storage/",$file_foto,1);
-            
-            $obj->save();
-
-            $user = User::where("cedula",Auth::user()->cedula)->update(["inscrito"=>1]);
-
-
-            return redirect("estudiante")->with('msj', 'Los datos han sido enviados satisfactoriamente.');
-        } catch (\Exception $e) {
-            Storage::deleteDirectory($nameFolder);
-            return redirect()->back()->withInput()->withErrors($e->getMessage());
-        }
-           
-    }
-    public function store(Request $request)
+    public function academicoIndex()
     {
+        return view("estudiante.academico");
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\estudiante  $estudiante
-     * @return \Illuminate\Http\Response
-     */
-    public function show(estudiante $estudiante)
+    public function preInscripcionForm()
     {
-        //
+        return view('auth.register');
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\estudiante  $estudiante
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(estudiante $estudiante)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\estudiante  $estudiante
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, estudiante $estudiante)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\estudiante  $estudiante
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function preInscripcion(Request $req)
     {
         try {
-            $estudiante = estudiante::find($id);
-            Storage::deleteDirectory($estudiante->nameFolder);
-            $estudiante->delete();
-            return back();
+            $personal = new personal;
+            $personal->nombre = $req->nombre;
+            $personal->apellido = $req->apellido;
+            $personal->cedula = $req->cedula;
+            $personal->telefono_1 = $req->telefono_1;
+            $personal->correo = $req->correo;
+            $personal->password = \Hash::make($req->password);
+            $personal->carrera = $req->carrera;
+            $personal->prosecucion = $req->prosecucion;
+            $personal->role = 3;
+            $personal->save();
+            return Response::json( ["estado"=>true,"msj"=>"¡Registro exitoso! Inicie Sesión para continuar"] );
         } catch (\Exception $e) {
-            return "Error al eliminar ".$e->getMessage();
+            return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
         }
     }
+    public function verificar(Request $req)
+    {
+        try {
+            $personal = personal::find($req->id);
+            $personal->verificado = $req->modo=="verificar"?1:0;
+            $personal->save();
+            return Response::json( ["estado"=>true,"msj"=>"¡Verificado con éxito!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
+        }
+    }
+    
+    public function primerainscripcion(Request $req)
+    {   
+        if (!personal::with("nombrecarrera")->find(session()->get("id"))->inscrito) {
+            return view("estudiante.primerainscripcion");
+        }else{
+            return redirect("/estudiante");
+        }
+    }
+    public function primerainscripcionStore(Request $req)
+    {
+        if (!personal::with("nombrecarrera")->find(session()->get("id"))->inscrito) {
+            $nameFolder = "public/docsPersonal/".$req->cedula . " " . date("Y-m-d")." ".time();
+                
+            try {
+                $this->validate($req, [
+                    'file_cedula' => 'required|image|mimes:jpeg,png,jpg,pdf|max:500',
+                    'file_foto' => 'required|image|mimes:jpeg,png,jpg,pdf|max:500',
+                    'file_notas' => 'required|image|mimes:jpeg,png,jpg,pdf|max:500',
+                    'file_fondo_negro' => 'required|image|mimes:jpeg,png,jpg,pdf|max:500',
+                ]);
+
+                $personal = personal::find(session()->get("id"));
+
+                $personal->inscrito = 1;
+
+                $personal->nombre = $req->nombre; 
+                $personal->apellido = $req->apellido; 
+                $personal->cedula = $req->cedula; 
+                $personal->n_carnet = $req->n_carnet; 
+                $personal->nacionalidad = $req->nacionalidad; 
+                $personal->genero = $req->genero; 
+                $personal->fecha_nacimiento = $req->fecha_nacimiento; 
+                $personal->estado_civil = $req->estado_civil; 
+                $personal->direccion = $req->direccion; 
+                $personal->telefono_1 = $req->telefono_1; 
+                $personal->telefono_2 = $req->telefono_2; 
+                $personal->correo = $req->correo; 
+                $personal->cuenta_bancaria = $req->cuenta_bancaria; 
+                $personal->observacion = $req->observacion; 
+                $personal->calzado = $req->calzado; 
+                $personal->gorra = $req->gorra; 
+                $personal->camisa = $req->camisa; 
+                $personal->pantalon = $req->pantalon; 
+                $personal->trabaja = $req->trabaja; 
+
+                if ($req->hasFile('file_cedula')) {
+                    $file_cedula = $req->file('file_cedula')->storeAs($nameFolder,"file_cedula".".".$req->file('file_cedula')->extension());
+                    $personal->file_cedula = preg_replace("/public\//","storage/",$file_cedula,1);
+                }
+                
+                if ($req->hasFile('file_foto')) {
+                    $file_foto = $req->file('file_foto')->storeAs($nameFolder,"file_foto".".".$req->file('file_foto')->extension());
+                    $personal->file_foto = preg_replace("/public\//","storage/",$file_foto,1);
+                }
+                if ($req->hasFile('file_notas')) {
+                    $file_notas = $req->file('file_notas')->storeAs($nameFolder,"file_notas".".".$req->file('file_notas')->extension());
+                    $personal->file_notas = preg_replace("/public\//","storage/",$file_notas,1);
+                }
+                if ($req->hasFile('file_fondo_negro')) {
+                    $file_fondo_negro = $req->file('file_fondo_negro')->storeAs($nameFolder,"file_fondo_negro".".".$req->file('file_fondo_negro')->extension());
+                    $personal->file_fondo_negro = preg_replace("/public\//","storage/",$file_fondo_negro,1);
+                }
+                if ($req->hasFile('file_sintesis')) {
+                    $file_sintesis = $req->file('file_sintesis')->storeAs($nameFolder,"file_sintesis".".".$req->file('file_sintesis')->extension());
+                    $personal->file_sintesis = preg_replace("/public\//","storage/",$file_sintesis,1);
+                }
+                if (
+
+                    $req->hasFile('file_sintesis')||
+                    $req->hasFile('file_cedula')||
+                    $req->hasFile('file_foto')||
+                    $req->hasFile('file_notas')||
+                    $req->hasFile('file_fondo_negro')
+                ) {
+                    $personal->nameFolder = $nameFolder;
+                }
+
+
+                $personal->save();
+
+                \App\Traits\RestoreSession::restoreSession($personal);
+                
+                return Response::json( ["estado"=>true,"msj"=>"¡Inscripción exitosa!"] );
+            } catch (\Exception $e) {
+                Storage::deleteDirectory($nameFolder);
+                return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
+            }
+        }
+    }
+    public function academico()
+    {
+        $data = personal::with(["trayecto"=>function($q){
+            $q->with(["notas","profesor","uc","seccion"]);
+        },"nombrecarrera"])->where("id",session()->get("id"))->get()->map(function($q){
+            $q->academico = $q->trayecto->groupBy(["trayecto","trimestre"]);
+            return $q;
+        })->first();
+
+        return Response::json( $data );
+    }
+
+    public function inscribir(Request $req){
+        try {
+            $c = trayecto::find($req->id);
+            $c->inscripcion = $req->inscripcion;
+            $c->save();
+            
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["error"=>$e->getMessage()] );
+        }
+    }
+   
+   
+   
+    
+
+  
+   
+
+   
+   
+
+    
+   
 }

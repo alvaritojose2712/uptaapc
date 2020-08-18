@@ -3,67 +3,105 @@
 namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
+use Hash;
+use App\personal;
+use Response;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
 
-    use AuthenticatesUsers;
-
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-     protected $redirectTo;
-    public function redirectTo()
+    public function __construct()
     {
-        switch(Auth::user()->role){
+        $this->middleware('guest')->except(['logout','getAuthId',"getCenso"]);
+    }
+
+    public function getCenso(Request $req)
+    {
+        $regulares = personal::with(["nombrecarrera"])
+        ->where("role",3)
+        ->whereIn("carrera",function($q){
+            $q->from("carreras")->where("proximamente",0)->select("id");
+        })
+        ->get()->groupBy("nombrecarrera.nombre");
+
+        $proxi = personal::with(["nombrecarrera"])
+        ->where("role",3)
+        ->whereIn("carrera",function($q){
+            $q->from("carreras")->where("proximamente",1)->select("id");
+        })
+        ->get()->groupBy("nombrecarrera.nombre");
+
+        return view("admin.carrera.censo",compact("regulares","proxi"));
+    }
+    
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+
+        return redirect('/');
+    }
+
+
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+   
+    public function login(Request $req)
+    {
+        try {
+
+           
+            $d = personal::with("nombrecarrera")->where("cedula","=",$req->username)->orWhere("correo","=",$req->username)->first();
+            
+            if ($d&&Hash::check($req->pass, $d->password)) {
+                \App\Traits\RestoreSession::restoreSession($d);
+                
+                $estado = $this->selectRedirect();
+            }else{
+                throw new \Exception("¡Datos Incorrectos!", 1);
+                
+            } 
+            
+            return Response::json( ["estado"=>true,"msj"=>"¡Inicio exitoso! Bienvenido/a, ".$d->nombre] );
+        } catch (\Exception $e) {
+            return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
+        }
+        
+        
+        return Response::json(["estado"=>$estado,"user"=>$d]);
+    }
+
+
+    public function selectRedirect()
+    {
+      $selectRedirect = "/";
+        switch(session("role")){
             case 1:
-            $this->redirectTo = '/admin';
-            return $this->redirectTo;
+                $selectRedirect = '/admin';
                 break;
             case 2:
-                $this->redirectTo = '/profesor';
-                return $this->redirectTo;
+                $selectRedirect = '/profesor';
                 break;
             case 3:
-                $this->redirectTo = '/estudiante';
-                return $this->redirectTo;
+                $selectRedirect = '/estudiante';
                 break;
             default:
-                $this->redirectTo = '/login';
-                return $this->redirectTo;
+                $selectRedirect = '/login';
         }
+      return $selectRedirect;
          
         // return $next($request);
     } 
-    protected function authenticated(Request $request, $user)
+    public function getAuthId(Request $req)
     {
-        session()->put('nombrecarrera', Auth::user()->carrera!==null?\App\carrera::find(Auth::user()->carrera)->nombre:"");
-        session()->save();
+        if (session()->has('role')) {
+            return Response::json(personal::with("nombrecarrera")->find(session()->get("id")));
+        }
         
     }
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
+    
 }

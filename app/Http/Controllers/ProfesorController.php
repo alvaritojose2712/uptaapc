@@ -2,95 +2,70 @@
 
 namespace App\Http\Controllers;
 
-use App\profesor;
+use App\personal;
+use App\trayecto;
+use App\notas_estudiantes;
+
 use App\User;
 use Illuminate\Http\Request;
-use Auth;
 use Illuminate\Support\Facades\Storage;
+use Response;
 
 class ProfesorController extends Controller
 {
-    use \App\Traits\ControllerAsyn;
-    protected $model = profesor::class;
-    protected $view = "";
-    protected $validate = [];
-    protected $where = [
-        "id",
-        "nombres",
-        "apellidos",
-        "cedula",
-    ];
-    // protected $withCheck = true; 
-    // public function with()
-    // {
-    //     return [];
-    // }
 
     public function dashboard()
     {
         return view("profesor.dashboard");
         
     }
-    public function cargarprofesor()
+
+    public function cargarnotas()
     {
-        return view("profesor.cargarprofesor");
+        return view("profesor.cargarnotas");
+        
     }
-    public function cargarprofesorStore(Request $request)
+    public function academico(Request $req)
     {
-         $request->validate([
-            'nombres' => 'required|string|max:255',
-            'apellidos' => 'required|string|max:255',
-            'nacimiento' => 'required|date',
-            'sexo' => 'required|string|max:255',
-            'estado_civil' => 'required',
-            'direccion' => 'required|string|max:255',
-            'ciudad' => 'required|string|max:255',
-            'estado' => 'required|string|max:255',
-            'telefono' => 'required|digits:11',
-            'hijos' => 'required|integer',
-            'file_cedula' => "required|mimes:jpg,jpeg,png,pdf|max:10240",
-            'file_foto' => "required|mimes:jpg,jpeg,png|max:10240",
-        ]);
-        $nameFolder = "public/docsProfesor/".$request->cedula . " " . date("Y-m-d")." ".time();
-        try {
-            
+        $data = trayecto::with(["estudiante","uc"=>function($q){
+        	$q->with(["categoria"=>function($q){
+	        	$q->with("carrera");
+	        }]);
+        },"seccion"=>function($q){
+        	$q->with("carrera");
+        },"notas"])->where("id_profesor",personal::where("cedula",session("cedula"))->first("id")->id)->get()->map(function($q){
+        	$q->seccion1 = $q->seccion->carrera->nombre." - ".$q->seccion->nombre;
+        	$q->uc1 = $q->uc->nombre;
+        	return $q;
+        })->groupBy(["trayecto","trimestre","seccion1","uc1"]);
 
+        return Response::json( $data );
+    }
 
-            $file_cedula = $request->file('file_cedula')->storeAs($nameFolder,"file_cedula".".".$request->file('file_cedula')->extension());
-            $file_foto = $request->file('file_foto')->storeAs($nameFolder,"file_foto".".".$request->file('file_foto')->extension());
+    public function nota(Request $req)
+    {
+    	 try {
+    	 	foreach ($req->notas as $e) {
+    	 		foreach ($e as $ee) {
+	    	 		if (isset($ee["type"])&&($ee["type"]==="update"||$ee["type"]==="new")) {
+	            $c = ($ee["type"]==="new")?new notas_estudiantes:(($ee["type"]==="update")?notas_estudiantes::find($ee["id"]):null);
 
+	            $c->id_trayecto = $ee["id_trayecto"];
+	            $c->puntos = $ee["puntos"]!==null?$ee["puntos"]:0;
+	            $c->modo = !$ee["modo"]?"Final":$ee["modo"];
 
-            $obj = new profesor;
-            $obj->nombres = $request->nombres;
-            $obj->apellidos = $request->apellidos;
-            $obj->cedula = Auth::user()->cedula;
-
-            $obj->nacimiento = $request->nacimiento;
-            $obj->sexo = $request->sexo;
-            $obj->estado_civil = $request->estado_civil;
-            $obj->direccion = $request->direccion;
-            $obj->ciudad = $request->ciudad;
-            $obj->estado = $request->estado;
-            $obj->telefono = $request->telefono;
-            $obj->hijos = $request->hijos;
-            $obj->observacion = $request->observacion;
-
-            $obj->nameFolder = $nameFolder;
-
-            $obj->file_cedula = preg_replace("/public\//","storage/",$file_cedula,1);
-            $obj->file_foto = preg_replace("/public\//","storage/",$file_foto,1);
-            
-            $obj->save();
-
-            $user = User::where("cedula",Auth::user()->cedula)->update(["inscrito"=>1]);
-
-
-            return redirect("profesor")->with('msj', 'Los datos han sido enviados satisfactoriamente.');
+	            $c->save();
+			            
+	    	 		}else if (isset($ee["type"])&&$ee["type"]==="delete") {
+			            notas_estudiantes::find($ee["id"])->delete();
+	    	 		}
+    	 		}
+	            
+    	 	}
+            return Response::json( ["msj"=>"¡Operación exitosa!"] );
         } catch (\Exception $e) {
-            Storage::deleteDirectory($nameFolder);
-            return redirect()->back()->withInput()->withErrors($e->getMessage());
+            return Response::json( ["error"=>$e->getMessage()] );
         }
     }
-
     
 }
