@@ -4,28 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="icon" type="image/png" href="{{ asset('uptaapc.png') }}">
     <title>UPT del Alto Apure "Pedro Camejo"</title>
 
-    <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
-
-    <!-- Fonts -->
-    {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"> --}}
-
-    <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
    
     @yield("scripts")
 </head>
 <body>
-    <div class="wrapper">
-      <nav class="nav-app">
-        <div class="nav-left"><img src="{{ asset('images/sinapsis/sinapsis.svg') }}" alt="logo sinapsis" height="100%"></div>
+    <nav class="nav-app">
+        
+        <img src="{{ asset('images/sinapsis/sinapsis.svg') }}" alt="logo sinapsis" height="100%">
         <div class="nav-right">
             @if (!session()->has('role'))
                 
@@ -74,17 +66,17 @@
                   </li>
                 </ul>
             @endif
-            
-         
         </div>
-      </nav>
-      <section id="errSection">@include("layouts.error")</section>
-      <section class="content">
+    </nav>
+    <section class="content">
+        {{-- <section id="errSection">@include("layouts.error")</section> --}}
+        
         @yield('nav')
+        
         <div id="appreact"></div>
+        
         @yield('content')
-      </section> 
-    </div>
+    </section> 
      {{--  <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">

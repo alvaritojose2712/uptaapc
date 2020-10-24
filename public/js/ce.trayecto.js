@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -440,7 +440,7 @@ module.exports = ReactPropTypesSecret;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/** @license React v16.13.0
+/** @license React v16.14.0
  * react-dom.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -886,271 +886,6 @@ var SuspenseListComponent = 19;
 var FundamentalComponent = 20;
 var ScopeComponent = 21;
 var Block = 22;
-
-var BEFORE_SLASH_RE = /^(.*)[\\\/]/;
-function describeComponentFrame (name, source, ownerName) {
-  var sourceInfo = '';
-
-  if (source) {
-    var path = source.fileName;
-    var fileName = path.replace(BEFORE_SLASH_RE, '');
-
-    {
-      // In DEV, include code for a common special case:
-      // prefer "folder/index.js" instead of just "index.js".
-      if (/^index\./.test(fileName)) {
-        var match = path.match(BEFORE_SLASH_RE);
-
-        if (match) {
-          var pathBeforeSlash = match[1];
-
-          if (pathBeforeSlash) {
-            var folderName = pathBeforeSlash.replace(BEFORE_SLASH_RE, '');
-            fileName = folderName + '/' + fileName;
-          }
-        }
-      }
-    }
-
-    sourceInfo = ' (at ' + fileName + ':' + source.lineNumber + ')';
-  } else if (ownerName) {
-    sourceInfo = ' (created by ' + ownerName + ')';
-  }
-
-  return '\n    in ' + (name || 'Unknown') + sourceInfo;
-}
-
-// The Symbol used to tag the ReactElement-like types. If there is no native Symbol
-// nor polyfill, then a plain number is used for performance.
-var hasSymbol = typeof Symbol === 'function' && Symbol.for;
-var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
-var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
-var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
-var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
-var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
-var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
-var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
-var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
-var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
-var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
-var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
-var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
-var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
-var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
-var MAYBE_ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-var FAUX_ITERATOR_SYMBOL = '@@iterator';
-function getIteratorFn(maybeIterable) {
-  if (maybeIterable === null || typeof maybeIterable !== 'object') {
-    return null;
-  }
-
-  var maybeIterator = MAYBE_ITERATOR_SYMBOL && maybeIterable[MAYBE_ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL];
-
-  if (typeof maybeIterator === 'function') {
-    return maybeIterator;
-  }
-
-  return null;
-}
-
-var Uninitialized = -1;
-var Pending = 0;
-var Resolved = 1;
-var Rejected = 2;
-function refineResolvedLazyComponent(lazyComponent) {
-  return lazyComponent._status === Resolved ? lazyComponent._result : null;
-}
-function initializeLazyComponentType(lazyComponent) {
-  if (lazyComponent._status === Uninitialized) {
-    lazyComponent._status = Pending;
-    var ctor = lazyComponent._ctor;
-    var thenable = ctor();
-    lazyComponent._result = thenable;
-    thenable.then(function (moduleObject) {
-      if (lazyComponent._status === Pending) {
-        var defaultExport = moduleObject.default;
-
-        {
-          if (defaultExport === undefined) {
-            error('lazy: Expected the result of a dynamic import() call. ' + 'Instead received: %s\n\nYour code should look like: \n  ' + "const MyComponent = lazy(() => import('./MyComponent'))", moduleObject);
-          }
-        }
-
-        lazyComponent._status = Resolved;
-        lazyComponent._result = defaultExport;
-      }
-    }, function (error) {
-      if (lazyComponent._status === Pending) {
-        lazyComponent._status = Rejected;
-        lazyComponent._result = error;
-      }
-    });
-  }
-}
-
-function getWrappedName(outerType, innerType, wrapperName) {
-  var functionName = innerType.displayName || innerType.name || '';
-  return outerType.displayName || (functionName !== '' ? wrapperName + "(" + functionName + ")" : wrapperName);
-}
-
-function getComponentName(type) {
-  if (type == null) {
-    // Host root, text node or just invalid type.
-    return null;
-  }
-
-  {
-    if (typeof type.tag === 'number') {
-      error('Received an unexpected object in getComponentName(). ' + 'This is likely a bug in React. Please file an issue.');
-    }
-  }
-
-  if (typeof type === 'function') {
-    return type.displayName || type.name || null;
-  }
-
-  if (typeof type === 'string') {
-    return type;
-  }
-
-  switch (type) {
-    case REACT_FRAGMENT_TYPE:
-      return 'Fragment';
-
-    case REACT_PORTAL_TYPE:
-      return 'Portal';
-
-    case REACT_PROFILER_TYPE:
-      return "Profiler";
-
-    case REACT_STRICT_MODE_TYPE:
-      return 'StrictMode';
-
-    case REACT_SUSPENSE_TYPE:
-      return 'Suspense';
-
-    case REACT_SUSPENSE_LIST_TYPE:
-      return 'SuspenseList';
-  }
-
-  if (typeof type === 'object') {
-    switch (type.$$typeof) {
-      case REACT_CONTEXT_TYPE:
-        return 'Context.Consumer';
-
-      case REACT_PROVIDER_TYPE:
-        return 'Context.Provider';
-
-      case REACT_FORWARD_REF_TYPE:
-        return getWrappedName(type, type.render, 'ForwardRef');
-
-      case REACT_MEMO_TYPE:
-        return getComponentName(type.type);
-
-      case REACT_BLOCK_TYPE:
-        return getComponentName(type.render);
-
-      case REACT_LAZY_TYPE:
-        {
-          var thenable = type;
-          var resolvedThenable = refineResolvedLazyComponent(thenable);
-
-          if (resolvedThenable) {
-            return getComponentName(resolvedThenable);
-          }
-
-          break;
-        }
-    }
-  }
-
-  return null;
-}
-
-var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
-
-function describeFiber(fiber) {
-  switch (fiber.tag) {
-    case HostRoot:
-    case HostPortal:
-    case HostText:
-    case Fragment:
-    case ContextProvider:
-    case ContextConsumer:
-      return '';
-
-    default:
-      var owner = fiber._debugOwner;
-      var source = fiber._debugSource;
-      var name = getComponentName(fiber.type);
-      var ownerName = null;
-
-      if (owner) {
-        ownerName = getComponentName(owner.type);
-      }
-
-      return describeComponentFrame(name, source, ownerName);
-  }
-}
-
-function getStackByFiberInDevAndProd(workInProgress) {
-  var info = '';
-  var node = workInProgress;
-
-  do {
-    info += describeFiber(node);
-    node = node.return;
-  } while (node);
-
-  return info;
-}
-var current = null;
-var phase = null;
-function getCurrentFiberOwnerNameInDevOrNull() {
-  {
-    if (current === null) {
-      return null;
-    }
-
-    var owner = current._debugOwner;
-
-    if (owner !== null && typeof owner !== 'undefined') {
-      return getComponentName(owner.type);
-    }
-  }
-
-  return null;
-}
-function getCurrentFiberStackInDev() {
-  {
-    if (current === null) {
-      return '';
-    } // Safe because if current fiber exists, we are reconciling,
-    // and it is guaranteed to be the work-in-progress version.
-
-
-    return getStackByFiberInDevAndProd(current);
-  }
-}
-function resetCurrentFiber() {
-  {
-    ReactDebugCurrentFrame.getCurrentStack = null;
-    current = null;
-    phase = null;
-  }
-}
-function setCurrentFiber(fiber) {
-  {
-    ReactDebugCurrentFrame.getCurrentStack = getCurrentFiberStackInDev;
-    current = fiber;
-    phase = null;
-  }
-}
-function setCurrentPhase(lifeCyclePhase) {
-  {
-    phase = lifeCyclePhase;
-  }
-}
 
 /**
  * Injectable ordering of event plugins.
@@ -1851,10 +1586,10 @@ properties[xlinkHref] = new PropertyInfoRecord('xlinkHref', STRING, false, // mu
   true);
 });
 
-var ReactDebugCurrentFrame$1 = null;
+var ReactDebugCurrentFrame = null;
 
 {
-  ReactDebugCurrentFrame$1 = ReactSharedInternals.ReactDebugCurrentFrame;
+  ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
 } // A javascript: URL can contain leading C0 control or \u0020 SPACE,
 // and any newline or tab are filtered out as if they're not part of the URL.
 // https://url.spec.whatwg.org/#url-parsing
@@ -2056,6 +1791,271 @@ function setValueForProperty(node, name, value, isCustomComponentTag) {
     } else {
       node.setAttribute(attributeName, attributeValue);
     }
+  }
+}
+
+var BEFORE_SLASH_RE = /^(.*)[\\\/]/;
+function describeComponentFrame (name, source, ownerName) {
+  var sourceInfo = '';
+
+  if (source) {
+    var path = source.fileName;
+    var fileName = path.replace(BEFORE_SLASH_RE, '');
+
+    {
+      // In DEV, include code for a common special case:
+      // prefer "folder/index.js" instead of just "index.js".
+      if (/^index\./.test(fileName)) {
+        var match = path.match(BEFORE_SLASH_RE);
+
+        if (match) {
+          var pathBeforeSlash = match[1];
+
+          if (pathBeforeSlash) {
+            var folderName = pathBeforeSlash.replace(BEFORE_SLASH_RE, '');
+            fileName = folderName + '/' + fileName;
+          }
+        }
+      }
+    }
+
+    sourceInfo = ' (at ' + fileName + ':' + source.lineNumber + ')';
+  } else if (ownerName) {
+    sourceInfo = ' (created by ' + ownerName + ')';
+  }
+
+  return '\n    in ' + (name || 'Unknown') + sourceInfo;
+}
+
+// The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+// nor polyfill, then a plain number is used for performance.
+var hasSymbol = typeof Symbol === 'function' && Symbol.for;
+var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
+var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
+var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
+var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
+var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
+var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
+var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
+var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
+var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
+var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
+var MAYBE_ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+var FAUX_ITERATOR_SYMBOL = '@@iterator';
+function getIteratorFn(maybeIterable) {
+  if (maybeIterable === null || typeof maybeIterable !== 'object') {
+    return null;
+  }
+
+  var maybeIterator = MAYBE_ITERATOR_SYMBOL && maybeIterable[MAYBE_ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL];
+
+  if (typeof maybeIterator === 'function') {
+    return maybeIterator;
+  }
+
+  return null;
+}
+
+var Uninitialized = -1;
+var Pending = 0;
+var Resolved = 1;
+var Rejected = 2;
+function refineResolvedLazyComponent(lazyComponent) {
+  return lazyComponent._status === Resolved ? lazyComponent._result : null;
+}
+function initializeLazyComponentType(lazyComponent) {
+  if (lazyComponent._status === Uninitialized) {
+    lazyComponent._status = Pending;
+    var ctor = lazyComponent._ctor;
+    var thenable = ctor();
+    lazyComponent._result = thenable;
+    thenable.then(function (moduleObject) {
+      if (lazyComponent._status === Pending) {
+        var defaultExport = moduleObject.default;
+
+        {
+          if (defaultExport === undefined) {
+            error('lazy: Expected the result of a dynamic import() call. ' + 'Instead received: %s\n\nYour code should look like: \n  ' + "const MyComponent = lazy(() => import('./MyComponent'))", moduleObject);
+          }
+        }
+
+        lazyComponent._status = Resolved;
+        lazyComponent._result = defaultExport;
+      }
+    }, function (error) {
+      if (lazyComponent._status === Pending) {
+        lazyComponent._status = Rejected;
+        lazyComponent._result = error;
+      }
+    });
+  }
+}
+
+function getWrappedName(outerType, innerType, wrapperName) {
+  var functionName = innerType.displayName || innerType.name || '';
+  return outerType.displayName || (functionName !== '' ? wrapperName + "(" + functionName + ")" : wrapperName);
+}
+
+function getComponentName(type) {
+  if (type == null) {
+    // Host root, text node or just invalid type.
+    return null;
+  }
+
+  {
+    if (typeof type.tag === 'number') {
+      error('Received an unexpected object in getComponentName(). ' + 'This is likely a bug in React. Please file an issue.');
+    }
+  }
+
+  if (typeof type === 'function') {
+    return type.displayName || type.name || null;
+  }
+
+  if (typeof type === 'string') {
+    return type;
+  }
+
+  switch (type) {
+    case REACT_FRAGMENT_TYPE:
+      return 'Fragment';
+
+    case REACT_PORTAL_TYPE:
+      return 'Portal';
+
+    case REACT_PROFILER_TYPE:
+      return "Profiler";
+
+    case REACT_STRICT_MODE_TYPE:
+      return 'StrictMode';
+
+    case REACT_SUSPENSE_TYPE:
+      return 'Suspense';
+
+    case REACT_SUSPENSE_LIST_TYPE:
+      return 'SuspenseList';
+  }
+
+  if (typeof type === 'object') {
+    switch (type.$$typeof) {
+      case REACT_CONTEXT_TYPE:
+        return 'Context.Consumer';
+
+      case REACT_PROVIDER_TYPE:
+        return 'Context.Provider';
+
+      case REACT_FORWARD_REF_TYPE:
+        return getWrappedName(type, type.render, 'ForwardRef');
+
+      case REACT_MEMO_TYPE:
+        return getComponentName(type.type);
+
+      case REACT_BLOCK_TYPE:
+        return getComponentName(type.render);
+
+      case REACT_LAZY_TYPE:
+        {
+          var thenable = type;
+          var resolvedThenable = refineResolvedLazyComponent(thenable);
+
+          if (resolvedThenable) {
+            return getComponentName(resolvedThenable);
+          }
+
+          break;
+        }
+    }
+  }
+
+  return null;
+}
+
+var ReactDebugCurrentFrame$1 = ReactSharedInternals.ReactDebugCurrentFrame;
+
+function describeFiber(fiber) {
+  switch (fiber.tag) {
+    case HostRoot:
+    case HostPortal:
+    case HostText:
+    case Fragment:
+    case ContextProvider:
+    case ContextConsumer:
+      return '';
+
+    default:
+      var owner = fiber._debugOwner;
+      var source = fiber._debugSource;
+      var name = getComponentName(fiber.type);
+      var ownerName = null;
+
+      if (owner) {
+        ownerName = getComponentName(owner.type);
+      }
+
+      return describeComponentFrame(name, source, ownerName);
+  }
+}
+
+function getStackByFiberInDevAndProd(workInProgress) {
+  var info = '';
+  var node = workInProgress;
+
+  do {
+    info += describeFiber(node);
+    node = node.return;
+  } while (node);
+
+  return info;
+}
+var current = null;
+var isRendering = false;
+function getCurrentFiberOwnerNameInDevOrNull() {
+  {
+    if (current === null) {
+      return null;
+    }
+
+    var owner = current._debugOwner;
+
+    if (owner !== null && typeof owner !== 'undefined') {
+      return getComponentName(owner.type);
+    }
+  }
+
+  return null;
+}
+function getCurrentFiberStackInDev() {
+  {
+    if (current === null) {
+      return '';
+    } // Safe because if current fiber exists, we are reconciling,
+    // and it is guaranteed to be the work-in-progress version.
+
+
+    return getStackByFiberInDevAndProd(current);
+  }
+}
+function resetCurrentFiber() {
+  {
+    ReactDebugCurrentFrame$1.getCurrentStack = null;
+    current = null;
+    isRendering = false;
+  }
+}
+function setCurrentFiber(fiber) {
+  {
+    ReactDebugCurrentFrame$1.getCurrentStack = getCurrentFiberStackInDev;
+    current = fiber;
+    isRendering = false;
+  }
+}
+function setIsRendering(rendering) {
+  {
+    isRendering = rendering;
   }
 }
 
@@ -6062,7 +6062,6 @@ function validateProperties$2(type, props, canUseEventSystem) {
 }
 
 var didWarnInvalidHydration = false;
-var didWarnShadyDOM = false;
 var DANGEROUSLY_SET_INNER_HTML = 'dangerouslySetInnerHTML';
 var SUPPRESS_CONTENT_EDITABLE_WARNING = 'suppressContentEditableWarning';
 var SUPPRESS_HYDRATION_WARNING = 'suppressHydrationWarning';
@@ -6382,12 +6381,6 @@ function setInitialProperties(domElement, tag, rawProps, rootContainerElement) {
 
   {
     validatePropertiesInDevelopment(tag, rawProps);
-
-    if (isCustomComponentTag && !didWarnShadyDOM && domElement.shadyRoot) {
-      error('%s is using shady DOM. Using shady DOM with React can ' + 'cause things to break subtly.', getCurrentFiberOwnerNameInDevOrNull() || 'A component');
-
-      didWarnShadyDOM = true;
-    }
   } // TODO: Make sure that we check isMounted before firing any of these events.
 
 
@@ -6741,12 +6734,6 @@ function diffHydratedProperties(domElement, tag, rawProps, parentNamespace, root
     suppressHydrationWarning = rawProps[SUPPRESS_HYDRATION_WARNING] === true;
     isCustomComponentTag = isCustomComponent(tag, rawProps);
     validatePropertiesInDevelopment(tag, rawProps);
-
-    if (isCustomComponentTag && !didWarnShadyDOM && domElement.shadyRoot) {
-      error('%s is using shady DOM. Using shady DOM with React can ' + 'cause things to break subtly.', getCurrentFiberOwnerNameInDevOrNull() || 'A component');
-
-      didWarnShadyDOM = true;
-    }
   } // TODO: Make sure that we check isMounted before firing any of these events.
 
 
@@ -11267,18 +11254,9 @@ function processChildContext(fiber, type, parentContext) {
     }
 
     var childContext;
-
-    {
-      setCurrentPhase('getChildContext');
-    }
-
     startPhaseTimer(fiber, 'getChildContext');
     childContext = instance.getChildContext();
     stopPhaseTimer();
-
-    {
-      setCurrentPhase(null);
-    }
 
     for (var contextKey in childContext) {
       if (!(contextKey in childContextTypes)) {
@@ -17203,7 +17181,6 @@ var didWarnAboutContextTypeOnFunctionComponent;
 var didWarnAboutGetDerivedStateOnFunctionComponent;
 var didWarnAboutFunctionRefs;
 var didWarnAboutReassigningProps;
-var didWarnAboutMaxDuration;
 var didWarnAboutRevealOrder;
 var didWarnAboutTailOptions;
 
@@ -17214,7 +17191,6 @@ var didWarnAboutTailOptions;
   didWarnAboutGetDerivedStateOnFunctionComponent = {};
   didWarnAboutFunctionRefs = {};
   didWarnAboutReassigningProps = false;
-  didWarnAboutMaxDuration = false;
   didWarnAboutRevealOrder = {};
   didWarnAboutTailOptions = {};
 }
@@ -17278,7 +17254,7 @@ function updateForwardRef(current, workInProgress, Component, nextProps, renderE
 
   {
     ReactCurrentOwner$1.current = workInProgress;
-    setCurrentPhase('render');
+    setIsRendering(true);
     nextChildren = renderWithHooks(current, workInProgress, render, nextProps, ref, renderExpirationTime);
 
     if ( workInProgress.mode & StrictMode) {
@@ -17288,7 +17264,7 @@ function updateForwardRef(current, workInProgress, Component, nextProps, renderE
       }
     }
 
-    setCurrentPhase(null);
+    setIsRendering(false);
   }
 
   if (current !== null && !didReceiveUpdate) {
@@ -17496,7 +17472,7 @@ function updateFunctionComponent(current, workInProgress, Component, nextProps, 
 
   {
     ReactCurrentOwner$1.current = workInProgress;
-    setCurrentPhase('render');
+    setIsRendering(true);
     nextChildren = renderWithHooks(current, workInProgress, Component, nextProps, context, renderExpirationTime);
 
     if ( workInProgress.mode & StrictMode) {
@@ -17506,7 +17482,7 @@ function updateFunctionComponent(current, workInProgress, Component, nextProps, 
       }
     }
 
-    setCurrentPhase(null);
+    setIsRendering(false);
   }
 
   if (current !== null && !didReceiveUpdate) {
@@ -17622,14 +17598,14 @@ function finishClassComponent(current, workInProgress, Component, shouldUpdate, 
     }
   } else {
     {
-      setCurrentPhase('render');
+      setIsRendering(true);
       nextChildren = instance.render();
 
       if ( workInProgress.mode & StrictMode) {
         instance.render();
       }
 
-      setCurrentPhase(null);
+      setIsRendering(false);
     }
   } // React DevTools reads this flag.
 
@@ -17943,8 +17919,10 @@ function mountIndeterminateComponent(_current, workInProgress, Component, render
       ReactStrictModeWarnings.recordLegacyContextWarning(workInProgress, null);
     }
 
+    setIsRendering(true);
     ReactCurrentOwner$1.current = workInProgress;
     value = renderWithHooks(null, workInProgress, Component, props, context, renderExpirationTime);
+    setIsRendering(false);
   } // React DevTools reads this flag.
 
 
@@ -18110,17 +18088,7 @@ function updateSuspenseComponent(current, workInProgress, renderExpirationTime) 
   }
 
   suspenseContext = setDefaultShallowSuspenseContext(suspenseContext);
-  pushSuspenseContext(workInProgress, suspenseContext);
-
-  {
-    if ('maxDuration' in nextProps) {
-      if (!didWarnAboutMaxDuration) {
-        didWarnAboutMaxDuration = true;
-
-        error('maxDuration has been removed from React. ' + 'Remove the maxDuration prop.');
-      }
-    }
-  } // This next part is a bit confusing. If the children timeout, we switch to
+  pushSuspenseContext(workInProgress, suspenseContext); // This next part is a bit confusing. If the children timeout, we switch to
   // showing the fallback children in place of the "primary" children.
   // However, we don't want to delete the primary children because then their
   // state will be lost (both the React state and the host state, e.g.
@@ -18141,7 +18109,6 @@ function updateSuspenseComponent(current, workInProgress, renderExpirationTime) 
   // Otherwise, we render the primary children directly. This requires some
   // custom reconciliation logic to preserve the state of the primary
   // children. It's essentially a very basic form of re-parenting.
-
 
   if (current === null) {
     // If we're currently hydrating, try to hydrate this boundary.
@@ -18775,9 +18742,9 @@ function updateContextConsumer(current, workInProgress, renderExpirationTime) {
 
   {
     ReactCurrentOwner$1.current = workInProgress;
-    setCurrentPhase('render');
+    setIsRendering(true);
     newChildren = render(newValue);
-    setCurrentPhase(null);
+    setIsRendering(false);
   } // React DevTools reads this flag.
 
 
@@ -21289,9 +21256,11 @@ function throwException(root, returnFiber, sourceFiber, value, renderExpirationT
       var currentSource = sourceFiber.alternate;
 
       if (currentSource) {
+        sourceFiber.updateQueue = currentSource.updateQueue;
         sourceFiber.memoizedState = currentSource.memoizedState;
         sourceFiber.expirationTime = currentSource.expirationTime;
       } else {
+        sourceFiber.updateQueue = null;
         sourceFiber.memoizedState = null;
       }
     }
@@ -23689,43 +23658,40 @@ var beginWork$1;
 }
 
 var didWarnAboutUpdateInRender = false;
-var didWarnAboutUpdateInGetChildContext = false;
+var didWarnAboutUpdateInRenderForAnotherComponent;
+
+{
+  didWarnAboutUpdateInRenderForAnotherComponent = new Set();
+}
 
 function warnAboutRenderPhaseUpdatesInDEV(fiber) {
   {
-    if ((executionContext & RenderContext) !== NoContext) {
+    if (isRendering && (executionContext & RenderContext) !== NoContext) {
       switch (fiber.tag) {
         case FunctionComponent:
         case ForwardRef:
         case SimpleMemoComponent:
           {
-            error('Cannot update a component from inside the function body of a ' + 'different component.');
+            var renderingComponentName = workInProgress && getComponentName(workInProgress.type) || 'Unknown'; // Dedupe by the rendering component because it's the one that needs to be fixed.
+
+            var dedupeKey = renderingComponentName;
+
+            if (!didWarnAboutUpdateInRenderForAnotherComponent.has(dedupeKey)) {
+              didWarnAboutUpdateInRenderForAnotherComponent.add(dedupeKey);
+              var setStateComponentName = getComponentName(fiber.type) || 'Unknown';
+
+              error('Cannot update a component (`%s`) while rendering a ' + 'different component (`%s`). To locate the bad setState() call inside `%s`, ' + 'follow the stack trace as described in https://fb.me/setstate-in-render', setStateComponentName, renderingComponentName, renderingComponentName);
+            }
 
             break;
           }
 
         case ClassComponent:
           {
-            switch (phase) {
-              case 'getChildContext':
-                if (didWarnAboutUpdateInGetChildContext) {
-                  return;
-                }
+            if (!didWarnAboutUpdateInRender) {
+              error('Cannot update during an existing state transition (such as ' + 'within `render`). Render methods should be a pure ' + 'function of props and state.');
 
-                error('setState(...): Cannot call setState() inside getChildContext()');
-
-                didWarnAboutUpdateInGetChildContext = true;
-                break;
-
-              case 'render':
-                if (didWarnAboutUpdateInRender) {
-                  return;
-                }
-
-                error('Cannot update during an existing state transition (such as ' + 'within `render`). Render methods should be a pure ' + 'function of props and state.');
-
-                didWarnAboutUpdateInRender = true;
-                break;
+              didWarnAboutUpdateInRender = true;
             }
 
             break;
@@ -24820,7 +24786,7 @@ function updateContainer(element, container, parentComponent, callback) {
   }
 
   {
-    if (phase === 'render' && current !== null && !didWarnAboutNestedUpdates) {
+    if (isRendering && current !== null && !didWarnAboutNestedUpdates) {
       didWarnAboutNestedUpdates = true;
 
       error('Render methods should be a pure function of props and state; ' + 'triggering nested component updates from render is not allowed. ' + 'If necessary, trigger nested updates in componentDidUpdate.\n\n' + 'Check the render method of %s.', getComponentName(current.type) || 'Unknown');
@@ -25044,7 +25010,7 @@ function injectIntoDevTools(devToolsConfig) {
     // Enables DevTools to append owner stacks to error messages in DEV mode.
     getCurrentFiber:  function () {
       return current;
-    } 
+    }
   }));
 }
 var IsSomeRendererActing$1 = ReactSharedInternals.IsSomeRendererActing;
@@ -25396,7 +25362,7 @@ implementation) {
   };
 }
 
-var ReactVersion = '16.13.0';
+var ReactVersion = '16.14.0';
 
 setAttemptUserBlockingHydration(attemptUserBlockingHydration$1);
 setAttemptContinuousHydration(attemptContinuousHydration$1);
@@ -25543,12 +25509,7 @@ if (false) {} else {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
-
-if (false) {} else {
-  module.exports = __webpack_require__(/*! ./js/react-notifications.dev.js */ "./node_modules/react-notifications-component/dist/js/react-notifications.dev.js");
-}
-
+ false?undefined:module.exports=__webpack_require__(/*! ./js/react-notifications.dev.js */ "./node_modules/react-notifications-component/dist/js/react-notifications.dev.js");
 
 /***/ }),
 
@@ -25648,90 +25609,108 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
-/***/ "./node_modules/css-loader/lib/css-base.js":
-/*!*************************************************!*\
-  !*** ./node_modules/css-loader/lib/css-base.js ***!
-  \*************************************************/
+/***/ "./node_modules/css-loader/dist/runtime/api.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/api.js ***!
+  \*****************************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 /*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
 */
 // css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
+// eslint-disable-next-line func-names
+module.exports = function (useSourceMap) {
+  var list = []; // return the list of modules as css string
 
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item, useSourceMap);
 
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
+      if (item[2]) {
+        return "@media ".concat(item[2], " {").concat(content, "}");
+      }
+
+      return content;
+    }).join('');
+  }; // import a list of modules into the list
+  // eslint-disable-next-line func-names
+
+
+  list.i = function (modules, mediaQuery, dedupe) {
+    if (typeof modules === 'string') {
+      // eslint-disable-next-line no-param-reassign
+      modules = [[null, modules, '']];
+    }
+
+    var alreadyImportedModules = {};
+
+    if (dedupe) {
+      for (var i = 0; i < this.length; i++) {
+        // eslint-disable-next-line prefer-destructuring
+        var id = this[i][0];
+
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+
+    for (var _i = 0; _i < modules.length; _i++) {
+      var item = [].concat(modules[_i]);
+
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (mediaQuery) {
+        if (!item[2]) {
+          item[2] = mediaQuery;
+        } else {
+          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
+        }
+      }
+
+      list.push(item);
+    }
+  };
+
+  return list;
 };
 
 function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
+  var content = item[1] || ''; // eslint-disable-next-line prefer-destructuring
 
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
+  var cssMapping = item[3];
 
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
+  if (!cssMapping) {
+    return content;
+  }
 
-	return [content].join('\n');
-}
+  if (useSourceMap && typeof btoa === 'function') {
+    var sourceMapping = toComment(cssMapping);
+    var sourceURLs = cssMapping.sources.map(function (source) {
+      return "/*# sourceURL=".concat(cssMapping.sourceRoot || '').concat(source, " */");
+    });
+    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+  }
 
-// Adapted from convert-source-map (MIT)
+  return [content].join('\n');
+} // Adapted from convert-source-map (MIT)
+
+
 function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
+  // eslint-disable-next-line no-undef
+  var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+  var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
+  return "/*# ".concat(data, " */");
 }
-
 
 /***/ }),
 
@@ -26882,16 +26861,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Notification__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Notification */ "./src/components/Notification.js");
 /* harmony import */ var _utils_helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/helpers */ "./src/utils/helpers.js");
 /* harmony import */ var _scss_notification_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../scss/notification.scss */ "./src/scss/notification.scss");
-/* harmony import */ var _scss_notification_scss__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_scss_notification_scss__WEBPACK_IMPORTED_MODULE_5__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -26899,16 +26881,19 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
 
@@ -26916,17 +26901,18 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var Container =
-/*#__PURE__*/
-function (_React$Component) {
+
+var Container = /*#__PURE__*/function (_React$Component) {
   _inherits(Container, _React$Component);
+
+  var _super = _createSuper(Container);
 
   function Container(props) {
     var _this;
 
     _classCallCheck(this, Container);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Container).call(this, props));
+    _this = _super.call(this, props);
     _this.state = {
       isMobile: props.isMobile,
       breakpoint: props.breakpoint,
@@ -27011,7 +26997,7 @@ function (_React$Component) {
       var _this2 = this;
 
       return notifications.map(function (notification) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Notification__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Notification__WEBPACK_IMPORTED_MODULE_3__["default"], {
           id: notification.id,
           key: notification.id,
           notification: notification,
@@ -27030,13 +27016,13 @@ function (_React$Component) {
       var mobileNotifications = Object(_utils_helpers__WEBPACK_IMPORTED_MODULE_4__["getNotificationsForMobileView"])(notifications);
       var top = this.renderNotifications(mobileNotifications.top);
       var bottom = this.renderNotifications(mobileNotifications.bottom);
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: id,
         key: "mobile",
         className: "react-notification-root ".concat(className || '')
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-container-mobile-top"
-      }, top), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, top), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-container-mobile-bottom"
       }, bottom));
     }
@@ -27054,25 +27040,25 @@ function (_React$Component) {
       var bottomRight = this.renderNotifications(items.bottomRight);
       var bottomCenter = this.renderNotifications(items.bottomCenter);
       var center = this.renderNotifications(items.center);
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: id,
         key: "screen",
         className: "react-notification-root ".concat(className || '')
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-container-top-left"
-      }, topLeft), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, topLeft), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-container-top-right"
-      }, topRight), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, topRight), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-container-bottom-left"
-      }, bottomLeft), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, bottomLeft), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-container-bottom-right"
-      }, bottomRight), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, bottomRight), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-container-top-center"
-      }, topCenter), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, topCenter), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-container-center"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "center-inner"
-      }, center)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, center)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-container-bottom-center"
       }, bottomCenter));
     }
@@ -27124,13 +27110,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_timer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/timer */ "./src/utils/timer.js");
 /* harmony import */ var _utils_helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/helpers */ "./src/utils/helpers.js");
 /* harmony import */ var _utils_constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/constants */ "./src/utils/constants.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -27140,13 +27126,17 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -27154,34 +27144,38 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
 
 
 
 
-var Notification =
-/*#__PURE__*/
-function (_React$Component) {
+
+var Notification = /*#__PURE__*/function (_React$Component) {
   _inherits(Notification, _React$Component);
+
+  var _super = _createSuper(Notification);
 
   function Notification(props) {
     var _this;
 
     _classCallCheck(this, Notification);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Notification).call(this, props));
-    _this.rootElementRef = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    _this = _super.call(this, props);
+    _this.rootElementRef = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
     _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
     _this.onTouchStart = _this.onTouchStart.bind(_assertThisInitialized(_this));
     _this.onTouchMove = _this.onTouchMove.bind(_assertThisInitialized(_this));
@@ -27338,7 +27332,7 @@ function (_React$Component) {
         return {
           startX: pageX,
           currentX: pageX,
-          parentStyle: _objectSpread({}, parentStyle, {
+          parentStyle: _objectSpread(_objectSpread({}, parentStyle), {}, {
             position: 'relative'
           })
         };
@@ -27383,7 +27377,7 @@ function (_React$Component) {
           var parentStyle = _ref8.parentStyle;
           return {
             touchEnabled: false,
-            parentStyle: _objectSpread({}, parentStyle, {
+            parentStyle: _objectSpread(_objectSpread({}, parentStyle), {}, {
               left: left,
               opacity: 0,
               transition: "".concat(t1, ", ").concat(t2)
@@ -27392,7 +27386,7 @@ function (_React$Component) {
               _this4.setState(function (_ref9) {
                 var parentStyle = _ref9.parentStyle;
                 return {
-                  parentStyle: _objectSpread({}, parentStyle, {
+                  parentStyle: _objectSpread(_objectSpread({}, parentStyle), {}, {
                     height: 0,
                     transition: Object(_utils_helpers__WEBPACK_IMPORTED_MODULE_3__["getTransition"])(slidingExit, 'height')
                   }),
@@ -27408,7 +27402,7 @@ function (_React$Component) {
         var parentStyle = _ref10.parentStyle;
         return {
           currentX: pageX,
-          parentStyle: _objectSpread({}, parentStyle, {
+          parentStyle: _objectSpread(_objectSpread({}, parentStyle), {}, {
             left: "".concat(0 + distance, "px")
           })
         };
@@ -27421,7 +27415,7 @@ function (_React$Component) {
       this.setState(function (_ref11) {
         var parentStyle = _ref11.parentStyle;
         return {
-          parentStyle: _objectSpread({}, parentStyle, {
+          parentStyle: _objectSpread(_objectSpread({}, parentStyle), {}, {
             left: 0,
             transition: Object(_utils_helpers__WEBPACK_IMPORTED_MODULE_3__["getTransition"])(touchRevert, 'left')
           })
@@ -27473,9 +27467,9 @@ function (_React$Component) {
         return _this5.removeNotification(_utils_constants__WEBPACK_IMPORTED_MODULE_4__["REMOVAL"].TIMEOUT);
       };
 
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "timer"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "timer-filler",
         onAnimationEnd: onAnimationEnd,
         style: style
@@ -27492,11 +27486,11 @@ function (_React$Component) {
           duration = _this$props$notificat2.duration,
           pauseOnHover = _this$props$notificat2.pauseOnHover;
       var hasMouseEvents = duration > 0 && pauseOnHover;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "".concat([].concat(_toConsumableArray(htmlClassList), ['n-child']).join(' ')),
         onMouseEnter: hasMouseEvents ? this.onMouseEnter : null,
         onMouseLeave: hasMouseEvents ? this.onMouseLeave : null
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.isValidElement(CustomContent) ? CustomContent : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CustomContent, {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.isValidElement(CustomContent) ? CustomContent : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CustomContent, {
         id: id
       }));
     }
@@ -27512,18 +27506,18 @@ function (_React$Component) {
           pauseOnHover = _this$props$notificat4.pauseOnHover;
       var htmlClassList = this.state.htmlClassList;
       var hasMouseEvents = duration > 0 && pauseOnHover;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "".concat([].concat(_toConsumableArray(htmlClassList), ['n-child']).join(' ')),
         onMouseEnter: hasMouseEvents ? this.onMouseEnter : null,
         onMouseLeave: hasMouseEvents ? this.onMouseLeave : null
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-content"
-      }, showIcon && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, showIcon && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-close",
         onClick: this.onClick
-      }), title && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }), title && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-title"
-      }, title), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "notification-message"
       }, message), this.renderTimer()));
     }
@@ -27538,7 +27532,7 @@ function (_React$Component) {
           onAnimationEnd = _this$state.onAnimationEnd,
           onTransitionEnd = _this$state.onTransitionEnd,
           touchEnabled = _this$state.touchEnabled;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         ref: this.rootElementRef,
         onClick: click ? this.onClick : null,
         className: "notification-parent",
@@ -27588,17 +27582,20 @@ __webpack_require__.r(__webpack_exports__);
 /*!************************************!*\
   !*** ./src/scss/notification.scss ***!
   \************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
 
-
-// module
-exports.push([module.i, ".notification-container-top-center,\n.notification-container-top-left,\n.notification-container-top-right,\n.notification-container-bottom-center,\n.notification-container-bottom-left,\n.notification-container-bottom-right,\n.notification-container-center {\n  width: 325px;\n  position: absolute;\n  pointer-events: all; }\n\n.notification-container-center,\n.notification-container-top-center,\n.notification-container-bottom-center {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: column;\n  left: calc(50% - 162.5px); }\n\n.notification-container-center {\n  top: 20px;\n  height: 100%;\n  pointer-events: none; }\n  .notification-container-center .center-inner {\n    width: 325px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    flex-direction: column;\n    pointer-events: all; }\n\n.notification-container-top-center {\n  top: 20px; }\n\n.notification-container-bottom-center {\n  bottom: 20px; }\n\n.notification-container-top-left {\n  left: 20px;\n  top: 20px; }\n\n.notification-container-top-right {\n  right: 20px;\n  top: 20px; }\n\n.notification-container-bottom-left {\n  left: 20px;\n  bottom: 20px; }\n\n.notification-container-bottom-right {\n  bottom: 20px;\n  right: 20px; }\n\n.notification-container-mobile-top,\n.notification-container-mobile-bottom {\n  pointer-events: all;\n  position: absolute; }\n\n.notification-container-mobile-top {\n  right: 20px;\n  left: 20px;\n  top: 20px; }\n\n.notification-container-mobile-bottom {\n  right: 20px;\n  left: 20px;\n  bottom: 20px;\n  margin-bottom: -15px; }\n\n.notification-default {\n  background-color: #007bff;\n  border-left: 8px solid #0562c7; }\n  .notification-default .timer {\n    background-color: #007bff; }\n  .notification-default .timer-filler {\n    background-color: #fff; }\n  .notification-default .notification-close {\n    background-color: #007bff; }\n\n.notification-success {\n  background-color: #28a745;\n  border-left: 8px solid #1f8838; }\n  .notification-success .timer {\n    background-color: #28a745; }\n  .notification-success .timer-filler {\n    background-color: #fff; }\n  .notification-success .notification-close {\n    background-color: #28a745; }\n\n.notification-danger {\n  background-color: #dc3545;\n  border-left: 8px solid #bd1120; }\n  .notification-danger .timer {\n    background-color: #dc3545; }\n  .notification-danger .timer-filler {\n    background-color: #fff; }\n  .notification-danger .notification-close {\n    background-color: #dc3545; }\n\n.notification-info {\n  background-color: #17a2b8;\n  border-left: 8px solid #138b9e; }\n  .notification-info .timer {\n    background-color: #17a2b8; }\n  .notification-info .timer-filler {\n    background-color: #fff; }\n  .notification-info .notification-close {\n    background-color: #17a2b8; }\n\n.notification-warning {\n  background-color: #eab000;\n  border-left: 8px solid #ce9c09; }\n  .notification-warning .timer {\n    background-color: #eab000; }\n  .notification-warning .timer-filler {\n    background-color: #fff; }\n  .notification-warning .notification-close {\n    background-color: #eab000; }\n\n.notification-awesome {\n  background-color: #685dc3;\n  border-left: 8px solid #4c3fb1; }\n  .notification-awesome .timer {\n    background-color: #685dc3; }\n  .notification-awesome .timer-filler {\n    background-color: #fff; }\n  .notification-awesome .notification-close {\n    background-color: #685dc3; }\n\n@keyframes timer {\n  0% {\n    width: 100%; }\n  100% {\n    width: 0%; } }\n\n.react-notification-root {\n  position: fixed;\n  z-index: 9000;\n  pointer-events: none;\n  width: 100%;\n  height: 100%; }\n\n.notification-item {\n  display: flex;\n  position: relative;\n  border-radius: 3px;\n  margin-bottom: 15px;\n  box-shadow: 1px 3px 4px rgba(0, 0, 0, 0.2);\n  cursor: pointer; }\n  .notification-item .timer {\n    width: 100%;\n    height: 3px;\n    margin-top: 10px;\n    border-radius: 5px; }\n    .notification-item .timer .timer-filler {\n      height: 3px;\n      border-radius: 5px; }\n  .notification-item .notification-title {\n    color: #fff;\n    font-weight: 700;\n    font-size: 14px;\n    margin-top: 5px;\n    margin-bottom: 5px; }\n  .notification-item .notification-message {\n    color: #fff;\n    max-width: calc(100% - 15px);\n    font-size: 14px;\n    line-height: 150%;\n    word-wrap: break-word;\n    margin-bottom: 0;\n    margin-top: 0; }\n  .notification-item .notification-content {\n    padding: 8px 15px;\n    display: inline-block;\n    width: 100%; }\n  .notification-item .notification-close {\n    width: 18px;\n    height: 18px;\n    border-radius: 50%;\n    display: inline-block;\n    position: absolute;\n    right: 10px;\n    top: 10px; }\n    .notification-item .notification-close::after {\n      content: '\\D7';\n      position: absolute;\n      transform: translate(-50%, -50%);\n      color: #fff;\n      font-size: 12px;\n      left: 50%;\n      top: 50%; }\n\n.notification-container-mobile-top .notification-item,\n.notification-container-mobile-bottom .notification-item,\n.notification-container-mobile-top .notification-parent,\n.notification-container-mobile-bottom .notification-parent {\n  max-width: 100%;\n  width: 100%; }\n\n.notification-container-top-right .notification-parent,\n.notification-container-bottom-right .notification-parent {\n  margin-left: auto; }\n\n.notification-container-top-left .notification-parent,\n.notification-container-bottom-left .notification-parent {\n  margin-right: auto; }\n\n.notification-container-mobile-top .notification-parent,\n.notification-container-mobile-bottom .notification-parent {\n  margin-left: auto;\n  margin-right: auto; }\n", ""]);
-
-// exports
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(true);
+// Module
+___CSS_LOADER_EXPORT___.push([module.i, ".notification-container-top-center,\n.notification-container-top-left,\n.notification-container-top-right,\n.notification-container-bottom-center,\n.notification-container-bottom-left,\n.notification-container-bottom-right,\n.notification-container-center {\n  width: 325px;\n  position: absolute;\n  pointer-events: all; }\n\n.notification-container-center,\n.notification-container-top-center,\n.notification-container-bottom-center {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  flex-direction: column;\n  left: calc(50% - 162.5px); }\n\n.notification-container-center {\n  top: 20px;\n  height: 100%;\n  pointer-events: none; }\n  .notification-container-center .center-inner {\n    width: 325px;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    flex-direction: column;\n    pointer-events: all; }\n\n.notification-container-top-center {\n  top: 20px; }\n\n.notification-container-bottom-center {\n  bottom: 20px; }\n\n.notification-container-top-left {\n  left: 20px;\n  top: 20px; }\n\n.notification-container-top-right {\n  right: 20px;\n  top: 20px; }\n\n.notification-container-bottom-left {\n  left: 20px;\n  bottom: 20px; }\n\n.notification-container-bottom-right {\n  bottom: 20px;\n  right: 20px; }\n\n.notification-container-mobile-top,\n.notification-container-mobile-bottom {\n  pointer-events: all;\n  position: absolute; }\n\n.notification-container-mobile-top {\n  right: 20px;\n  left: 20px;\n  top: 20px; }\n\n.notification-container-mobile-bottom {\n  right: 20px;\n  left: 20px;\n  bottom: 20px;\n  margin-bottom: -15px; }\n\n.notification-default {\n  background-color: #007bff;\n  border-left: 8px solid #0562c7; }\n  .notification-default .timer {\n    background-color: #007bff; }\n  .notification-default .timer-filler {\n    background-color: #fff; }\n  .notification-default .notification-close {\n    background-color: #007bff; }\n\n.notification-success {\n  background-color: #28a745;\n  border-left: 8px solid #1f8838; }\n  .notification-success .timer {\n    background-color: #28a745; }\n  .notification-success .timer-filler {\n    background-color: #fff; }\n  .notification-success .notification-close {\n    background-color: #28a745; }\n\n.notification-danger {\n  background-color: #dc3545;\n  border-left: 8px solid #bd1120; }\n  .notification-danger .timer {\n    background-color: #dc3545; }\n  .notification-danger .timer-filler {\n    background-color: #fff; }\n  .notification-danger .notification-close {\n    background-color: #dc3545; }\n\n.notification-info {\n  background-color: #17a2b8;\n  border-left: 8px solid #138b9e; }\n  .notification-info .timer {\n    background-color: #17a2b8; }\n  .notification-info .timer-filler {\n    background-color: #fff; }\n  .notification-info .notification-close {\n    background-color: #17a2b8; }\n\n.notification-warning {\n  background-color: #eab000;\n  border-left: 8px solid #ce9c09; }\n  .notification-warning .timer {\n    background-color: #eab000; }\n  .notification-warning .timer-filler {\n    background-color: #fff; }\n  .notification-warning .notification-close {\n    background-color: #eab000; }\n\n.notification-awesome {\n  background-color: #685dc3;\n  border-left: 8px solid #4c3fb1; }\n  .notification-awesome .timer {\n    background-color: #685dc3; }\n  .notification-awesome .timer-filler {\n    background-color: #fff; }\n  .notification-awesome .notification-close {\n    background-color: #685dc3; }\n\n@keyframes timer {\n  0% {\n    width: 100%; }\n  100% {\n    width: 0%; } }\n\n.react-notification-root {\n  position: fixed;\n  z-index: 9000;\n  pointer-events: none;\n  width: 100%;\n  height: 100%; }\n\n.notification-item {\n  display: flex;\n  position: relative;\n  border-radius: 3px;\n  margin-bottom: 15px;\n  box-shadow: 1px 3px 4px rgba(0, 0, 0, 0.2);\n  cursor: pointer; }\n  .notification-item .timer {\n    width: 100%;\n    height: 3px;\n    margin-top: 10px;\n    border-radius: 5px; }\n    .notification-item .timer .timer-filler {\n      height: 3px;\n      border-radius: 5px; }\n  .notification-item .notification-title {\n    color: #fff;\n    font-weight: 700;\n    font-size: 14px;\n    margin-top: 5px;\n    margin-bottom: 5px; }\n  .notification-item .notification-message {\n    color: #fff;\n    max-width: calc(100% - 15px);\n    font-size: 14px;\n    line-height: 150%;\n    word-wrap: break-word;\n    margin-bottom: 0;\n    margin-top: 0; }\n  .notification-item .notification-content {\n    padding: 8px 15px;\n    display: inline-block;\n    width: 100%; }\n  .notification-item .notification-close {\n    width: 18px;\n    height: 18px;\n    border-radius: 50%;\n    display: inline-block;\n    position: absolute;\n    right: 10px;\n    top: 10px; }\n    .notification-item .notification-close::after {\n      content: '\\D7';\n      position: absolute;\n      transform: translate(-50%, -50%);\n      color: #fff;\n      font-size: 12px;\n      left: 50%;\n      top: 50%; }\n\n.notification-container-mobile-top .notification-item,\n.notification-container-mobile-bottom .notification-item,\n.notification-container-mobile-top .notification-parent,\n.notification-container-mobile-bottom .notification-parent {\n  max-width: 100%;\n  width: 100%; }\n\n.notification-container-top-right .notification-parent,\n.notification-container-bottom-right .notification-parent {\n  margin-left: auto; }\n\n.notification-container-top-left .notification-parent,\n.notification-container-bottom-left .notification-parent {\n  margin-right: auto; }\n\n.notification-container-mobile-top .notification-parent,\n.notification-container-mobile-bottom .notification-parent {\n  margin-left: auto;\n  margin-right: auto; }\n", "",{"version":3,"sources":["F:/Projects/react-notifications-component/src/scss/_containers.scss","F:/Projects/react-notifications-component/src/scss/_types.scss","F:/Projects/react-notifications-component/src/scss/_variables.scss","F:/Projects/react-notifications-component/src/scss/notification.scss"],"names":[],"mappings":"AAAA;;;;;;;EAOE,YAAY;EACZ,kBAAkB;EAClB,mBAAmB,EAAA;;AAGrB;;;EAGE,aAAa;EACb,uBAAuB;EACvB,mBAAmB;EACnB,sBAAsB;EACtB,yBAAyB,EAAA;;AAG3B;EACE,SAAS;EACT,YAAY;EACZ,oBAAoB,EAAA;EAHtB;IAMI,YAAY;IACZ,aAAa;IACb,uBAAuB;IACvB,mBAAmB;IACnB,sBAAsB;IACtB,mBAAmB,EAAA;;AAIvB;EACE,SAAS,EAAA;;AAEX;EACE,YAAY,EAAA;;AAGd;EACE,UAAU;EACV,SAAS,EAAA;;AAGX;EACE,WAAW;EACX,SAAS,EAAA;;AAGX;EACE,UAAU;EACV,YAAY,EAAA;;AAGd;EACE,YAAY;EACZ,WAAW,EAAA;;AAGb;;EAEE,mBAAmB;EACnB,kBAAkB,EAAA;;AAGpB;EACE,WAAW;EACX,UAAU;EACV,SAAS,EAAA;;AAGX;EACE,WAAW;EACX,UAAU;EACV,YAAY;EACZ,oBAAoB,EAAA;;AC9EtB;EACE,yBCHe;EDIf,8BCHoB,EAAA;EDCtB;IAKI,yBCWmB,EAAA;EDhBvB;IAQI,sBCSuB,EAAA;EDjB3B;IAWI,yBCba,EAAA;;ADiBjB;EACE,yBCfe;EDgBf,8BCfoB,EAAA;EDatB;IAKI,yBCDmB,EAAA;EDJvB;IAQI,sBCHuB,EAAA;EDL3B;IAWI,yBCzBa,EAAA;;AD6BjB;EACE,yBC3Bc;ED4Bd,8BC3BmB,EAAA;EDyBrB;IAKI,yBCbkB,EAAA;EDQtB;IAQI,sBCfsB,EAAA;EDO1B;IAWI,yBCrCY,EAAA;;ADyChB;EACE,yBCvCY;EDwCZ,8BCvCiB,EAAA;EDqCnB;IAKI,yBCzBgB,EAAA;EDoBpB;IAQI,sBC3BoB,EAAA;EDmBxB;IAWI,yBCjDU,EAAA;;ADqDd;EACE,yBCnDe;EDoDf,8BCnDoB,EAAA;EDiDtB;IAKI,yBCrCmB,EAAA;EDgCvB;IAQI,sBCvCuB,EAAA;ED+B3B;IAWI,yBC7Da,EAAA;;ADiEjB;EACE,yBC/De;EDgEf,8BC/DoB,EAAA;ED6DtB;IAKI,yBCjDmB,EAAA;ED4CvB;IAQI,sBCnDuB,EAAA;ED2C3B;IAWI,yBCzEa,EAAA;;ACZjB;EACE;IAAK,WAAW,EAAA;EAChB;IAAO,SAAS,EAAA,EAAA;;AAGlB;EACE,eAAe;EACf,aAAa;EACb,oBAAoB;EACpB,WAAW;EACX,YAAY,EAAA;;AAGd;EACE,aAAa;EACb,kBAAkB;EAClB,kBAAkB;EAClB,mBAAmB;EACnB,0CAA0C;EAC1C,eAAe,EAAA;EANjB;IASI,WAAW;IACX,WAAW;IACX,gBAAgB;IAChB,kBAAkB,EAAA;IAZtB;MAeM,WAAW;MACX,kBAAkB,EAAA;EAhBxB;IAqBI,WAAW;IACX,gBAAgB;IAChB,eAAe;IACf,eAAe;IACf,kBAAkB,EAAA;EAzBtB;IA6BI,WAAW;IACX,4BAA4B;IAC5B,eAAe;IACf,iBAAiB;IACjB,qBAAqB;IACrB,gBAAgB;IAChB,aAAa,EAAA;EAnCjB;IAuCI,iBAAiB;IACjB,qBAAqB;IACrB,WAAW,EAAA;EAzCf;IA6CI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,qBAAqB;IACrB,kBAAkB;IAClB,WAAW;IACX,SAAS,EAAA;IAnDb;MAsDM,cAAc;MACd,kBAAkB;MAClB,gCAAgC;MAChC,WAAW;MACX,eAAe;MACf,SAAS;MACT,QAAQ,EAAA;;AAKd;;;;EAIE,eAAe;EACf,WAAW,EAAA;;AAGb;;EAEE,iBAAiB,EAAA;;AAGnB;;EAEE,kBAAkB,EAAA;;AAGpB;;EAEE,iBAAiB;EACjB,kBAAkB,EAAA","file":"notification.scss","sourcesContent":[".notification-container-top-center,\r\n.notification-container-top-left,\r\n.notification-container-top-right,\r\n.notification-container-bottom-center,\r\n.notification-container-bottom-left,\r\n.notification-container-bottom-right,\r\n.notification-container-center {\r\n  width: 325px;\r\n  position: absolute;\r\n  pointer-events: all;\r\n}\r\n\r\n.notification-container-center,\r\n.notification-container-top-center,\r\n.notification-container-bottom-center {\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  flex-direction: column;\r\n  left: calc(50% - 162.5px);\r\n}\r\n\r\n.notification-container-center {\r\n  top: 20px;\r\n  height: 100%;\r\n  pointer-events: none;\r\n\r\n  .center-inner {\r\n    width: 325px;\r\n    display: flex;\r\n    justify-content: center;\r\n    align-items: center;\r\n    flex-direction: column;\r\n    pointer-events: all;\r\n  }\r\n}\r\n\r\n.notification-container-top-center {\r\n  top: 20px;\r\n}\r\n.notification-container-bottom-center {\r\n  bottom: 20px;\r\n}\r\n\r\n.notification-container-top-left {\r\n  left: 20px;\r\n  top: 20px;\r\n}\r\n\r\n.notification-container-top-right {\r\n  right: 20px;\r\n  top: 20px;\r\n}\r\n\r\n.notification-container-bottom-left {\r\n  left: 20px;\r\n  bottom: 20px;\r\n}\r\n\r\n.notification-container-bottom-right {\r\n  bottom: 20px;\r\n  right: 20px;\r\n}\r\n\r\n.notification-container-mobile-top,\r\n.notification-container-mobile-bottom {\r\n  pointer-events: all;\r\n  position: absolute;\r\n}\r\n\r\n.notification-container-mobile-top {\r\n  right: 20px;\r\n  left: 20px;\r\n  top: 20px;\r\n}\r\n\r\n.notification-container-mobile-bottom {\r\n  right: 20px;\r\n  left: 20px;\r\n  bottom: 20px;\r\n  margin-bottom: -15px;\r\n}\r\n","@import \"_variables.scss\";\r\n\r\n.notification-default {\r\n  background-color: $default;\r\n  border-left: 8px solid $default_dark;\r\n\r\n  .timer {\r\n    background-color: $default_timer;\r\n  }\r\n  .timer-filler {\r\n    background-color: $default_timer_filler;\r\n  }\r\n  .notification-close {\r\n    background-color: $default;\r\n  }\r\n}\r\n\r\n.notification-success {\r\n  background-color: $success;\r\n  border-left: 8px solid $success_dark;\r\n\r\n  .timer {\r\n    background-color: $success_timer;\r\n  }\r\n  .timer-filler {\r\n    background-color: $success_timer_filler;\r\n  }\r\n  .notification-close {\r\n    background-color: $success;\r\n  }\r\n}\r\n\r\n.notification-danger {\r\n  background-color: $danger;\r\n  border-left: 8px solid $danger_dark;\r\n\r\n  .timer {\r\n    background-color: $danger_timer;\r\n  }\r\n  .timer-filler {\r\n    background-color: $danger_timer_filler;\r\n  }\r\n  .notification-close {\r\n    background-color: $danger;\r\n  }\r\n}\r\n\r\n.notification-info {\r\n  background-color: $info;\r\n  border-left: 8px solid $info_dark;\r\n\r\n  .timer {\r\n    background-color: $info_timer;\r\n  }\r\n  .timer-filler {\r\n    background-color: $info_timer_filler;\r\n  }\r\n  .notification-close {\r\n    background-color: $info;\r\n  }\r\n}\r\n\r\n.notification-warning {\r\n  background-color: $warning;\r\n  border-left: 8px solid $warning_dark;\r\n\r\n  .timer {\r\n    background-color: $warning_timer;\r\n  }\r\n  .timer-filler {\r\n    background-color: $warning_timer_filler;\r\n  }\r\n  .notification-close {\r\n    background-color: $warning;\r\n  }\r\n}\r\n\r\n.notification-awesome {\r\n  background-color: $awesome;\r\n  border-left: 8px solid $awesome_dark;\r\n\r\n  .timer {\r\n    background-color: $awesome_timer;\r\n  }\r\n  .timer-filler {\r\n    background-color: $awesome_timer_filler;\r\n  }\r\n  .notification-close {\r\n    background-color: $awesome;\r\n  }\r\n}","$default: #007bff !default;\r\n$default_dark: #0562c7 !default;\r\n\r\n$success: #28a745 !default;\r\n$success_dark: #1f8838 !default;\r\n\r\n$danger: #dc3545 !default;\r\n$danger_dark: #bd1120 !default;\r\n\r\n$info: #17a2b8 !default;\r\n$info_dark: #138b9e !default;\r\n\r\n$warning: #eab000 !default;\r\n$warning_dark: #ce9c09 !default;\r\n\r\n$awesome: #685dc3 !default;\r\n$awesome_dark: #4c3fb1 !default;\r\n\r\n$default_timer: #007bff !default;\r\n$default_timer_filler: #fff !default;\r\n\r\n$success_timer: #28a745 !default;\r\n$success_timer_filler: #fff !default;\r\n\r\n$danger_timer: #dc3545 !default;\r\n$danger_timer_filler: #fff !default;\r\n\r\n$info_timer: #17a2b8 !default;\r\n$info_timer_filler: #fff !default;\r\n\r\n$warning_timer: #eab000 !default;\r\n$warning_timer_filler: #fff !default;\r\n\r\n$awesome_timer: #685dc3 !default;\r\n$awesome_timer_filler: #fff !default;\r\n","@import \"./_containers.scss\";\r\n@import \"./_types.scss\";\r\n\r\n@keyframes timer {\r\n  0% { width: 100%; }\r\n  100% { width: 0%; }\r\n}\r\n\r\n.react-notification-root {\r\n  position: fixed;\r\n  z-index: 9000;\r\n  pointer-events: none;\r\n  width: 100%;\r\n  height: 100%;\r\n}\r\n\r\n.notification-item {\r\n  display: flex;\r\n  position: relative;\r\n  border-radius: 3px;\r\n  margin-bottom: 15px;\r\n  box-shadow: 1px 3px 4px rgba(0, 0, 0, 0.2);\r\n  cursor: pointer;\r\n\r\n  .timer {\r\n    width: 100%;\r\n    height: 3px;\r\n    margin-top: 10px;\r\n    border-radius: 5px;\r\n\r\n    .timer-filler {\r\n      height: 3px;\r\n      border-radius: 5px;\r\n    }\r\n  }\r\n\r\n  .notification-title {\r\n    color: #fff;\r\n    font-weight: 700;\r\n    font-size: 14px;\r\n    margin-top: 5px;\r\n    margin-bottom: 5px;\r\n  }\r\n\r\n  .notification-message {\r\n    color: #fff;\r\n    max-width: calc(100% - 15px);\r\n    font-size: 14px;\r\n    line-height: 150%;\r\n    word-wrap: break-word;\r\n    margin-bottom: 0;\r\n    margin-top: 0;\r\n  }\r\n\r\n  .notification-content {\r\n    padding: 8px 15px;\r\n    display: inline-block;\r\n    width: 100%;\r\n  }\r\n\r\n  .notification-close {\r\n    width: 18px;\r\n    height: 18px;\r\n    border-radius: 50%;\r\n    display: inline-block;\r\n    position: absolute;\r\n    right: 10px;\r\n    top: 10px;\r\n\r\n    &::after {\r\n      content: '\\D7';\r\n      position: absolute;\r\n      transform: translate(-50%, -50%);\r\n      color: #fff;\r\n      font-size: 12px;\r\n      left: 50%;\r\n      top: 50%;\r\n    }\r\n  }\r\n}\r\n\r\n.notification-container-mobile-top .notification-item,\r\n.notification-container-mobile-bottom .notification-item,\r\n.notification-container-mobile-top .notification-parent,\r\n.notification-container-mobile-bottom .notification-parent {\r\n  max-width: 100%;\r\n  width: 100%;\r\n}\r\n\r\n.notification-container-top-right .notification-parent,\r\n.notification-container-bottom-right .notification-parent {\r\n  margin-left: auto;\r\n}\r\n\r\n.notification-container-top-left .notification-parent,\r\n.notification-container-bottom-left .notification-parent {\r\n  margin-right: auto;\r\n}\r\n\r\n.notification-container-mobile-top .notification-parent,\r\n.notification-container-mobile-bottom .notification-parent {\r\n  margin-left: auto;\r\n  margin-right: auto;\r\n}"]}]);
+// Exports
+/* harmony default export */ __webpack_exports__["default"] = (___CSS_LOADER_EXPORT___);
 
 
 /***/ }),
@@ -28071,7 +28068,7 @@ function isFunctionComponent(component) {
 }
 
 var isReactElement = function isReactElement(value) {
-  return isFunctionComponent(value) || react__WEBPACK_IMPORTED_MODULE_0___default.a.isValidElement(value);
+  return isFunctionComponent(value) || /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.isValidElement(value);
 };
 
 function validateTransition(notification, transition) {
@@ -28099,47 +28096,59 @@ function validateTransition(notification, transition) {
 var validators = [function title(_ref2) {
   var content = _ref2.content,
       title = _ref2.title;
-  if (content) return;
-  if (isNull(title)) return;
-  var isReactEl = isReactElement(title);
-  if (isReactEl || typeof title === 'string') return;
-  if (!isReactEl) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TITLE_ELEMENT);
-  if (typeof title !== 'string') throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TITLE_STRING);
+  return function () {
+    if (content) return;
+    if (isNull(title)) return;
+    var isReactEl = isReactElement(title);
+    if (isReactEl || typeof title === 'string') return;
+    if (!isReactEl) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TITLE_ELEMENT);
+    if (typeof title !== 'string') throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TITLE_STRING);
+  }();
 }, function message(_ref3) {
   var content = _ref3.content,
       message = _ref3.message;
-  if (content) return;
+  return function () {
+    if (content) return;
 
-  if (!message) {
-    throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].MESSAGE_REQUIRED);
-  }
+    if (!message) {
+      throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].MESSAGE_REQUIRED);
+    }
 
-  var isReactEl = isReactElement(message);
-  if (isString(message) || isReactEl) return;
-  if (!isString(message)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].MESSAGE_STRING);
-  if (!isReactEl) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].MESSAGE_ELEMENT);
+    var isReactEl = isReactElement(message);
+    if (isString(message) || isReactEl) return;
+    if (!isString(message)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].MESSAGE_STRING);
+    if (!isReactEl) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].MESSAGE_ELEMENT);
+  }();
 }, function type(_ref4, userDefinedTypes) {
   var content = _ref4.content,
       type = _ref4.type;
-  if (content) return;
-  if (!type) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TYPE_REQUIRED);
-  if (!isString(type)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TYPE_STRING);
+  return function () {
+    if (content) return;
+    if (!type) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TYPE_REQUIRED);
+    if (!isString(type)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TYPE_STRING);
 
-  if (!userDefinedTypes && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].SUCCESS && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].DANGER && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].INFO && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].DEFAULT && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].WARNING) {
-    throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TYPE_NOT_EXISTENT);
-  }
+    if (!userDefinedTypes && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].SUCCESS && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].DANGER && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].INFO && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].DEFAULT && type !== _constants__WEBPACK_IMPORTED_MODULE_1__["NOTIFICATION_TYPE"].WARNING) {
+      throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].TYPE_NOT_EXISTENT);
+    }
+  }();
 }, function container(_ref5) {
   var container = _ref5.container;
-  if (isNull(container)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].CONTAINER_REQUIRED);
-  if (!isString(container)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].CONTAINER_STRING);
+  return function () {
+    if (isNull(container)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].CONTAINER_REQUIRED);
+    if (!isString(container)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].CONTAINER_STRING);
+  }();
 }, function insert(_ref6) {
   var insert = _ref6.insert;
-  if (isNull(insert)) return;
-  if (!isString(insert)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].INSERT_STRING);
+  return function () {
+    if (isNull(insert)) return;
+    if (!isString(insert)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].INSERT_STRING);
+  }();
 }, function width(_ref7) {
   var width = _ref7.width;
-  if (isNull(width)) return;
-  if (!isNumber(width)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].WIDTH_NUMBER);
+  return function () {
+    if (isNull(width)) return;
+    if (!isNumber(width)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].WIDTH_NUMBER);
+  }();
 }, function userDefinedTypes(_ref8, userDefinedTypes) {
   var type = _ref8.type,
       content = _ref8.content;
@@ -28153,43 +28162,53 @@ var validators = [function title(_ref2) {
   }
 }, function content(_ref9) {
   var content = _ref9.content;
-  if (!content) return;
-  var isClass = isClassComponent(content);
-  var isFunction = isFunctionComponent(content);
-  var isElem = react__WEBPACK_IMPORTED_MODULE_0___default.a.isValidElement(content);
-  if (!isClass && !isFunction && !isElem) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].CONTENT_INVALID);
+  return function () {
+    if (!content) return;
+    var isClass = isClassComponent(content);
+    var isFunction = isFunctionComponent(content);
+    var isElem = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.isValidElement(content);
+    if (!isClass && !isFunction && !isElem) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].CONTENT_INVALID);
+  }();
 }, function animationIn(_ref10) {
   var animationIn = _ref10.animationIn;
-  if (isNull(animationIn)) return;
-  if (!isArray(animationIn)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].ANIMATION_IN);
+  return function () {
+    if (isNull(animationIn)) return;
+    if (!isArray(animationIn)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].ANIMATION_IN);
+  }();
 }, function animationOut(_ref11) {
   var animationOut = _ref11.animationOut;
-  if (isNull(animationOut)) return;
-  if (!isArray(animationOut)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].ANIMATION_OUT);
+  return function () {
+    if (isNull(animationOut)) return;
+    if (!isArray(animationOut)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].ANIMATION_OUT);
+  }();
 }, function onRemoval(_ref12) {
   var onRemoval = _ref12.onRemoval;
-  if (!onRemoval) return;
-  if (!isFunction(onRemoval)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].REMOVAL_FUNC);
+  return function () {
+    if (!onRemoval) return;
+    if (!isFunction(onRemoval)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].REMOVAL_FUNC);
+  }();
 }, function dismiss(_ref13) {
   var dismiss = _ref13.dismiss;
-  if (!dismiss) return;
-  var _dismiss = dismiss,
-      duration = _dismiss.duration,
-      onScreen = _dismiss.onScreen,
-      showIcon = _dismiss.showIcon,
-      pauseOnHover = _dismiss.pauseOnHover,
-      wait = _dismiss.waitForAnimation,
-      click = _dismiss.click,
-      touch = _dismiss.touch;
-  if (isNull(duration)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_REQUIRED);
-  if (!isNumber(duration)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_NUMBER);
-  if (duration < 0) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_POSITIVE);
-  if (!isNull(onScreen) && !isBoolean(onScreen)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_ONSCREEN_BOOL);
-  if (!isNull(pauseOnHover) && !isBoolean(pauseOnHover)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_PAUSE_BOOL);
-  if (!isNull(click) && !isBoolean(click)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_CLICK_BOOL);
-  if (!isNull(touch) && !isBoolean(touch)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_TOUCH_BOOL);
-  if (!isNull(showIcon) && !isBoolean(showIcon)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_ICON);
-  if (!isNull(wait) && !isBoolean(wait)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_WAIT);
+  return function () {
+    if (!dismiss) return;
+    var _dismiss = dismiss,
+        duration = _dismiss.duration,
+        onScreen = _dismiss.onScreen,
+        showIcon = _dismiss.showIcon,
+        pauseOnHover = _dismiss.pauseOnHover,
+        wait = _dismiss.waitForAnimation,
+        click = _dismiss.click,
+        touch = _dismiss.touch;
+    if (isNull(duration)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_REQUIRED);
+    if (!isNumber(duration)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_NUMBER);
+    if (duration < 0) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_POSITIVE);
+    if (!isNull(onScreen) && !isBoolean(onScreen)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_ONSCREEN_BOOL);
+    if (!isNull(pauseOnHover) && !isBoolean(pauseOnHover)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_PAUSE_BOOL);
+    if (!isNull(click) && !isBoolean(click)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_CLICK_BOOL);
+    if (!isNull(touch) && !isBoolean(touch)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_TOUCH_BOOL);
+    if (!isNull(showIcon) && !isBoolean(showIcon)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_ICON);
+    if (!isNull(wait) && !isBoolean(wait)) throw new Error(_constants__WEBPACK_IMPORTED_MODULE_1__["ERROR"].DISMISS_WAIT);
+  }();
 }];
 
 /***/ }),
@@ -28248,7 +28267,7 @@ if(false) {}
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/** @license React v16.13.0
+/** @license React v16.14.0
  * react.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -28268,7 +28287,7 @@ if (true) {
 var _assign = __webpack_require__(/*! object-assign */ "./node_modules/object-assign/index.js");
 var checkPropTypes = __webpack_require__(/*! prop-types/checkPropTypes */ "./node_modules/prop-types/checkPropTypes.js");
 
-var ReactVersion = '16.13.0';
+var ReactVersion = '16.14.0';
 
 // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
 // nor polyfill, then a plain number is used for performance.
@@ -30189,7 +30208,7 @@ if (false) {} else {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/** @license React v0.19.0
+/** @license React v0.19.1
  * scheduler-tracing.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -30550,7 +30569,7 @@ exports.unstable_wrap = unstable_wrap;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/** @license React v0.19.0
+/** @license React v0.19.1
  * scheduler.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -31955,10 +31974,248 @@ module.exports = function (css) {
 
 /***/ }),
 
-/***/ "./resources/js/components/ce.estudiantesList.jsx":
-/*!********************************************************!*\
-  !*** ./resources/js/components/ce.estudiantesList.jsx ***!
-  \********************************************************/
+/***/ "./resources/js/assets/custom.js":
+/*!***************************************!*\
+  !*** ./resources/js/assets/custom.js ***!
+  \***************************************/
+/*! exports provided: formatCedula, formatMoneda, formatPartida, diffFecha, diffdatefull, inputMoneda, removeMoneda, getDiaSemana, retDivisa, getTodayDate, getDataForm, leerTxt, lenValLimit */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatCedula", function() { return formatCedula; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatMoneda", function() { return formatMoneda; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatPartida", function() { return formatPartida; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "diffFecha", function() { return diffFecha; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "diffdatefull", function() { return diffdatefull; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "inputMoneda", function() { return inputMoneda; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeMoneda", function() { return removeMoneda; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDiaSemana", function() { return getDiaSemana; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "retDivisa", function() { return retDivisa; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTodayDate", function() { return getTodayDate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDataForm", function() { return getDataForm; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "leerTxt", function() { return leerTxt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lenValLimit", function() { return lenValLimit; });
+function formatMoneda(value) {
+  var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+  var separators = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['.', ".", ','];
+  decimals = decimals >= 0 ? parseInt(decimals, 0) : 2;
+  separators = separators || ['.', "'", ','];
+  var number = (parseFloat(value) || 0).toFixed(decimals);
+  if (number.length <= 4 + decimals) return number.replace('.', separators[separators.length - 1]);
+  var parts = number.split(/[-.]/);
+  value = parts[parts.length > 1 ? parts.length - 2 : 0];
+  var result = value.substr(value.length - 3, 3) + (parts.length > 1 ? separators[separators.length - 1] + parts[parts.length - 1] : '');
+  var start = value.length - 6;
+  var idx = 0;
+
+  while (start > -3) {
+    result = (start > 0 ? value.substr(start, 3) : value.substr(0, 3 + start)) + separators[idx] + result;
+    idx = ++idx % 2;
+    start -= 3;
+  }
+
+  return (parts.length == 3 ? '-' : '') + result;
+}
+
+function formatCedula(val) {
+  val = val.toString();
+  var count = 1;
+  var format = "";
+
+  for (var i = val.length - 1; i >= 0; i--) {
+    format = val[i] + format;
+
+    if (count % 3 == 0) {
+      format = "." + format;
+    }
+
+    count++;
+  }
+
+  return format;
+}
+
+function formatPartida(val) {
+  val = val.toString();
+  var v = "";
+  var num = 1;
+
+  for (var i = val.length - 1; i >= 0; i--) {
+    v = val[i] + v;
+
+    if (num % 2 == 0) {
+      v = "." + v;
+    }
+
+    num++;
+  }
+
+  v = v[0] == "." ? v.substr(1) : v;
+  return v;
+}
+
+function diffFecha(fecha) {
+  var f = Date.parse(fecha);
+  var f2 = Date.now();
+  var t = new Date(f - f2);
+  return Math.round((f2 - f) / (3600 * 24 * 1000) / 365);
+}
+
+function diffdatefull(fromDate, toDate) {
+  try {
+    var result = getDateDifference(new Date(fromDate), new Date(toDate));
+
+    if (result && !isNaN(result.years)) {
+      return (result.years == 0 ? "" : result.years + ' año' + (result.years == 1 ? ' ' : 's ')) + (result.months == 0 ? "" : result.months + ' mes' + (result.months == 1 ? ' ' : 'es ')) + (result.days == 0 ? "" : result.days + ' día' + (result.days == 1 ? '' : 's'));
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function getDateDifference(startDate, endDate) {
+  if (startDate > endDate) {
+    console.log('Start date must be before end date');
+    return null;
+  }
+
+  var startYear = startDate.getFullYear();
+  var startMonth = startDate.getMonth();
+  var startDay = startDate.getDate();
+  var endYear = endDate.getFullYear();
+  var endMonth = endDate.getMonth();
+  var endDay = endDate.getDate(); // We diffdatefull February based on end year as it might be a leep year which might influence the number of days.
+
+  var february = endYear % 4 == 0 && endYear % 100 != 0 || endYear % 400 == 0 ? 29 : 28;
+  var daysOfMonth = [31, february, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  var startDateNotPassedInEndYear = endMonth < startMonth || endMonth == startMonth && endDay < startDay;
+  var years = endYear - startYear - (startDateNotPassedInEndYear ? 1 : 0);
+  var months = (12 + endMonth - startMonth - (endDay < startDay ? 1 : 0)) % 12; // (12 + …) % 12 makes sure index is always between 0 and 11
+
+  var days = startDay <= endDay ? endDay - startDay : daysOfMonth[(12 + endMonth - 1) % 12] - startDay + endDay;
+  return {
+    years: years,
+    months: months,
+    days: days
+  };
+}
+
+function formatNumber(n) {
+  return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function inputMoneda(val) {
+  if (val.indexOf(",") >= 0) {
+    var decimal_pos = val.indexOf(",");
+    var left_side = val.substring(0, decimal_pos);
+    var right_side = val.substring(decimal_pos);
+    left_side = formatNumber(left_side);
+    right_side = formatNumber(right_side);
+    right_side = right_side.substring(0, 2);
+    return left_side + "," + right_side;
+  }
+
+  return formatNumber(val);
+}
+
+function removeMoneda(val) {
+  return parseFloat(val.replace(/\./g, "").replace(/,/g, "."));
+}
+
+function getDiaSemana(date) {
+  var fecha = new Date(date);
+  var dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', "Domingo"];
+  return dias[fecha.getDay()];
+}
+
+function retDivisa(divisa) {
+  return divisa == 1 ? "USD" : divisa == 2 ? "COP" : divisa == 3 ? "Bs." : "";
+}
+
+function getTodayDate() {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1;
+  var yyyy = today.getFullYear();
+
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+
+  return yyyy + "-" + mm + "-" + dd;
+}
+
+function getDataForm(target) {
+  var form = new FormData(target);
+  var data = {};
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = form.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var key = _step.value;
+      data[key[0]] = key[1];
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+        _iterator["return"]();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return data;
+}
+
+var leerTxt = function leerTxt(e, callback) {
+  var archivo = e.target.files[0];
+
+  if (!archivo) {
+    return;
+  }
+
+  var lector = new FileReader();
+
+  lector.onload = function (e) {
+    var contenido = e.target.result;
+    callback(contenido.replace(/\r/g, "").split(/\n/).map(function (e) {
+      return e ? e.split(/\t/).filter(function (ee) {
+        return ee && ee.length;
+      }) : null;
+    }).filter(function (e) {
+      return e && e.length;
+    }));
+  };
+
+  lector.readAsText(archivo, "ISO-8859-1");
+};
+
+function lenValLimit(val, len) {
+  val = val.substr(0, len).replace(/[^0-9]/g, "");
+  return val;
+}
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/academico/ce.estudiantesList.jsx":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/academico/ce.estudiantesList.jsx ***!
+  \******************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -31966,7 +32223,7 @@ module.exports = function (css) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _custom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../custom.js */ "./resources/js/custom.js");
+/* harmony import */ var _assets_custom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/custom.js */ "./resources/js/assets/custom.js");
 
 
 var loc = window.location.origin;
@@ -31991,7 +32248,7 @@ function TrEstudiante(_ref) {
     className: "table-nombre-estudiante"
   }, estudiante.nombre, " ", estudiante.apellido), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
     className: "table-cedula-estudiante"
-  }, Object(_custom_js__WEBPACK_IMPORTED_MODULE_1__["formatCedula"])(estudiante.cedula)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+  }, Object(_assets_custom_js__WEBPACK_IMPORTED_MODULE_1__["formatCedula"])(estudiante.cedula)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
     className: "table-cedula-estudiante"
   }, estudiante.nombrecarrera.nombre));
 }
@@ -32079,10 +32336,10 @@ TrEstudiante.defaultProps = {
 
 /***/ }),
 
-/***/ "./resources/js/components/ce.trayecto.jsx":
-/*!*************************************************!*\
-  !*** ./resources/js/components/ce.trayecto.jsx ***!
-  \*************************************************/
+/***/ "./resources/js/components/academico/ce.trayecto.jsx":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/academico/ce.trayecto.jsx ***!
+  \***********************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -32092,9 +32349,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _handleNotification_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./handleNotification.jsx */ "./resources/js/components/handleNotification.jsx");
-/* harmony import */ var _custom_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../custom.js */ "./resources/js/custom.js");
-/* harmony import */ var _ce_estudiantesList_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ce.estudiantesList.jsx */ "./resources/js/components/ce.estudiantesList.jsx");
+/* harmony import */ var _handleNotification_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./handleNotification.jsx */ "./resources/js/components/academico/handleNotification.jsx");
+/* harmony import */ var _assets_custom_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../assets/custom.js */ "./resources/js/assets/custom.js");
+/* harmony import */ var _ce_estudiantesList_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ce.estudiantesList.jsx */ "./resources/js/components/academico/ce.estudiantesList.jsx");
 function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
 
 function _typeof(obj) {
@@ -32566,7 +32823,7 @@ function (_Component) {
                       className: "table-nombre-estudiante"
                     }, e.estudiante.nombre, " ", e.estudiante.apellido), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
                       className: "table-cedula-estudiante"
-                    }, Object(_custom_js__WEBPACK_IMPORTED_MODULE_3__["formatCedula"])(e.estudiante.cedula))) : null;
+                    }, Object(_assets_custom_js__WEBPACK_IMPORTED_MODULE_3__["formatCedula"])(e.estudiante.cedula))) : null;
                   })))))) : null;
                 }))) : null;
               }))) : null;
@@ -32886,10 +33143,10 @@ Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(react__WEBPACK_IMPORTED
 
 /***/ }),
 
-/***/ "./resources/js/components/handleNotification.jsx":
-/*!********************************************************!*\
-  !*** ./resources/js/components/handleNotification.jsx ***!
-  \********************************************************/
+/***/ "./resources/js/components/academico/handleNotification.jsx":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/academico/handleNotification.jsx ***!
+  \******************************************************************/
 /*! exports provided: handleNotification, Notification */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -32933,97 +33190,14 @@ var Notification = function Notification() {
 
 /***/ }),
 
-/***/ "./resources/js/custom.js":
-/*!********************************!*\
-  !*** ./resources/js/custom.js ***!
-  \********************************/
-/*! exports provided: formatCedula, formatMoneda, formatPartida, diffFecha */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatCedula", function() { return formatCedula; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatMoneda", function() { return formatMoneda; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatPartida", function() { return formatPartida; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "diffFecha", function() { return diffFecha; });
-function formatMoneda(value) {
-  var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-  var separators = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['.', ".", ','];
-  decimals = decimals >= 0 ? parseInt(decimals, 0) : 2;
-  separators = separators || ['.', "'", ','];
-  var number = (parseFloat(value) || 0).toFixed(decimals);
-  if (number.length <= 4 + decimals) return number.replace('.', separators[separators.length - 1]);
-  var parts = number.split(/[-.]/);
-  value = parts[parts.length > 1 ? parts.length - 2 : 0];
-  var result = value.substr(value.length - 3, 3) + (parts.length > 1 ? separators[separators.length - 1] + parts[parts.length - 1] : '');
-  var start = value.length - 6;
-  var idx = 0;
-
-  while (start > -3) {
-    result = (start > 0 ? value.substr(start, 3) : value.substr(0, 3 + start)) + separators[idx] + result;
-    idx = ++idx % 2;
-    start -= 3;
-  }
-
-  return (parts.length == 3 ? '-' : '') + result;
-}
-
-function formatCedula(val) {
-  val = val.toString();
-  var count = 1;
-  var format = "";
-
-  for (var i = val.length - 1; i >= 0; i--) {
-    format = val[i] + format;
-
-    if (count % 3 == 0) {
-      format = "." + format;
-    }
-
-    count++;
-  }
-
-  return format;
-}
-
-function formatPartida(val) {
-  val = val.toString();
-  var v = "";
-  var num = 1;
-
-  for (var i = val.length - 1; i >= 0; i--) {
-    v = val[i] + v;
-
-    if (num % 2 == 0) {
-      v = "." + v;
-    }
-
-    num++;
-  }
-
-  v = v[0] == "." ? v.substr(1) : v;
-  return v;
-}
-
-function diffFecha(fecha) {
-  var f = Date.parse(fecha);
-  var f2 = Date.now();
-  var t = new Date(f - f2);
-  return Math.round((f2 - f) / (3600 * 24 * 1000) / 365);
-}
-
-
-
-/***/ }),
-
-/***/ 3:
-/*!*******************************************************!*\
-  !*** multi ./resources/js/components/ce.trayecto.jsx ***!
-  \*******************************************************/
+/***/ 4:
+/*!*****************************************************************!*\
+  !*** multi ./resources/js/components/academico/ce.trayecto.jsx ***!
+  \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\uptaapc\resources\js\components\ce.trayecto.jsx */"./resources/js/components/ce.trayecto.jsx");
+module.exports = __webpack_require__(/*! D:\uptaapc\resources\js\components\academico\ce.trayecto.jsx */"./resources/js/components/academico/ce.trayecto.jsx");
 
 
 /***/ })

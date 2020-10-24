@@ -8,54 +8,45 @@ use App\Acciones_proyecto;
 use App\Acciones_especifica;
 use App\Presupuesto_ordinario;
 
+use Response;
+
 class partidasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+   
+    public function index(Request $req)
     {
-        return Partidas_presupuestaria::where("codigo","LIKE","401%")->get()->take(15);
+        return Partidas_presupuestaria::orWhere("codigo","LIKE",$req->q."%")
+        ->orWhere("descripcion","LIKE",$req->q."%")
+        ->get()
+        ->take($req->limit);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    
+    public function store(Request $req)
     {
-        //
-    }
+       try{
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        try{
-            $partidas = new Partidas_presupuestaria;
-            $partidas->codigo = $request->codigo;
-            $partidas->partida = $request->partida;
-            $partidas->descripcion = $request->descripcion;
-            $partidas->save();
-            return response(["code"=>200,"msj"=>"¡Éxito al guardar!"],200);
-        }catch(\Exception $e){
-           return response(["code"=>500,"msj"=>$e->getMessage()],200);
+            if ($req->modo==="delete") {
+                Partidas_presupuestaria::find($req->id)->delete();
+            }else{
+                if ($req->modo==="update") {
+                    $obj = Partidas_presupuestaria::find($req->idupdate);
+                }else{
+                    $obj = new Partidas_presupuestaria;
+                }
+                $obj->codigo = $req->codigo;
+                $obj->partida = $req->partida;
+                $obj->descripcion = $req->descripcion;
+                $obj->save();
+            }
+
+            return Response::json( ["estado"=>true,"msj"=>"¡Éxito!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
         }
+          
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($id)
     {
         $id = str_replace(".", "", (string)$id);
@@ -97,51 +88,7 @@ class partidasController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        try{
-            $partida_update = Partidas_presupuestaria::where("codigo",$id);
-           
-            $partida_update->update($request->all());
-
-            return response(["code"=>200,"msj"=>"¡Éxito al editar!"],200);
-        }catch(\Exception $e){
-           return response(["code"=>500,"msj"=>$e->getMessage()],200);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        try{
-            Partidas_presupuestaria::where("codigo",$id)->delete();
-            return response(["code"=>200,"msj"=>"¡Éxito al eliminar!"],200);
-        }catch(\Exception $e){
-           return response(["code"=>500,"msj"=>$e->getMessage()],200);
-        }
-    }
+    
+    
 }
 

@@ -15,8 +15,8 @@ class CreatePartidasPresupuestariasTable extends Migration
     {
         Schema::create('partidas_presupuestarias', function (Blueprint $table) {
             $table->engine = 'InnoDB';
-
-            $table->string('codigo',20)->primary();
+            $table->increments('id');
+            $table->string('codigo',20)->unique();
             $table->text('partida');
             $table->text('descripcion');
             $table->timestamps();

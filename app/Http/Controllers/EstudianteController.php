@@ -92,14 +92,13 @@ class EstudianteController extends Controller
     public function primerainscripcionStore(Request $req)
     {
         if (!personal::with("nombrecarrera")->find(session()->get("id"))->inscrito) {
-            $nameFolder = "public/docsPersonal/".$req->cedula . " " . date("Y-m-d")." ".time();
                 
             try {
                 $this->validate($req, [
-                    'file_cedula' => 'required|image|mimes:jpeg,png,jpg,pdf|max:500',
-                    'file_foto' => 'required|image|mimes:jpeg,png,jpg,pdf|max:500',
-                    'file_notas' => 'required|image|mimes:jpeg,png,jpg,pdf|max:500',
-                    'file_fondo_negro' => 'required|image|mimes:jpeg,png,jpg,pdf|max:500',
+                    'file_cedula' => 'required|image|mimes:jpeg,png,jpg,pdf',
+                    'file_foto' => 'required|image|mimes:jpeg,png,jpg,pdf',
+                    'file_notas' => 'required|image|mimes:jpeg,png,jpg,pdf',
+                    'file_fondo_negro' => 'required|image|mimes:jpeg,png,jpg,pdf',
                 ]);
 
                 $personal = personal::find(session()->get("id"));
@@ -126,46 +125,36 @@ class EstudianteController extends Controller
                 $personal->pantalon = $req->pantalon; 
                 $personal->trabaja = $req->trabaja; 
 
-                if ($req->hasFile('file_cedula')) {
-                    $file_cedula = $req->file('file_cedula')->storeAs($nameFolder,"file_cedula".".".$req->file('file_cedula')->extension());
-                    $personal->file_cedula = preg_replace("/public\//","storage/",$file_cedula,1);
-                }
-                
-                if ($req->hasFile('file_foto')) {
-                    $file_foto = $req->file('file_foto')->storeAs($nameFolder,"file_foto".".".$req->file('file_foto')->extension());
-                    $personal->file_foto = preg_replace("/public\//","storage/",$file_foto,1);
-                }
-                if ($req->hasFile('file_notas')) {
-                    $file_notas = $req->file('file_notas')->storeAs($nameFolder,"file_notas".".".$req->file('file_notas')->extension());
-                    $personal->file_notas = preg_replace("/public\//","storage/",$file_notas,1);
-                }
-                if ($req->hasFile('file_fondo_negro')) {
-                    $file_fondo_negro = $req->file('file_fondo_negro')->storeAs($nameFolder,"file_fondo_negro".".".$req->file('file_fondo_negro')->extension());
-                    $personal->file_fondo_negro = preg_replace("/public\//","storage/",$file_fondo_negro,1);
-                }
-                if ($req->hasFile('file_sintesis')) {
-                    $file_sintesis = $req->file('file_sintesis')->storeAs($nameFolder,"file_sintesis".".".$req->file('file_sintesis')->extension());
-                    $personal->file_sintesis = preg_replace("/public\//","storage/",$file_sintesis,1);
-                }
-                if (
+                if ($personal->save()) {
+                    
 
-                    $req->hasFile('file_sintesis')||
-                    $req->hasFile('file_cedula')||
-                    $req->hasFile('file_foto')||
-                    $req->hasFile('file_notas')||
-                    $req->hasFile('file_fondo_negro')
-                ) {
-                    $personal->nameFolder = $nameFolder;
+                    $path = "public/docsPersonal/".$personal->id;
+                    $obj_files = personal::find($personal->id);
+    
+                    if ($req->hasFile('file_foto')) {
+                        $obj_files->file_foto = str_replace("public","storage",$req->file('file_foto')->storeAs($path,"file_foto.".$req->file('file_foto')->extension()));
+                    }
+                    if ($req->hasFile('file_cedula')) {
+                        $obj_files->file_cedula = str_replace("public","storage",$req->file('file_cedula')->storeAs($path,"file_cedula.".$req->file('file_cedula')->extension()));
+                    }
+                    if ($req->hasFile('file_notas')) {
+                        $obj_files->file_notas = str_replace("public","storage",$req->file('file_notas')->storeAs($path,"file_notas.".$req->file('file_notas')->extension()));
+                    }
+                    if ($req->hasFile('file_fondo_negro')) {
+                        $obj_files->file_fondo_negro = str_replace("public","storage",$req->file('file_fondo_negro')->storeAs($path,"file_fondo_negro.".$req->file('file_fondo_negro')->extension()));
+                    }
+                    if ($req->hasFile('file_sintesis')) {
+                        $obj_files->file_sintesis = str_replace("public","storage",$req->file('file_sintesis')->storeAs($path,"file_sintesis.".$req->file('file_sintesis')->extension()));
+                    }
+                    $obj_files->save();
+
                 }
-
-
-                $personal->save();
 
                 \App\Traits\RestoreSession::restoreSession($personal);
                 
                 return Response::json( ["estado"=>true,"msj"=>"¡Inscripción exitosa!"] );
             } catch (\Exception $e) {
-                Storage::deleteDirectory($nameFolder);
+
                 return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
             }
         }
@@ -195,15 +184,31 @@ class EstudianteController extends Controller
     }
    
    
-   
-    
+    public function destroy(Request $req)
+    {
+        try{
+            $obj = personal::find($req->id);
 
-  
-   
+            $file_foto =  str_replace("storage","public",$obj->file_foto);
+            $file_cedula =  str_replace("storage","public",$obj->file_cedula);
+            $file_sintesis =  str_replace("storage","public",$obj->file_sintesis);
+            $file_fondo_negro =  str_replace("storage","public",$obj->file_fondo_negro);
+            $file_notas =  str_replace("storage","public",$obj->file_notas);
 
-   
-   
+            if ($obj->delete()) {
 
-    
+                Storage::delete($file_foto);
+                Storage::delete($file_cedula);
+                Storage::delete($file_fondo_negro);
+                Storage::delete($file_sintesis);
+                Storage::delete($file_notas);
+
+                Storage::deleteDirectory("public/docsPersonal/".$req->id);
+            }
+            return Response::json( ["estado"=>true,"msj"=>"¡Éxito!"] );
+        }catch(\Exception $e){
+            return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
+        }
+    }
    
 }

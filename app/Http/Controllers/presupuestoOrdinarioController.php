@@ -4,58 +4,46 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Presupuesto_ordinario;
+use Response;
 
 class presupuestoOrdinarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
    public function index()
     {
-       return Presupuesto_ordinario::with('uno_uno_especifica')->get()->take(30);
+       return Presupuesto_ordinario::with('uno_uno_especifica')->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(Request $req)
     {
         try{
-            $PresupuestOrdinario = new Presupuesto_ordinario;
-            // $PresupuestOrdinario->monto = $request->monto;
-            // $PresupuestOrdinario->denominacion = $request->denominacion;
-            // $PresupuestOrdinario->ae = $request->ae;
-            // $PresupuestOrdinario->partida = $request->partida;           
-            // $PresupuestOrdinario->fecha = $request->fecha;           
+
+            if ($req->modo==="delete") {
+                Presupuesto_ordinario::find($req->id)->delete();
+            }else{
+                if ($req->modo==="update") {
+                    $obj = Presupuesto_ordinario::find($req->idupdate);
+                }else{
+                    $obj = new Presupuesto_ordinario;
+                }
+
+                $obj->monto = $req->monto;
+                $obj->denominacion = $req->denominacion;
+                $obj->ae = $req->ae;
+                $obj->partida = $req->partida;
+                $obj->fecha = $req->fecha;
+                $obj->save();
+            }
+
+            return Response::json( ["estado"=>true,"msj"=>"¡Éxito!"] );
+        } catch (\Exception $e) {
+            return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
+        }          
             
-            $PresupuestOrdinario->insert($request->all());
-            return response(["code"=>200,"msj"=>"¡Éxito al guardar!"],200);
-        }catch(\Exception $e){
-           return response(["code"=>500,"msj"=>$e->getMessage()],200);
-        }
+          
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+   
     public function show($id)
     {
         return Presupuesto_ordinario::with('uno_uno_especifica')
@@ -68,50 +56,8 @@ class presupuestoOrdinarioController extends Controller
             ->get()->take(30);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+   
+   
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        try{
-            $PresupuestOrdinarioUpdate = Presupuesto_ordinario::where("id",$id);
-            
-            $PresupuestOrdinarioUpdate->update($request->all());
-
-            return response(["code"=>200,"msj"=>"¡Éxito al editar!"],200);
-        }catch(\Exception $e){
-           return response(["code"=>500,"msj"=>$e->getMessage()],200);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        try{
-            Presupuesto_ordinario::where("id",$id)->delete();
-            return response(["code"=>200,"msj"=>"¡Éxito al eliminar!"],200);
-        }catch(\Exception $e){
-           return response(["code"=>500,"msj"=>$e->getMessage()],200);
-        }
-    }
+   
 }

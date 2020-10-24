@@ -180,15 +180,16 @@ ____________________Controller Común___________________________*/
 	// Route::get('/rrhh/infoNomina/{id}', 'infoNominaController@index');
 
 	//PRESUPUESTO
-	Route::get('/presupuesto/', function(){
-	    return view("presupuesto.index");
-	});
+	
+	
+	Route::get('/presupuesto', "presupuestoController@index")->name("presupuesto.index");
+	Route::get('/presupuesto/cruds', "presupuestoController@cruds");
 	Route::resource('/presupuesto/partidas', "partidasController");
 	Route::resource('/presupuesto/acciones_especificas', "Acciones_especificasController");
 	Route::resource('/presupuesto/movimientos_presupuestarios', "Movimientos_presupuestariosController");
 	Route::resource('/presupuesto/acciones_proyectos', "accionesProyectosController");
 	Route::resource('/presupuesto/presupuesto_ordinario', "presupuestoOrdinarioController");
-	Route::resource('/presupuesto/credito_adicional', "creditoAdicionalController");
+	// Route::resource('/presupuesto/credito_adicional', "creditoAdicionalController");
 	Route::resource('/global/valores', "SnoValoresPersonalController");
 
 
