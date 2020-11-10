@@ -26,6 +26,9 @@ class App extends Component{
 			id_trayecto,
 		} = this.state
 		let {estudiante,inscribir} = this.props
+		if (!estudiante.academico) {
+			estudiante.academico = {}
+		}
 		return(
 			<React.Fragment>
 				{(id_notas!==null&&

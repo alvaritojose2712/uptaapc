@@ -22,16 +22,19 @@ class CreateUcsTable extends Migration
             $table->enum("trayecto",["I","II","III","IV","V","VI"]);
             $table->integer("id_categoria")->unsigned();
             $table->foreign("id_categoria")->references("id")->on("categorias")->onUpdate("cascade");
+
+            $table->integer("id_escala")->unsigned();
+            $table->foreign("id_escala")->references("id")->on("escala_evaluacions")->onUpdate("cascade");
             $table->timestamps();
         });
 
         DB::table("ucs")->insert([
-            ["nombre"=>"MySQL I", "id_categoria"=>1, "trayecto"=>"I","duracion"=>12,"u_credito"=>3],
-            ["nombre"=>"Satélites", "id_categoria"=>2, "trayecto"=>"I","duracion"=>12,"u_credito"=>3],
-            ["nombre"=>"JavaScript", "id_categoria"=>3, "trayecto"=>"I","duracion"=>12,"u_credito"=>3],
-            ["nombre"=>"Fluídos I", "id_categoria"=>4, "trayecto"=>"I","duracion"=>12,"u_credito"=>3],
-            ["nombre"=>"Energías libres", "id_categoria"=>5, "trayecto"=>"I","duracion"=>12,"u_credito"=>3],
-            ["nombre"=>"Termodinámica I", "id_categoria"=>5, "trayecto"=>"I","duracion"=>12,"u_credito"=>3],
+            ["nombre"=>"MySQL I", "id_categoria"=>1, "trayecto"=>"I","duracion"=>12,"u_credito"=>3, "id_escala"=>1],
+            ["nombre"=>"Satélites", "id_categoria"=>2, "trayecto"=>"I","duracion"=>12,"u_credito"=>3, "id_escala"=>1],
+            ["nombre"=>"JavaScript", "id_categoria"=>3, "trayecto"=>"I","duracion"=>12,"u_credito"=>3, "id_escala"=>1],
+            ["nombre"=>"Fluídos I", "id_categoria"=>4, "trayecto"=>"I","duracion"=>12,"u_credito"=>3, "id_escala"=>1],
+            ["nombre"=>"Energías libres", "id_categoria"=>5, "trayecto"=>"I","duracion"=>12,"u_credito"=>3, "id_escala"=>1],
+            ["nombre"=>"Termodinámica I", "id_categoria"=>5, "trayecto"=>"I","duracion"=>12,"u_credito"=>3, "id_escala"=>1],
         ]);
     }
 

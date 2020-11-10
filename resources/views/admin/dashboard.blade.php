@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('nav')
+	@include("admin.nav")
+@endsection
 @section('content')
-@include("admin.nav")
+		<script src="{{ asset('js/ce.dashboard.js') }}"></script>
 @endsection

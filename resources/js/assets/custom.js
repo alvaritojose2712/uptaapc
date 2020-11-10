@@ -177,6 +177,46 @@ function lenValLimit(val,len){
     val = val.substr(0,len).replace(/[^0-9]/g,"")
     return val
 }
+
+
+const searchParams = (q,e,searchKeys) => {
+  let ret = false
+  searchKeys.map(key=>{
+    if (e[key].toString().toLowerCase().startsWith(q.toLowerCase())) ret = true
+  })
+
+  return ret
+}
+function estatusNota(estatus) {
+    switch(estatus){
+        case "reprobado":
+            return "danger"
+        break;
+
+        case "repite":
+            return "warning"
+        break;
+
+        case "especial":
+            return "primary"
+        break;
+
+        case "aprobado":
+            return "success"
+        break;
+
+    }
+}
+
+const getToday = () => {
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    return yyyy + '-' + mm + '-' + dd;
+}
+const today = getToday()
 export {
     formatCedula,
     formatMoneda,
@@ -191,4 +231,7 @@ export {
     getDataForm,
     leerTxt,
     lenValLimit,
+    searchParams,
+    today,
+    estatusNota,
 }

@@ -3,30 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\carrera;
+use App\notas_estudiantes;
+use App\uc;
 use Illuminate\Http\Request;
 use Response;
 
 class CarreraController extends Controller
 {
-    use \App\Traits\ControllerAsyn;
-    protected $model = carrera::class;
-    protected $view = "admin.carrera";
-    protected $validate = [];
-    protected $where = [
-        "id",
-        "nombre"
-    ];
-    protected $withCheck = true; 
-    public function with()
+
+    public function index(Request $req)
     {
-        return ["categorias"=>function($q){
-        	$q->with(["ucs"=>function($q){
-                $q->with(["prela"=>function($q){
+
+        
+        $whe = ["id","nombre"];
+        $data = carrera::with(["categorias"=>function($q){
+            $q->with(["ucs"=>function($q){
+                $q->with(["escala","prela"=>function($q){
                     $q->with("uc");
                 }]);
             }]);
-        },"secciones"];
+        },"secciones"])->where(function($q) use ($req,$whe){
+            foreach ($whe as $val) {
+                $q->orWhere($val,"LIKE",$req->q."%");
+            }
+        })->orderBy("created_at","desc")->get();
+            
+        return Response::json( $data );
+       
+
+
+
     }
+
+    public function viewIndex(Request $req)
+    {
+        return view("admin.carrera.index");
+    }
+
     public function store(Request $req){
         try {
             $c = new carrera;
@@ -61,4 +74,6 @@ class CarreraController extends Controller
         }
 
     }
+    
+   
 }

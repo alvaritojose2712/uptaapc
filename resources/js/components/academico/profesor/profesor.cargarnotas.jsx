@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import ReactDOM, {render} from 'react-dom';
 import {handleNotification,Notification} from '../handleNotification.jsx';
+import {HeaderPersona} from '../headerPersona';
+import {formatCedula} from '../../../assets/custom';
 
 
 
@@ -12,6 +14,7 @@ class App extends Component{
 		this.state = {
 			
 			profesor:{},
+			profesorData:{},
 			search:"",
 
 			idtray:null,
@@ -29,6 +32,8 @@ class App extends Component{
 	}
 	componentDidMount() {
 		this.getApiData(null,"/profesor/academico","profesor")
+		this.getApiData(null,"/profesor/show","profesorData")
+
 	}
 	changeState(newState){
 		return new Promise(solve=>this.setState(newState,solve))
@@ -159,6 +164,7 @@ class App extends Component{
 		)
 		let { 
 			profesor,
+			profesorData,
 			idtray,
 			idtri,
 			idsecc,
@@ -170,7 +176,10 @@ class App extends Component{
 			<React.Fragment>
 				<Notification />
 				<div className="container">
+
 						<div className="p-3 border border-dark rounded">
+							<HeaderPersona persona={profesorData}/>
+							<h3>Cargar notas</h3>
 							<div className="mb-3">
 								<input type="text" placeholder="Buscar..." className="form-control w-25" onChange={e=>this.changeState({search:e.target.value.toLowerCase()})}/>
 							</div>

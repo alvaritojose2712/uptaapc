@@ -30,6 +30,7 @@ Route::post('/getAuthId', 'Auth\LoginController@getAuthId');
 
 //Valores Personal
 Route::resource('/config/valores', "SnoValoresPersonalController");
+Route::get('/controlEstudios/escalas/evaluacion', "EscalaEvaluacionController@index");
 
 Route::get("createadmin",function()
 {
@@ -81,27 +82,6 @@ Route::group(['middleware' => ['admin']], function () {
 
 	//Verificar Cuenta
 	Route::get("/gestionar/estudiante","AdminController@verificarCuenta")->name("gestionar.estudiante");
-	// Route::get("/verificarCuentaItems/{t}","AdminController@verificarCuentaItems")->name("verificarCuenta.items");
-	# Route::get("/verificarCuentaProcesar/","AdminController@verificarCuentaProcesar")->name("verificarCuenta.procesar");
-	// Route::get("/verificarCuentaShow/{t}","AdminController@verificarCuentaShow")->name("verificarCuenta.show");
-	// Route::post("/verificarCuentaDelete","AdminController@verificarCuentaDelete")->name("verificarCuenta.delete");
-
-/*____________________Controller Común___________________________
-	Crud Carreras
-	Route::get("/carreracreate","CarreraController@create")->name("carrera.create");
-	Route::post("/carrerastore","CarreraController@store")->name("carrera.store");
-	Route::get("/carrera","CarreraController@index")->name("carrera.index");
-	Route::get("/carreraitems","CarreraController@items")->name("carrera.items");
-	Route::get("/carreraedit","CarreraController@edit")->name("carrera.edit");
-	Route::post("/carreraupdate","CarreraController@update")->name("carrera.update");
-	Route::post("/carreradelete","CarreraController@destroy")->name("carrera.destroy");
-____________________Controller Común___________________________*/
-
-// ____________________Controller Async___________________________
-	
-// ____________________Controller Async___________________________
-
-	// Route::get("/admin/carreras");
 
 
 	// Crud Carreras
@@ -140,6 +120,10 @@ ____________________Controller Común___________________________*/
 	Route::get("/controlEstudios/estudiante","EstudianteController@viewIndex")->name("ce.estudiantes.index");
 	Route::get("/controlEstudios/estudiantes","EstudianteController@index");
 	Route::post("/controlEstudios/estudiantes/verificar","EstudianteController@verificar");
+
+
+	Route::get("/controlEstudios/admin/show","ProfesorController@show");
+
 	
 	//Crud Unidad Curricular
 
@@ -166,6 +150,7 @@ ____________________Controller Común___________________________*/
 
 	//Personal RRHH
 	Route::get('/rrhh/administrar/personal/', "personalController@view")->name("rrhh.personal");
+	Route::post('/rrhh/personal/delete', "personalController@destroy");
 	Route::resource('/rrhh/personal', "personalController");
 	
 	
@@ -199,10 +184,17 @@ ____________________Controller Común___________________________*/
 
 });
 Route::group(['middleware' => ['profesor']], function () {
+	Route::get("/profesor/show","ProfesorController@show");
 	Route::get("/profesor","ProfesorController@dashboard")->name("profesor");
 	Route::get("/profesor/cargar/notas","ProfesorController@cargarnotas")->name("profesor.cargarnotas");
 	Route::post("/profesor/cargar/notas","ProfesorController@nota");
 	Route::get("/profesor/academico","ProfesorController@academico");
+	
+
+	Route::post("/profesor/tareas","ProfesorController@tareas");
+
+	
+
 
 
 	
@@ -211,6 +203,8 @@ Route::group(['middleware' => ['profesor']], function () {
 Route::group(['middleware' => ['estudiante']], function () {
 
 	Route::get("/estudiante","EstudianteController@dashboard")->name("estudiante");
+	Route::get("/estudiante/modificar","EstudianteController@modificar");
+
 
 	Route::get("/requisitos","EstudianteController@primerainscripcion")->name("primerainscripcion");
 	Route::post("/requisitos","EstudianteController@primerainscripcionStore")->name("primerainscripcion.store");
@@ -219,6 +213,8 @@ Route::group(['middleware' => ['estudiante']], function () {
 	Route::get("/estudiante/academicos","EstudianteController@academico");
 	
 	Route::put("/estudiante/academicos","EstudianteController@inscribir");
+	Route::get("/estudiante/constancia","EstudianteController@constancia");
+	Route::get("/estudiante/academicoCertificado","EstudianteController@certificacion");
 
 
 });

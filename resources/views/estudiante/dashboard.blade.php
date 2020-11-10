@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('nav')
+	@include("estudiante.nav")
+@endsection
 @section('content')
 	@if (!session("inscrito")&&session("role")==3)
 	<div class="h-100 	w-100 d-flex justify-content-center align-items-center">
@@ -17,7 +19,6 @@
 		</article>
 	</div>
 	@else
-		@include("estudiante.nav")
+		<script src="{{ asset('js/estudiantes.dashboard.js') }}"></script>
 	@endif
-
 @endsection

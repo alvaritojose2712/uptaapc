@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -32010,57 +32010,10 @@ function Cargando(props) {
 
 /***/ }),
 
-/***/ "./resources/js/components/academico/handleNotification.jsx":
-/*!******************************************************************!*\
-  !*** ./resources/js/components/academico/handleNotification.jsx ***!
-  \******************************************************************/
-/*! exports provided: handleNotification, Notification */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleNotification", function() { return handleNotification; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Notification", function() { return Notification; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_notifications_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-notifications-component */ "./node_modules/react-notifications-component/dist/index.js");
-/* harmony import */ var react_notifications_component__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_notifications_component__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_notifications_component_dist_theme_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-notifications-component/dist/theme.css */ "./node_modules/react-notifications-component/dist/theme.css");
-/* harmony import */ var react_notifications_component_dist_theme_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_notifications_component_dist_theme_css__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
-var handleNotification = function handleNotification(data) {
-  try {
-    react_notifications_component__WEBPACK_IMPORTED_MODULE_1__["store"].addNotification({
-      title: data.data ? data.data.error ? "¡Upss! Tenemos problemas" : ":D" : ":D",
-      message: data.data ? data.data.error ? data.data.error : data.data.msj : data,
-      type: data.data ? data.data.error ? "danger" : "success" : "warning",
-      insert: "top",
-      container: "top-right",
-      animationIn: ["animated", "fadeIn"],
-      animationOut: ["animated", "fadeOut"],
-      dismiss: {
-        duration: 5000,
-        onScreen: true
-      }
-    });
-  } catch (err) {
-    console.log(data);
-    console.log(err);
-  }
-};
-var Notification = function Notification() {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_notifications_component__WEBPACK_IMPORTED_MODULE_1___default.a, null);
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/academico/pre-inscripcion.jsx":
-/*!***************************************************************!*\
-  !*** ./resources/js/components/academico/pre-inscripcion.jsx ***!
-  \***************************************************************/
+/***/ "./resources/js/components/academico/estudiante.pre-inscripcion.jsx":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/academico/estudiante.pre-inscripcion.jsx ***!
+  \**************************************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -32339,148 +32292,303 @@ function (_Component) {
           carrera = _this$state$user.carrera,
           prosecucion = _this$state$user.prosecucion;
       var carreras = this.state.carreras;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "wraper-panel-pre-inscripcion"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_handleNotification_jsx__WEBPACK_IMPORTED_MODULE_3__["Notification"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "panel-pre-inscripcion"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-        onSubmit: this.submit
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "boton-fixed"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn-success btn btn-xl btn-circle m-2",
-        onClick: this.save
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-send"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
-        className: "header-register"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "header-register-logo"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: this.loc + "/images/uptaapc/logo1.png",
-        alt: ""
-      })), "Pre-Inscripci\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_cargando__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        active: this.state.activeLoading
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-        className: "table"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: "text-right font-weight-bold"
-      }, "Prosecuci\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: ""
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        className: "form-control",
-        name: "prosecucion",
-        value: !prosecucion ? "" : prosecucion,
-        onChange: this.changeInput,
-        required: true
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "0"
-      }, "No"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "1"
-      }, "S\xED")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: "text-right font-weight-bold"
-      }, "Carrera"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: ""
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        className: "form-control",
-        name: "carrera",
-        value: !carrera ? "" : carrera,
-        onChange: this.changeInput,
-        required: true
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: ""
-      }, "-Seleccione-"), carreras.map(function (e) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-          key: e.id,
-          value: e.id
-        }, e.nombre, " ", e.proximamente == 1 ? "*Próximamente*" : null);
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: "text-right font-weight-bold"
-      }, "Nombres"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: ""
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: (nombre ? "" : "is-invalid") + " form-control-lg form-control",
-        placeholder: "Introduzca ambos nombres",
-        name: "nombre",
-        value: !nombre ? "" : nombre,
-        onChange: this.changeInput,
-        required: true
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: "text-right font-weight-bold"
-      }, "Apellidos"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: ""
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: (apellido ? "" : "is-invalid") + " form-control-lg form-control",
-        placeholder: "Introduzca ambos apellidos",
-        name: "apellido",
-        value: !apellido ? "" : apellido,
-        onChange: this.changeInput,
-        required: true
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: "text-right font-weight-bold"
-      }, "C\xE9dula de Identidad"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: ""
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: (cedula ? "" : "is-invalid") + " form-control-lg form-control",
-        name: "cedula",
-        value: !cedula ? "" : cedula,
-        onChange: this.changeInput,
-        required: true
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: "text-right font-weight-bold"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-phone"
-      }), " Tel\xE9fono 1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: (telefono_1 ? "" : "is-invalid") + " form-control-lg form-control",
-        name: "telefono_1",
-        value: !telefono_1 ? "" : telefono_1,
-        onChange: this.changeInput,
-        required: true
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: "text-right font-weight-bold"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-envelope"
-      }), " Correo Electr\xF3nico"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: (correo ? "" : "is-invalid") + " form-control-lg form-control",
-        name: "correo",
-        value: !correo ? "" : correo,
-        onChange: this.changeInput,
-        required: true
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        className: "text-right font-weight-bold"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-password"
-      }), " Contrase\xF1a"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "password",
-        className: (password ? "" : "is-invalid") + " form-control-lg form-control",
-        name: "password",
-        value: !password ? "" : password,
-        onChange: this.changeInput,
-        required: true
-      }))))))));
+      return (
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "wraper-panel-pre-inscripcion"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_handleNotification_jsx__WEBPACK_IMPORTED_MODULE_3__["Notification"], null),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "panel-pre-inscripcion"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+          onSubmit: this.submit
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "boton-fixed"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn-success btn btn-xl btn-circle m-2",
+          onClick: this.save
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-send"
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
+          className: "header-register"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "header-register-logo"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          src: this.loc + "/images/uptaapc/logo1.png",
+          alt: ""
+        })), "Pre-Inscripci\xF3n"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_cargando__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          active: this.state.activeLoading
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+          className: "table"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "text-right font-weight-bold"
+        }, "Prosecuci\xF3n"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: ""
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "form-control",
+          name: "prosecucion",
+          value: !prosecucion ? "" : prosecucion,
+          onChange: this.changeInput,
+          required: true
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "0"
+        }, "No"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "1"
+        }, "S\xED")))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "text-right font-weight-bold"
+        }, "Carrera"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: ""
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "form-control",
+          name: "carrera",
+          value: !carrera ? "" : carrera,
+          onChange: this.changeInput,
+          required: true
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: ""
+        }, "-Seleccione-"), carreras.map(function (e) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+              key: e.id,
+              value: e.id
+            }, e.nombre, " ", e.proximamente == 1 ? "*Próximamente*" : null)
+          );
+        })))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "text-right font-weight-bold"
+        }, "Nombres"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: ""
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: (nombre ? "" : "is-invalid") + " form-control-lg form-control",
+          placeholder: "Introduzca ambos nombres",
+          name: "nombre",
+          value: !nombre ? "" : nombre,
+          onChange: this.changeInput,
+          required: true
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "text-right font-weight-bold"
+        }, "Apellidos"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: ""
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: (apellido ? "" : "is-invalid") + " form-control-lg form-control",
+          placeholder: "Introduzca ambos apellidos",
+          name: "apellido",
+          value: !apellido ? "" : apellido,
+          onChange: this.changeInput,
+          required: true
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "text-right font-weight-bold"
+        }, "C\xE9dula de Identidad"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: ""
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: (cedula ? "" : "is-invalid") + " form-control-lg form-control",
+          name: "cedula",
+          value: !cedula ? "" : cedula,
+          onChange: this.changeInput,
+          required: true
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "text-right font-weight-bold"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-phone"
+        }), " Tel\xE9fono 1"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: (telefono_1 ? "" : "is-invalid") + " form-control-lg form-control",
+          name: "telefono_1",
+          value: !telefono_1 ? "" : telefono_1,
+          onChange: this.changeInput,
+          required: true
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "text-right font-weight-bold"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-envelope"
+        }), " Correo Electr\xF3nico"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: (correo ? "" : "is-invalid") + " form-control-lg form-control",
+          name: "correo",
+          value: !correo ? "" : correo,
+          onChange: this.changeInput,
+          required: true
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          className: "text-right font-weight-bold"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-password"
+        }), " Contrase\xF1a"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "password",
+          className: (password ? "" : "is-invalid") + " form-control-lg form-control",
+          name: "password",
+          value: !password ? "" : password,
+          onChange: this.changeInput,
+          required: true
+        }))))))))
+      );
     }
   }]);
 
   return App;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
+Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(
+/*#__PURE__*/
+react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
 
 /***/ }),
 
-/***/ 9:
-/*!*********************************************************************!*\
-  !*** multi ./resources/js/components/academico/pre-inscripcion.jsx ***!
-  \*********************************************************************/
+/***/ "./resources/js/components/academico/handleNotification.jsx":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/academico/handleNotification.jsx ***!
+  \******************************************************************/
+/*! exports provided: handleNotification, Notification */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleNotification", function() { return handleNotification; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Notification", function() { return Notification; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_notifications_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-notifications-component */ "./node_modules/react-notifications-component/dist/index.js");
+/* harmony import */ var react_notifications_component__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_notifications_component__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_notifications_component_dist_theme_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-notifications-component/dist/theme.css */ "./node_modules/react-notifications-component/dist/theme.css");
+/* harmony import */ var react_notifications_component_dist_theme_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_notifications_component_dist_theme_css__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+var handleNotification = function handleNotification(data) {
+  try {
+    react_notifications_component__WEBPACK_IMPORTED_MODULE_1__["store"].addNotification({
+      title: data.data ? data.data.error ? "¡Upss! Tenemos problemas" : ":D" : ":D",
+      message: data.data ? data.data.error ? data.data.error : data.data.msj : data,
+      type: data.data ? data.data.error ? "danger" : "success" : "warning",
+      insert: "top",
+      container: "top-right",
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: 5000,
+        onScreen: true
+      }
+    });
+  } catch (err) {
+    console.log(data);
+    console.log(err);
+  }
+};
+var Notification = function Notification() {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_notifications_component__WEBPACK_IMPORTED_MODULE_1___default.a, null);
+};
+
+/***/ }),
+
+/***/ 13:
+/*!********************************************************************************!*\
+  !*** multi ./resources/js/components/academico/estudiante.pre-inscripcion.jsx ***!
+  \********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\uptaapc\resources\js\components\academico\pre-inscripcion.jsx */"./resources/js/components/academico/pre-inscripcion.jsx");
+module.exports = __webpack_require__(/*! D:\uptaapc\resources\js\components\academico\estudiante.pre-inscripcion.jsx */"./resources/js/components/academico/estudiante.pre-inscripcion.jsx");
 
 
 /***/ })

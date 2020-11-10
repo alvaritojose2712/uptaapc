@@ -10,6 +10,8 @@ class App extends Component{
 		this.state = {
 			carreras:[],
 			uc:[],
+			escalas:[],
+
 			carreras_id:null,
 			categoria_id:null,
 			uc_id:null,
@@ -21,10 +23,13 @@ class App extends Component{
 			u_credito:"",
 			duracion:"",
 			trayecto:"I",
+			escala:"",
 
 			ucSelectPrela:0,
 
 			nombreSeccion:"",
+
+			newUc:false,
 
 			section:null,//0 Unidades Curricular 1 Secciones
 		}
@@ -37,6 +42,7 @@ class App extends Component{
 	componentDidMount() {
 		this.getApiData(null,"/controlEstudios/carreras","carreras")
 		this.getApiData(null,"/controlEstudios/carreras/uc","uc")
+		this.getApiData(null,"/controlEstudios/escalas/evaluacion","escalas")
 
 		
 	}
@@ -139,6 +145,7 @@ class App extends Component{
 					u_credito:this.state.u_credito,
 					duracion:this.state.duracion,
 					trayecto:this.state.trayecto,
+					escala:this.state.escala,
 					id_categoria:this.state.carreras[this.state.carreras_id].categorias[this.state.categoria_id].id
 				}
 			break;
@@ -179,22 +186,27 @@ class App extends Component{
 		let { 
 		carreras,
 		uc,
+		escalas,
 		carreras_id,
 		categoria_id,
 		uc_id,
 		nombreCarrera,
 		nombreCategoria,
 		nombreUc,
+
 		u_credito,
 		duracion,
 		trayecto,
+		escala,
 		ucSelectPrela,
 		nombreSeccion,
+
+		newUc,
 		section } = this.state
 		return(
 			<div className="container-fluid">
 				<div className="row">
-					<div className="col-2">
+					<div className="col-md-auto">
 						<input type="text" placeholder="Buscar..." onChange={e=>this.getApiData(e,"/controlEstudios/carreras","carreras")} className="form-control mb-3"/>
 						<div className="input-group">
 						  <input type="text" className="form-control" placeholder="Agregar carrera..." value={nombreCarrera} onChange={e=>this.changeUniqueState({nombreCarrera:e.target.value})}/>
@@ -272,25 +284,64 @@ class App extends Component{
 														<div className="container-fluid">
 															<div className="row">
 																<div className="col">
-																	<h4>UC's</h4>
-																	<div className="input-group mb-3">
-																	 	<input type="text" className="form-control" placeholder="Unidad Curricular..." value={nombreUc} onChange={e=>this.changeUniqueState({nombreUc:e.target.value})}/>
-																		<input type="number" className="form-control" placeholder="Unidades Crédito..." value={u_credito} onChange={e=>this.changeUniqueState({u_credito:e.target.value})}/>
-																		<input type="number" className="form-control" placeholder="Duración.. Semanas" value={duracion} onChange={e=>this.changeUniqueState({duracion:e.target.value})}/>
-																		<select className="form-control" value={trayecto} onChange={e=>this.changeUniqueState({trayecto:e.target.value})}>
-																			<option value="I">I</option>
-																			<option value="II">II</option>
-																			<option value="III">III</option>
-																			<option value="IV">IV</option>
-																			<option value="V">V</option>
-																			<option value="VI">VI</option>
-																		</select>
-																	  <div className="input-group-append">
-																	    <button onClick={()=>this.addItem("uc")} className="btn btn-outline-success" type="button"><i className="fa fa-plus"></i></button>
-																	  </div>
-																	</div>
+																	<h4>UC's <button className="btn-success btn" onClick={()=>this.changeUniqueState({newUc:!newUc})}><i className="fa fa-plus"></i></button></h4>
+																	{newUc&&<div>
+																		
+																		<div className="form-group">
+																			<span>Unidad Curricular</span>
+																		 	<input type="text" className="form-control" placeholder="Unidad Curricular..." value={nombreUc} onChange={e=>this.changeUniqueState({nombreUc:e.target.value})}/>
+																		</div>
+																		<div className="form-group">
+																			<span>Unidades Crédito</span>
+																			<input type="number" className="form-control" placeholder="Unidades Crédito..." value={u_credito} onChange={e=>this.changeUniqueState({u_credito:e.target.value})}/>
+																		</div>
+																		<div className="form-group">
+																			<span>Duración en semanas</span>
+																			<input type="number" className="form-control" placeholder="Duración.. Semanas" value={duracion} onChange={e=>this.changeUniqueState({duracion:e.target.value})}/>
+																		</div>
+																		<div className="form-group">
+																			<span>Trayecto</span>
+																			<select className="form-control" value={trayecto} onChange={e=>this.changeUniqueState({trayecto:e.target.value})}>
+																				<option value="I">I</option>
+																				<option value="II">II</option>
+																				<option value="III">III</option>
+																				<option value="IV">IV</option>
+																				<option value="V">V</option>
+																				<option value="VI">VI</option>
+																			</select>
+																		</div>
+																		<div className="form-group">
+																			<span>Escala de evaluación</span>
+																			<select className="form-control" value={escala} onChange={e=>this.changeUniqueState({escala:e.target.value})}>
+																				<option value="">--Seleccione--</option>
+																				{
+																					escalas.map(e=>
+																						<option value={e.id} key={e.id}>
+																							{e.reprobado} /
+																							{e.repite} /
+																							{e.especial} /
+																							{e.aprobado}
+																						</option>
+
+																					)
+																				}
+																			</select>
+																		</div>
+																		<div className="form-group">
+																		    <button onClick={()=>this.addItem("uc")} className="btn btn-outline-success btn-bloc" type="button">Agregar</button>
+																		</div>
+																	</div>}
 
 																	<table className="table table-borderless">
+																		<thead>
+																			<tr>
+																				<th>Unidad Curricular</th>
+																				<th>Unidades Crédito</th>
+																				<th>Duración.. Semanas</th>
+																				<th>Trayecto</th>
+																				<th>Escala de evaluación</th>
+																			</tr>
+																		</thead>
 																		<tbody>
 																			{carreras[carreras_id].categorias[categoria_id].ucs.map((e,i)=>
 																				<tr key={i} className={(uc_id===i?"alert-success":"")+" hover"} onClick={()=>this.changeUniqueState({uc_id:i,ucSelectPrela:"null"})}>
@@ -301,6 +352,22 @@ class App extends Component{
 																					<td>{e.duracion}</td>
 																					<td>{e.trayecto}</td>
 																					<td>
+																						<div className="btn-group">
+																							<button className="btn-sm btn btn-danger">
+																								<i className="fa fa-times"></i> {e.escala.reprobado}
+																							</button>
+																							<button className="btn-sm btn btn-warning">
+																								<i className="fa fa-minus"></i> {e.escala.repite}
+																							</button>
+																							<button className="btn-sm btn btn-primary">
+																								<i className="fa fa-minus"></i> {e.escala.especial}
+																							</button>
+																							<button className="btn-sm btn btn-success">
+																								<i className="fa fa-check"></i> {e.escala.aprobado}
+																							</button>
+																						</div>
+																					</td>
+																					<td>
 																						<i className="fa fa-trash" onClick={()=>this.delItem(e.id,"uc")}></i>
 																					</td>
 																				</tr>
@@ -308,7 +375,9 @@ class App extends Component{
 																		</tbody>
 																	</table>
 																</div>
-																{(uc_id!==null&&carreras[carreras_id].categorias[categoria_id].ucs[uc_id])?
+															</div>
+															{(uc_id!==null&&carreras[carreras_id].categorias[categoria_id].ucs[uc_id])?
+																<div className="row">
 																	<div className="col">
 																		<h4>Prelaciones  <span className="text-success"> / {carreras[carreras_id].categorias[categoria_id].ucs[uc_id].nombre}</span></h4>
 																		<div className="input-group mb-3">
@@ -332,8 +401,8 @@ class App extends Component{
 																			)}
 																		</ul>
 																	</div>
-																:null}
-															</div>
+																</div>
+															:null}
 														</div>
 													</div>
 												:null}

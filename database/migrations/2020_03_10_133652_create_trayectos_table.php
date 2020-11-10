@@ -38,6 +38,9 @@ class CreateTrayectosTable extends Migration
             $table->integer("mes");
             $table->integer("ano");
 
+            $table->date("fecha");
+            $table->date("fecha_cierre");
+
 
             $table->string("trayecto");
             $table->enum("trimestre",["I","II","III","IV"]);

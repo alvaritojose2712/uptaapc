@@ -7,8 +7,13 @@ use App\trayecto;
 use App\carrera;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Response;
 use App\Http\Controllers\Auth\LoginController;
+
+use Jenssegers\Date\Date;
+use Response;
+use PDF;
+
+Date::setLocale('es');
 
 class EstudianteController extends Controller
 {
@@ -23,7 +28,8 @@ class EstudianteController extends Controller
             }
         })
         ->where("role",3)
-        ->take(10)
+        ->where("verificado","LIKE",$req->verificado)
+        ->take($req->limit)
         ->orderBy("created_at","desc")
         ->get()
         ->map(function($q){
@@ -49,6 +55,10 @@ class EstudianteController extends Controller
     public function preInscripcionForm()
     {
         return view('auth.register');
+    }
+    public function modificar()
+    {
+        return view("estudiante.modificar");
     }
     public function preInscripcion(Request $req)
     {
@@ -80,7 +90,6 @@ class EstudianteController extends Controller
             return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
         }
     }
-    
     public function primerainscripcion(Request $req)
     {   
         if (!personal::with("nombrecarrera")->find(session()->get("id"))->inscrito) {
@@ -91,14 +100,14 @@ class EstudianteController extends Controller
     }
     public function primerainscripcionStore(Request $req)
     {
-        if (!personal::with("nombrecarrera")->find(session()->get("id"))->inscrito) {
+        if (!personal::with("nombrecarrera")->find(session()->get("id"))->verificado&&(!personal::with("nombrecarrera")->find(session()->get("id"))->inscrito||$req->type==="update")) {
                 
             try {
                 $this->validate($req, [
-                    'file_cedula' => 'required|image|mimes:jpeg,png,jpg,pdf',
-                    'file_foto' => 'required|image|mimes:jpeg,png,jpg,pdf',
-                    'file_notas' => 'required|image|mimes:jpeg,png,jpg,pdf',
-                    'file_fondo_negro' => 'required|image|mimes:jpeg,png,jpg,pdf',
+                    'file_cedula' => 'nullable|sometimes|image|mimes:jpeg,png,jpg,pdf',
+                    'file_foto' => 'nullable|sometimes|image|mimes:jpeg,png,jpg,pdf',
+                    'file_notas' => 'nullable|sometimes|image|mimes:jpeg,png,jpg,pdf',
+                    'file_fondo_negro' => 'nullable|sometimes|image|mimes:jpeg,png,jpg,pdf',
                 ]);
 
                 $personal = personal::find(session()->get("id"));
@@ -123,7 +132,11 @@ class EstudianteController extends Controller
                 $personal->gorra = $req->gorra; 
                 $personal->camisa = $req->camisa; 
                 $personal->pantalon = $req->pantalon; 
-                $personal->trabaja = $req->trabaja; 
+                $personal->trabaja = $req->trabaja;
+
+                $personal->fecha_ingreso = date('Y-m-d');
+
+                
 
                 if ($personal->save()) {
                     
@@ -152,23 +165,165 @@ class EstudianteController extends Controller
 
                 \App\Traits\RestoreSession::restoreSession($personal);
                 
-                return Response::json( ["estado"=>true,"msj"=>"¡Inscripción exitosa!"] );
+                return Response::json( ["estado"=>true,"msj"=>$req->type==="update"?"¡Modificación exitosa!":"¡Inscripción exitosa!"] );
             } catch (\Exception $e) {
 
                 return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
             }
         }
     }
+    public function validNota($materia)
+    {   
+        $estatus = "reprobado";
+        $promedio = 0;
+
+        if (!$materia) {
+            return ["estatus" => $estatus, "promedio" => $promedio];
+        }
+
+
+        $escala = $materia->uc->escala;
+        $notas = $materia->notas;
+
+        foreach ($notas as $nota) {$promedio += $nota->puntos;}
+        if (count($notas)) {
+            $promedio = $promedio/count($notas);
+        }
+
+        $estatus = "";
+        if ($promedio <= $escala->reprobado) {
+            $estatus = "reprobado";
+        }
+        if ($promedio > $escala->reprobado && $promedio < $escala->especial) {
+            $estatus = "repite";
+        }
+        if ($promedio >= $escala->especial && $promedio < $escala->aprobado) {
+            $estatus = "especial";
+        }
+        if ($promedio >= $escala->aprobado) {
+            $estatus = "aprobado";
+        }
+        return ["estatus"=>$estatus,"promedio"=>$promedio];
+    }
     public function academico()
     {
         $data = personal::with(["trayecto"=>function($q){
-            $q->with(["notas","profesor","uc","seccion"]);
+            $q->with(["notas"=>function($q){
+                $q->orderBy("created_at","desc");
+            },"profesor","uc"=>function($q){
+                $q->with(["prela"=>function($q){$q->with("uc");},"escala","categoria"=>function($q){$q->with("carrera");}]);
+            },"seccion"]);
         },"nombrecarrera"])->where("id",session()->get("id"))->get()->map(function($q){
-            $q->academico = $q->trayecto->groupBy(["trayecto","trimestre"]);
+            if ($q->verificado) {
+
+
+                $q->trayecto->map(function($t) use ($q) {
+                    $t->se_puede_inscribir = true;
+                    $inscripcion_motivo = [];
+                    
+                    $t->estatus = $this->validNota($t)["estatus"];
+                    $t->promedio = $this->validNota($t)["promedio"];
+
+                    foreach ($t->uc->prela as $prelacion) {
+                        $materia = $q->trayecto->where("id_uc",$prelacion->uc->id)->first();
+
+                        $estatus = $this->validNota($materia)["estatus"];
+                        $promedio = $this->validNota($materia)["promedio"];
+
+                        if ($estatus!=="aprobado") {
+                            $t->se_puede_inscribir = false;
+                            $mensaje = " La materia ".$prelacion->uc->nombre." ( $estatus: $promedio ) prela a ".$t->uc->nombre.".";
+                            array_push($inscripcion_motivo, $mensaje);
+                        }
+                    }
+
+                    $t->inscripcion_motivo = $inscripcion_motivo;
+                });
+
+                $q->academico = $q->trayecto->groupBy(["trayecto","trimestre","seccion.nombre","uc.nombre"]);
+
+
+
+            }else{
+                $q->academico = [];
+            }
             return $q;
         })->first();
 
+
+       
+
+
+
         return Response::json( $data );
+    }
+    public function certificacion(Request $req)
+    {
+        Date::setLocale('es');
+
+        $data = personal::with(["trayecto"=>function($q) use ($req){
+
+            $q->with(["notas"=>function($q){
+                $q->orderBy("created_at","desc");
+            },"profesor","uc"=>function($q){
+                $q->with(["prela"=>function($q){$q->with("uc");},"escala","categoria"=>function($q){$q->with("carrera");}]);
+            },"seccion"])
+            ->where("trimestre",$req->id_trimestre)
+            ->where("trayecto",$req->id_trayecto);
+
+        },"nombrecarrera"])->find(session()->get("id"));
+
+
+        if ($data) {
+            
+            // return $data; 
+            return view("reporte.academico", $data);
+
+            $pdf = PDF::loadView('reporte.academico', $data);
+            return $pdf->download('academico - '.$data->cedula." ".$req->id_trayecto.'_'.$req->id_trimestre."_".Date::parse(date("Y-m-d"))->format('l, j \de F Y').'.pdf');
+        }else{
+            return "¡No encontrado!";
+        }
+    }
+    public function constancia(Request $req)
+    {
+        $d  = personal::with(["nombrecarrera"])->find(session()->get("id"));
+
+        $document = new \PhpOffice\PhpWord\TemplateProcessor(storage_path('constancia_estudiante.docx'));
+        
+        $document->setValue("nombre",$d->nombre);
+        $document->setValue("apellido",$d->apellido);
+        $document->setValue("cedula",formatCedula($d->cedula));
+        $document->setValue("nacionalidad",$d->nacionalidad);
+
+        $document->setValue("nombrecarrera",$d->nombrecarrera->nombre);
+        $document->setValue("fecha_inscripcion",$newDate = date("d-m-Y", strtotime($d->fecha_ingreso)));
+
+
+        $document->setValue("nombrecarrera",$d->nombrecarrera->nombre);
+
+
+        $document->setValue("trayecto","trayecto");
+        $document->setValue("trimestre","trimestre");
+        $document->setValue("inicio_trayecto","inicio_trayecto");
+        $document->setValue("cierre_trayecto","cierre_trayecto");
+        $document->setValue("fecha_hoy",Date::parse(date("Y-m-d"))->format('j \de F Y'));
+
+        
+
+        
+
+        
+        
+        
+
+
+
+
+        header('Content-Type: application/msword');
+        header('Content-Disposition: attachment;filename="'. "Constancia de estudio ".$d->cedula.".docx" .'"');
+        header('Cache-Control: max-age=0');
+        $document->saveAs('php://output');
     }
 
     public function inscribir(Request $req){

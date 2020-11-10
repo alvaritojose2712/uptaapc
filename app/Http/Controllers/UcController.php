@@ -12,13 +12,13 @@ class UcController extends Controller
     public function index(Request $req)
     {
         
-        $data = uc::with(["categoria"=>function($q){
+        $data = uc::with(["escala","categoria"=>function($q){
             $q->with("carrera");
         }])->where(function($q) use ($req){
             foreach (["id","nombre","trayecto","duracion"] as $val) {
                 $q->orWhere($val,"LIKE",$req->q."%");
             }
-        })->take(10)->orderBy("created_at","desc")->get();
+        })->orderBy("created_at","desc")->get();
         
         return Response::json( $data );
     }
@@ -32,7 +32,8 @@ class UcController extends Controller
 			$c->u_credito = $req->u_credito;
 			$c->duracion = $req->duracion;
 			$c->trayecto = $req->trayecto;
-			$c->id_categoria = $req->id_categoria;
+            $c->id_categoria = $req->id_categoria;
+			$c->id_escala = $req->escala;
             $c->save();
             
             return Response::json( ["msj"=>"¡Operación exitosa!"] );

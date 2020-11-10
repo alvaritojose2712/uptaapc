@@ -1,8 +1,17 @@
 <?php 
-if (! function_exists('valueRet')) {
-    function valueRet($name) {
-        return;
-
+if (! function_exists('formatCedula')) {
+    function formatCedula($val) {
+        $val = strval($val);
+        $count = 1;
+        $format = "";
+        for ($i = strlen($val)-1; $i >= 0; $i--) {
+            $format = $val[$i].$format;
+            if ($count%3==0) {
+                $format = ".".$format;
+            }
+            $count++;
+        }
+        return $format;
     }
 }
 

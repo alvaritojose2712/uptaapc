@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Alert from 'react-s-alert';
 
-// import Recursoshumanoscrud from './recursos_humanos/crud/';
 import Nominas from './recursos_humanos/nomina/';
 import Presupuesto from './presupuesto/';
 import store  from './store'
@@ -18,8 +17,15 @@ class Index extends Component{
 			<Provider store={store}>
 				<Router>
 					<Switch>
-						<Route path='/recursoshumanos/nominas/' component={Nominas}/>
-						<Route path='/presupuesto' component={Presupuesto}/>
+						<Route path='/rrhh/administrar/nominas/'>
+							<Nominas/>
+						</Route>
+						<Route path='/rrhh/administrar/personal'>
+						
+						</Route>
+						<Route path='/presupuesto'>
+							<Presupuesto/>
+						</Route>
 					</Switch>
 				</Router>
 				<Alert stack={false} timeout={5000} position='bottom'  effect='slide'/>
@@ -28,4 +34,3 @@ class Index extends Component{
 	}
 }
 render(<Index/>,document.getElementById('appreact'));
-						// <Route path='/recursoshumanos/personal/' component={Recursoshumanoscrud}/>

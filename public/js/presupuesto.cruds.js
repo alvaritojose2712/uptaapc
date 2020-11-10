@@ -35916,7 +35916,7 @@ function Cargando(props) {
 /*!***************************************!*\
   !*** ./resources/js/assets/custom.js ***!
   \***************************************/
-/*! exports provided: formatCedula, formatMoneda, formatPartida, diffFecha, diffdatefull, inputMoneda, removeMoneda, getDiaSemana, retDivisa, getTodayDate, getDataForm, leerTxt, lenValLimit */
+/*! exports provided: formatCedula, formatMoneda, formatPartida, diffFecha, diffdatefull, inputMoneda, removeMoneda, getDiaSemana, retDivisa, getTodayDate, getDataForm, leerTxt, lenValLimit, searchParams, today, estatusNota */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35934,6 +35934,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDataForm", function() { return getDataForm; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "leerTxt", function() { return leerTxt; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lenValLimit", function() { return lenValLimit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "searchParams", function() { return searchParams; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "today", function() { return today; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "estatusNota", function() { return estatusNota; });
 function formatMoneda(value) {
   var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
   var separators = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['.', ".", ','];
@@ -36146,6 +36149,44 @@ function lenValLimit(val, len) {
   return val;
 }
 
+var searchParams = function searchParams(q, e, searchKeys) {
+  var ret = false;
+  searchKeys.map(function (key) {
+    if (e[key].toString().toLowerCase().startsWith(q.toLowerCase())) ret = true;
+  });
+  return ret;
+};
+
+function estatusNota(estatus) {
+  switch (estatus) {
+    case "reprobado":
+      return "danger";
+      break;
+
+    case "repite":
+      return "warning";
+      break;
+
+    case "especial":
+      return "primary";
+      break;
+
+    case "aprobado":
+      return "success";
+      break;
+  }
+}
+
+var getToday = function getToday() {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+
+  var yyyy = today.getFullYear();
+  return yyyy + '-' + mm + '-' + dd;
+};
+
+var today = getToday();
 
 
 /***/ }),

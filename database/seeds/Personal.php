@@ -348,7 +348,7 @@ class Personal extends Seeder
 			];
 			$faker = \Faker\Factory::create();
 			foreach($arrInsert as $key => $valor){
-				$role = $faker->randomElement([1,2]);
+				$role = $faker->randomElement([1,2,3]);
 				array_push($arr,[
 					'nombre' => $valor[0],
 					'apellido' => $valor[1],
@@ -405,44 +405,46 @@ class Personal extends Seeder
 		
     	DB::table('personals')->insert($arr);
 
-    		DB::table('personals')->insert([
-						'nombre' => "admin",
-						'apellido' => "ospino",
-						'cedula' => 23232323,
-						'nacionalidad' => "V",
-						'genero' => "Masculino",
-						'fecha_nacimiento' => "2020-07-07",
-						"estado_civil"=>NULL,
-						'telefono_1' => "02409940789",
-						'telefono_2' => NULL,
-						'grado_instruccion' => NULL,
-						"direccion"=>NULL,
-						'fecha_ingreso' => NULL,
-						'antiguedad_otros_ieu' => NULL,
-						'correo' => "admin@gmail.com",
-						'categoria' => NULL,
-						'cargo' => NULL,
-						'dedicacion' => NULL,
-						'estado' => NULL,
-						'estatus' => NULL,
-						'caja_ahorro' => '0',
-						'cuenta_bancaria' => '001750090232323',
-						'hrs_nocturnas' => '0',
-						'hrs_feriadas' => '0',
-						'hrs_diurnas' => '0',
-						'hrs_feriadas_nocturnas' => '0',
-						'profesion' => 'Informático',
-						'departamento_adscrito' => 'PNFI',
-						'cargo_departamento' => 'Coordinador',
-						"password"=>Hash::make("12345678"),
+  		DB::table('personals')->insert([
+					'nombre' => "admin",
+					'apellido' => "ospino",
+					'cedula' => 23232323,
+					'nacionalidad' => "V",
+					'genero' => "Masculino",
+					'fecha_nacimiento' => "2020-07-07",
+					"estado_civil"=>NULL,
+					'telefono_1' => "02409940789",
+					'telefono_2' => NULL,
+					'grado_instruccion' => NULL,
+					"direccion"=>NULL,
+					'fecha_ingreso' => NULL,
+					'antiguedad_otros_ieu' => NULL,
+					'correo' => "admin@gmail.com",
+					'categoria' => NULL,
+					'cargo' => NULL,
+					'dedicacion' => NULL,
+					'estado' => NULL,
+					'estatus' => NULL,
+					'caja_ahorro' => '0',
+					'cuenta_bancaria' => '001750090232323',
+					'hrs_nocturnas' => '0',
+					'hrs_feriadas' => '0',
+					'hrs_diurnas' => '0',
+					'hrs_feriadas_nocturnas' => '0',
+					'profesion' => 'Informático',
+					'departamento_adscrito' => 'PNFI',
+					'cargo_departamento' => 'Coordinador',
+					"password"=>Hash::make("12345678"),
 
-						"nameFolder"=>"public/docsEstudiante/ 2020-03-27 1585268890",
-		                "file_cedula"=>"storage/docsEstudiante/ 2020-03-27 1585268890/file_cedula.jpeg",
-		                "file_fondo_negro"=>"storage/docsEstudiante/ 2020-03-27 1585268890/file_fondo_negro.jpeg",
-		                "file_notas"=>"storage/docsEstudiante/ 2020-03-27 1585268890/file_notas.jpeg",
-		                
-		                "role" => 1,
-					]);
+					"nameFolder"=>"public/docsEstudiante/ 2020-03-27 1585268890",
+	                "file_cedula"=>"storage/docsEstudiante/ 2020-03-27 1585268890/file_cedula.jpeg",
+	                "file_fondo_negro"=>"storage/docsEstudiante/ 2020-03-27 1585268890/file_fondo_negro.jpeg",
+	                "file_notas"=>"storage/docsEstudiante/ 2020-03-27 1585268890/file_notas.jpeg",
+	                
+	                "role" => 1,
+			]);
+
+			factory(App\personal::class)->times(100)->create();
      
     }
 }

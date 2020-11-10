@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -31974,6 +31974,285 @@ module.exports = function (css) {
 
 /***/ }),
 
+/***/ "./resources/js/assets/custom.js":
+/*!***************************************!*\
+  !*** ./resources/js/assets/custom.js ***!
+  \***************************************/
+/*! exports provided: formatCedula, formatMoneda, formatPartida, diffFecha, diffdatefull, inputMoneda, removeMoneda, getDiaSemana, retDivisa, getTodayDate, getDataForm, leerTxt, lenValLimit, searchParams, today, estatusNota */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatCedula", function() { return formatCedula; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatMoneda", function() { return formatMoneda; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "formatPartida", function() { return formatPartida; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "diffFecha", function() { return diffFecha; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "diffdatefull", function() { return diffdatefull; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "inputMoneda", function() { return inputMoneda; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeMoneda", function() { return removeMoneda; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDiaSemana", function() { return getDiaSemana; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "retDivisa", function() { return retDivisa; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTodayDate", function() { return getTodayDate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDataForm", function() { return getDataForm; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "leerTxt", function() { return leerTxt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lenValLimit", function() { return lenValLimit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "searchParams", function() { return searchParams; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "today", function() { return today; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "estatusNota", function() { return estatusNota; });
+function formatMoneda(value) {
+  var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+  var separators = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['.', ".", ','];
+  decimals = decimals >= 0 ? parseInt(decimals, 0) : 2;
+  separators = separators || ['.', "'", ','];
+  var number = (parseFloat(value) || 0).toFixed(decimals);
+  if (number.length <= 4 + decimals) return number.replace('.', separators[separators.length - 1]);
+  var parts = number.split(/[-.]/);
+  value = parts[parts.length > 1 ? parts.length - 2 : 0];
+  var result = value.substr(value.length - 3, 3) + (parts.length > 1 ? separators[separators.length - 1] + parts[parts.length - 1] : '');
+  var start = value.length - 6;
+  var idx = 0;
+
+  while (start > -3) {
+    result = (start > 0 ? value.substr(start, 3) : value.substr(0, 3 + start)) + separators[idx] + result;
+    idx = ++idx % 2;
+    start -= 3;
+  }
+
+  return (parts.length == 3 ? '-' : '') + result;
+}
+
+function formatCedula(val) {
+  val = val.toString();
+  var count = 1;
+  var format = "";
+
+  for (var i = val.length - 1; i >= 0; i--) {
+    format = val[i] + format;
+
+    if (count % 3 == 0) {
+      format = "." + format;
+    }
+
+    count++;
+  }
+
+  return format;
+}
+
+function formatPartida(val) {
+  val = val.toString();
+  var v = "";
+  var num = 1;
+
+  for (var i = val.length - 1; i >= 0; i--) {
+    v = val[i] + v;
+
+    if (num % 2 == 0) {
+      v = "." + v;
+    }
+
+    num++;
+  }
+
+  v = v[0] == "." ? v.substr(1) : v;
+  return v;
+}
+
+function diffFecha(fecha) {
+  var f = Date.parse(fecha);
+  var f2 = Date.now();
+  var t = new Date(f - f2);
+  return Math.round((f2 - f) / (3600 * 24 * 1000) / 365);
+}
+
+function diffdatefull(fromDate, toDate) {
+  try {
+    var result = getDateDifference(new Date(fromDate), new Date(toDate));
+
+    if (result && !isNaN(result.years)) {
+      return (result.years == 0 ? "" : result.years + ' año' + (result.years == 1 ? ' ' : 's ')) + (result.months == 0 ? "" : result.months + ' mes' + (result.months == 1 ? ' ' : 'es ')) + (result.days == 0 ? "" : result.days + ' día' + (result.days == 1 ? '' : 's'));
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function getDateDifference(startDate, endDate) {
+  if (startDate > endDate) {
+    console.log('Start date must be before end date');
+    return null;
+  }
+
+  var startYear = startDate.getFullYear();
+  var startMonth = startDate.getMonth();
+  var startDay = startDate.getDate();
+  var endYear = endDate.getFullYear();
+  var endMonth = endDate.getMonth();
+  var endDay = endDate.getDate(); // We diffdatefull February based on end year as it might be a leep year which might influence the number of days.
+
+  var february = endYear % 4 == 0 && endYear % 100 != 0 || endYear % 400 == 0 ? 29 : 28;
+  var daysOfMonth = [31, february, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  var startDateNotPassedInEndYear = endMonth < startMonth || endMonth == startMonth && endDay < startDay;
+  var years = endYear - startYear - (startDateNotPassedInEndYear ? 1 : 0);
+  var months = (12 + endMonth - startMonth - (endDay < startDay ? 1 : 0)) % 12; // (12 + …) % 12 makes sure index is always between 0 and 11
+
+  var days = startDay <= endDay ? endDay - startDay : daysOfMonth[(12 + endMonth - 1) % 12] - startDay + endDay;
+  return {
+    years: years,
+    months: months,
+    days: days
+  };
+}
+
+function formatNumber(n) {
+  return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function inputMoneda(val) {
+  if (val.indexOf(",") >= 0) {
+    var decimal_pos = val.indexOf(",");
+    var left_side = val.substring(0, decimal_pos);
+    var right_side = val.substring(decimal_pos);
+    left_side = formatNumber(left_side);
+    right_side = formatNumber(right_side);
+    right_side = right_side.substring(0, 2);
+    return left_side + "," + right_side;
+  }
+
+  return formatNumber(val);
+}
+
+function removeMoneda(val) {
+  return parseFloat(val.replace(/\./g, "").replace(/,/g, "."));
+}
+
+function getDiaSemana(date) {
+  var fecha = new Date(date);
+  var dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', "Domingo"];
+  return dias[fecha.getDay()];
+}
+
+function retDivisa(divisa) {
+  return divisa == 1 ? "USD" : divisa == 2 ? "COP" : divisa == 3 ? "Bs." : "";
+}
+
+function getTodayDate() {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1;
+  var yyyy = today.getFullYear();
+
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+
+  return yyyy + "-" + mm + "-" + dd;
+}
+
+function getDataForm(target) {
+  var form = new FormData(target);
+  var data = {};
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = form.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var key = _step.value;
+      data[key[0]] = key[1];
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+        _iterator["return"]();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return data;
+}
+
+var leerTxt = function leerTxt(e, callback) {
+  var archivo = e.target.files[0];
+
+  if (!archivo) {
+    return;
+  }
+
+  var lector = new FileReader();
+
+  lector.onload = function (e) {
+    var contenido = e.target.result;
+    callback(contenido.replace(/\r/g, "").split(/\n/).map(function (e) {
+      return e ? e.split(/\t/).filter(function (ee) {
+        return ee && ee.length;
+      }) : null;
+    }).filter(function (e) {
+      return e && e.length;
+    }));
+  };
+
+  lector.readAsText(archivo, "ISO-8859-1");
+};
+
+function lenValLimit(val, len) {
+  val = val.substr(0, len).replace(/[^0-9]/g, "");
+  return val;
+}
+
+var searchParams = function searchParams(q, e, searchKeys) {
+  var ret = false;
+  searchKeys.map(function (key) {
+    if (e[key].toString().toLowerCase().startsWith(q.toLowerCase())) ret = true;
+  });
+  return ret;
+};
+
+function estatusNota(estatus) {
+  switch (estatus) {
+    case "reprobado":
+      return "danger";
+      break;
+
+    case "repite":
+      return "warning";
+      break;
+
+    case "especial":
+      return "primary";
+      break;
+
+    case "aprobado":
+      return "success";
+      break;
+  }
+}
+
+var getToday = function getToday() {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+
+  var yyyy = today.getFullYear();
+  return yyyy + '-' + mm + '-' + dd;
+};
+
+var today = getToday();
+
+
+/***/ }),
+
 /***/ "./resources/js/components/academico/handleNotification.jsx":
 /*!******************************************************************!*\
   !*** ./resources/js/components/academico/handleNotification.jsx ***!
@@ -32017,6 +32296,73 @@ var handleNotification = function handleNotification(data) {
 };
 var Notification = function Notification() {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_notifications_component__WEBPACK_IMPORTED_MODULE_1___default.a, null);
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/academico/headerPersona.js":
+/*!************************************************************!*\
+  !*** ./resources/js/components/academico/headerPersona.js ***!
+  \************************************************************/
+/*! exports provided: HeaderPersona */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HeaderPersona", function() { return HeaderPersona; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var loc = window.location.origin;
+var HeaderPersona = function HeaderPersona(_ref) {
+  var persona = _ref.persona;
+  return (
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "container-fluid"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "row mb-2"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "col-md-auto"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      title: persona.id,
+      src: "".concat(loc, "/").concat(persona.file_foto),
+      alt: "Foto de perfil",
+      className: "img-lg"
+    })),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "col align-items-center d-flex"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: ""
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: ""
+    }, persona.cedula),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+      className: ""
+    }, persona.nombre, " ", persona.apellido),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "badge badge-secondary"
+    }, persona.categoria)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+      className: " badge-success badge"
+    }, persona.departamento_adscrito, " - ", persona.cargo_departamento)))))
+  );
 };
 
 /***/ }),
@@ -32093,7 +32439,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _handleNotification_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../handleNotification.jsx */ "./resources/js/components/academico/handleNotification.jsx");
-/* harmony import */ var _list_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./list.jsx */ "./resources/js/components/academico/profesor/list.jsx");
+/* harmony import */ var _headerPersona__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../headerPersona */ "./resources/js/components/academico/headerPersona.js");
+/* harmony import */ var _assets_custom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../assets/custom */ "./resources/js/assets/custom.js");
+/* harmony import */ var _list_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./list.jsx */ "./resources/js/components/academico/profesor/list.jsx");
 function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
 
 function _typeof(obj) {
@@ -32199,6 +32547,8 @@ function _setPrototypeOf(o, p) {
 
 
 
+
+
 var App =
 /*#__PURE__*/
 function (_Component) {
@@ -32212,6 +32562,7 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this));
     _this.state = {
       profesor: {},
+      profesorData: {},
       search: "",
       idtray: null,
       idtri: null,
@@ -32230,6 +32581,7 @@ function (_Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.getApiData(null, "/profesor/academico", "profesor");
+      this.getApiData(null, "/profesor/show", "profesorData");
     }
   }, {
     key: "changeState",
@@ -32405,208 +32757,359 @@ function (_Component) {
 
       var returnUrl = function returnUrl(arr) {
         return arr.map(function (e, i) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
-            key: i
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-            className: "text-primary h4"
-          }, e), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-            className: "h2 mr-2 ml-2"
-          }, i == arr.length - 1 ? "" : " / "));
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
+              key: i
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+              className: "text-primary h4"
+            }, e),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+              className: "h2 mr-2 ml-2"
+            }, i == arr.length - 1 ? "" : " / "))
+          );
         });
       };
 
       var _this$state3 = this.state,
           profesor = _this$state3.profesor,
+          profesorData = _this$state3.profesorData,
           idtray = _this$state3.idtray,
           idtri = _this$state3.idtri,
           idsecc = _this$state3.idsecc,
           id_uc = _this$state3.id_uc,
           search = _this$state3.search;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_handleNotification_jsx__WEBPACK_IMPORTED_MODULE_2__["Notification"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "container"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "p-3 border border-dark rounded"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mb-3"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        placeholder: "Buscar...",
-        className: "form-control w-25",
-        onChange: function onChange(e) {
-          return _this6.changeState({
-            search: e.target.value.toLowerCase()
-          });
-        }
-      })), idtray === null ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_list_jsx__WEBPACK_IMPORTED_MODULE_3__["List"], {
-        filter: search,
-        returnUrl: returnUrl,
-        obj: profesor,
-        changeState: this.changeState,
-        preprop: "idtray",
-        prop: "idtray",
-        title: ""
-      }) : null, idtri === null && profesor[idtray] ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_list_jsx__WEBPACK_IMPORTED_MODULE_3__["List"], {
-        filter: search,
-        returnUrl: returnUrl,
-        obj: profesor[idtray],
-        changeState: this.changeState,
-        preprop: "idtray",
-        prop: "idtri",
-        title: [idtray]
-      }) : null, idsecc === null && profesor[idtray] && profesor[idtray][idtri] ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_list_jsx__WEBPACK_IMPORTED_MODULE_3__["List"], {
-        filter: search,
-        returnUrl: returnUrl,
-        obj: profesor[idtray][idtri],
-        changeState: this.changeState,
-        preprop: "idtri",
-        prop: "idsecc",
-        title: [idtray, idtri]
-      }) : null, id_uc === null && profesor[idtray] && profesor[idtray][idtri] && profesor[idtray][idtri][idsecc] ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_list_jsx__WEBPACK_IMPORTED_MODULE_3__["List"], {
-        filter: search,
-        returnUrl: returnUrl,
-        obj: profesor[idtray][idtri][idsecc],
-        changeState: this.changeState,
-        preprop: "idsecc",
-        prop: "id_uc",
-        title: [idtray, idtri, idsecc]
-      }) : null, id_uc !== null && profesor[idtray] && profesor[idtray][idtri] && profesor[idtray][idtri][idsecc] && profesor[idtray][idtri][idsecc][id_uc] ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "mb-3"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-arrow-left mr-3 hover",
-        onClick: function onClick() {
-          return _this6.changeState({
-            id_uc: null
-          });
-        }
-      }), returnUrl([idtray, idtri, idsecc, id_uc])), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-        className: "table"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
-        colSpan: "5"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group mb-3",
-        title: "TXT separado por tabulaciones:\r | Primera columna -> C\xE9dula del estudiante \r | Segunda columna -> Nota del estudiante \r | Tercera columna -> Modo de calificaci\xF3n \r | Una fila por estudiante"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group-prepend"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "input-group-text"
-      }, "Notas por lotes")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "custom-file"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "file",
-        className: "custom-file-input",
-        accept: ".txt",
-        onChange: this.selectFile
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
-        className: "custom-file-label"
-      }, "Seleccionar .txt"))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "ID"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nombres y Apellidos"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sexo"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "C\xE9dula"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Puntos"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, profesor[idtray][idtri][idsecc][id_uc].map(function (e) {
-        return e.notas;
-      }).filter(function (e) {
-        return !(e == false);
-      }).length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-primary",
-        onClick: this.saveNota
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-send"
-      })) : null))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, profesor[idtray][idtri][idsecc][id_uc].map(function (e, i) {
-        return (search == e.estudiante.nombre.substr(0, search.length).toLowerCase() || search == e.estudiante.apellido.substr(0, search.length).toLowerCase() || search == e.estudiante.cedula.toString().substr(0, search.length).toLowerCase() || search == "") && e.inscripcion ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-          key: e.estudiante.id
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.estudiante.id), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "img-sm",
-          style: {
-            backgroundImage: "url('" + _this6.loc + "/" + e.estudiante.file_foto + "')"
+      return (
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_handleNotification_jsx__WEBPACK_IMPORTED_MODULE_2__["Notification"], null),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "container"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "p-3 border border-dark rounded"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_headerPersona__WEBPACK_IMPORTED_MODULE_3__["HeaderPersona"], {
+          persona: profesorData
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Cargar notas"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "mb-3"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          placeholder: "Buscar...",
+          className: "form-control w-25",
+          onChange: function onChange(e) {
+            return _this6.changeState({
+              search: e.target.value.toLowerCase()
+            });
           }
-        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.estudiante.nombre, " ", e.estudiante.apellido), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-          className: "badge badge-" + (e.estudiante.sexo === "Masculino" ? "primary" : "warning")
-        }, e.estudiante.sexo)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.estudiante.cedula), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.editable ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, e.notas.map(function (nota, inota) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
-            key: inota
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "input-group " + (nota.type === "delete" && "opacity-md")
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-            type: "number",
-            disabled: !nota.type || nota.type === "delete" ? true : false,
-            className: "form-control",
-            min: "0",
-            max: "99",
-            value: nota.puntos,
-            onChange: function onChange(event) {
-              return _this6.updateMode(event.target.value, inota, i, "changeInput");
-            },
-            placeholder: "Pts"
-          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-            type: "text",
-            disabled: !nota.type || nota.type === "delete" ? true : false,
-            className: "form-control",
-            value: nota.modo,
-            onChange: function onChange(event) {
-              return _this6.updateMode(event.target.value, inota, i, "changeInputModo");
-            },
-            placeholder: "Modo. Ejemplo: Nota final, Recuperativo"
-          }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-            className: "input-group-append"
-          }, !nota.type ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "btn btn-warning",
-            onClick: function onClick() {
-              return _this6.updateMode(null, inota, i, "update");
-            }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fa fa-pencil"
-          })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "btn btn-danger",
-            onClick: function onClick() {
-              return _this6.updateMode(null, inota, i, "delMode");
-            }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fa fa-trash"
-          }))) : null, nota.type === "new" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "btn btn-danger",
-            onClick: function onClick() {
-              return _this6.updateMode(null, inota, i, "delNew");
-            }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fa fa-times"
-          })) : null, nota.type === "update" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "btn btn-warning",
-            onClick: function onClick() {
-              return _this6.updateMode(null, inota, i, "delModeUpdateDelete");
-            }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fa fa-times"
-          })) : null, nota.type === "delete" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-            className: "btn btn-danger",
-            onClick: function onClick() {
-              return _this6.updateMode(null, inota, i, "delModeUpdateDelete");
-            }
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-            className: "fa fa-arrow-left"
-          })) : null)));
-        })) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
-          className: "list-group"
-        }, e.notas.map(function (ee, ii) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-            key: ii,
-            className: "list-group-item"
-          }, ee.puntos, " / ", ee.modo);
-        }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "btn btn-success",
+        })), idtray === null ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_list_jsx__WEBPACK_IMPORTED_MODULE_5__["List"], {
+          filter: search,
+          returnUrl: returnUrl,
+          obj: profesor,
+          changeState: this.changeState,
+          preprop: "idtray",
+          prop: "idtray",
+          title: ""
+        }) : null, idtri === null && profesor[idtray] ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_list_jsx__WEBPACK_IMPORTED_MODULE_5__["List"], {
+          filter: search,
+          returnUrl: returnUrl,
+          obj: profesor[idtray],
+          changeState: this.changeState,
+          preprop: "idtray",
+          prop: "idtri",
+          title: [idtray]
+        }) : null, idsecc === null && profesor[idtray] && profesor[idtray][idtri] ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_list_jsx__WEBPACK_IMPORTED_MODULE_5__["List"], {
+          filter: search,
+          returnUrl: returnUrl,
+          obj: profesor[idtray][idtri],
+          changeState: this.changeState,
+          preprop: "idtri",
+          prop: "idsecc",
+          title: [idtray, idtri]
+        }) : null, id_uc === null && profesor[idtray] && profesor[idtray][idtri] && profesor[idtray][idtri][idsecc] ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_list_jsx__WEBPACK_IMPORTED_MODULE_5__["List"], {
+          filter: search,
+          returnUrl: returnUrl,
+          obj: profesor[idtray][idtri][idsecc],
+          changeState: this.changeState,
+          preprop: "idsecc",
+          prop: "id_uc",
+          title: [idtray, idtri, idsecc]
+        }) : null, id_uc !== null && profesor[idtray] && profesor[idtray][idtri] && profesor[idtray][idtri][idsecc] && profesor[idtray][idtri][idsecc][id_uc] ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "mb-3"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-arrow-left mr-3 hover",
           onClick: function onClick() {
-            return _this6.updateMode(null, null, i, "addNew", e.id);
+            return _this6.changeState({
+              id_uc: null
+            });
           }
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-plus"
-        })))) : null;
-      })))) : null)));
+        }), returnUrl([idtray, idtri, idsecc, id_uc])),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+          className: "table"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+          colSpan: "5"
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group mb-3",
+          title: "TXT separado por tabulaciones:\r | Primera columna -> C\xE9dula del estudiante \r | Segunda columna -> Nota del estudiante \r | Tercera columna -> Modo de calificaci\xF3n \r | Una fila por estudiante"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group-prepend"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "input-group-text"
+        }, "Notas por lotes")),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "custom-file"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "file",
+          className: "custom-file-input",
+          accept: ".txt",
+          onChange: this.selectFile
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+          className: "custom-file-label"
+        }, "Seleccionar .txt"))))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "ID"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nombres y Apellidos"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sexo"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "C\xE9dula"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Puntos"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, profesor[idtray][idtri][idsecc][id_uc].map(function (e) {
+          return e.notas;
+        }).filter(function (e) {
+          return !(e == false);
+        }).length ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-primary",
+          onClick: this.saveNota
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-send"
+        })) : null))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, profesor[idtray][idtri][idsecc][id_uc].map(function (e, i) {
+          return (search == e.estudiante.nombre.substr(0, search.length).toLowerCase() || search == e.estudiante.apellido.substr(0, search.length).toLowerCase() || search == e.estudiante.cedula.toString().substr(0, search.length).toLowerCase() || search == "") && e.inscripcion ?
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+            key: e.estudiante.id
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.estudiante.id),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+            className: "img-sm",
+            style: {
+              backgroundImage: "url('" + _this6.loc + "/" + e.estudiante.file_foto + "')"
+            }
+          })),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.estudiante.nombre, " ", e.estudiante.apellido),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+            className: "badge badge-" + (e.estudiante.sexo === "Masculino" ? "primary" : "warning")
+          }, e.estudiante.sexo)),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.estudiante.cedula),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.editable ?
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, e.notas.map(function (nota, inota) {
+            return (
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
+                key: inota
+              },
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+                className: "input-group " + (nota.type === "delete" && "opacity-md")
+              },
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+                type: "number",
+                disabled: !nota.type || nota.type === "delete" ? true : false,
+                className: "form-control",
+                min: "0",
+                max: "99",
+                value: nota.puntos,
+                onChange: function onChange(event) {
+                  return _this6.updateMode(event.target.value, inota, i, "changeInput");
+                },
+                placeholder: "Pts"
+              }),
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+                type: "text",
+                disabled: !nota.type || nota.type === "delete" ? true : false,
+                className: "form-control",
+                value: nota.modo,
+                onChange: function onChange(event) {
+                  return _this6.updateMode(event.target.value, inota, i, "changeInputModo");
+                },
+                placeholder: "Modo. Ejemplo: Nota final, Recuperativo"
+              }),
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+                className: "input-group-append"
+              }, !nota.type ?
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null,
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+                className: "btn btn-warning",
+                onClick: function onClick() {
+                  return _this6.updateMode(null, inota, i, "update");
+                }
+              },
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+                className: "fa fa-pencil"
+              })),
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+                className: "btn btn-danger",
+                onClick: function onClick() {
+                  return _this6.updateMode(null, inota, i, "delMode");
+                }
+              },
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+                className: "fa fa-trash"
+              }))) : null, nota.type === "new" ?
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+                className: "btn btn-danger",
+                onClick: function onClick() {
+                  return _this6.updateMode(null, inota, i, "delNew");
+                }
+              },
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+                className: "fa fa-times"
+              })) : null, nota.type === "update" ?
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+                className: "btn btn-warning",
+                onClick: function onClick() {
+                  return _this6.updateMode(null, inota, i, "delModeUpdateDelete");
+                }
+              },
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+                className: "fa fa-times"
+              })) : null, nota.type === "delete" ?
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+                className: "btn btn-danger",
+                onClick: function onClick() {
+                  return _this6.updateMode(null, inota, i, "delModeUpdateDelete");
+                }
+              },
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+                className: "fa fa-arrow-left"
+              })) : null)))
+            );
+          })) :
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+            className: "list-group"
+          }, e.notas.map(function (ee, ii) {
+            return (
+              /*#__PURE__*/
+              react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+                key: ii,
+                className: "list-group-item"
+              }, ee.puntos, " / ", ee.modo)
+            );
+          }))),
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+            className: "btn btn-success",
+            onClick: function onClick() {
+              return _this6.updateMode(null, null, i, "addNew", e.id);
+            }
+          },
+          /*#__PURE__*/
+          react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+            className: "fa fa-plus"
+          })))) : null;
+        })))) : null)))
+      );
     }
   }]);
 
   return App;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
+Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(
+/*#__PURE__*/
+react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
 
 /***/ }),
 
-/***/ 7:
+/***/ 10:
 /*!***********************************************************************************!*\
   !*** multi ./resources/js/components/academico/profesor/profesor.cargarnotas.jsx ***!
   \***********************************************************************************/

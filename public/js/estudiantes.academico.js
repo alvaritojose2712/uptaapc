@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -31974,678 +31974,10 @@ module.exports = function (css) {
 
 /***/ }),
 
-/***/ "./resources/js/components/academico/estudiante/estudiante.notas.jsx":
-/*!***************************************************************************!*\
-  !*** ./resources/js/components/academico/estudiante/estudiante.notas.jsx ***!
-  \***************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
-
-function _typeof(obj) {
-  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
-    _typeof = function _typeof(obj) {
-      return _typeof2(obj);
-    };
-  } else {
-    _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
-    };
-  }
-
-  return _typeof(obj);
-}
-
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-function _possibleConstructorReturn(self, call) {
-  if (call && (_typeof(call) === "object" || typeof call === "function")) {
-    return call;
-  }
-
-  return _assertThisInitialized(self);
-}
-
-function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
-
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) _setPrototypeOf(subClass, superClass);
-}
-
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
-}
-
-
-
-var App =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(App, _Component);
-
-  function App() {
-    var _this;
-
-    _classCallCheck(this, App);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this));
-    _this.state = {
-      id_notas: null,
-      id_trimestre: null,
-      id_trayecto: null
-    };
-    _this.changeState = _this.changeState.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(App, [{
-    key: "changeState",
-    value: function changeState(newState) {
-      var _this2 = this;
-
-      return new Promise(function (solve) {
-        return _this2.setState(newState, solve);
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this3 = this;
-
-      var _this$state = this.state,
-          id_notas = _this$state.id_notas,
-          id_trimestre = _this$state.id_trimestre,
-          id_trayecto = _this$state.id_trayecto;
-      var _this$props = this.props,
-          estudiante = _this$props.estudiante,
-          inscribir = _this$props.inscribir;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, id_notas !== null && id_trayecto !== null && id_trimestre !== null && estudiante && estudiante.academico[id_trayecto] && estudiante.academico[id_trayecto][id_trimestre].length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-        className: "table"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        colSpan: "7"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
-        className: "text-right"
-      }, estudiante.academico[id_trayecto][id_trimestre][id_notas].inscripcion === 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: ""
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "badge badge-warning"
-      }, "Materia Ofertada"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "#",
-        className: "h6 badge-dark badge",
-        onClick: inscribir ? function () {
-          return inscribir(estudiante.academico[id_trayecto][id_trimestre][id_notas].id);
-        } : null
-      }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-pencil"
-      })))) : estudiante.academico[id_trayecto][id_trimestre][id_notas].notas.length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "badge badge-success"
-      }, "Notas cargadas") : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "badge badge-primary"
-      }, "Materia inscrita")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-        colSpan: "7",
-        className: "text-danger"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-times hover",
-        onClick: function onClick() {
-          return _this3.changeState({
-            id_notas: null,
-            id_trayecto: null,
-            id_trimestre: null
-          });
-        }
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Trayecto"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Trimestre"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Secci\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Unidad Curricular"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Profesor"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Duraci\xF3n(Semanas)"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "UC")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-        className: estudiante.academico[id_trayecto][id_trimestre][id_notas].inscripcion ? estudiante.academico[id_trayecto][id_trimestre][id_notas].notas.length ? "table-success" : "table-primary" : "table-warning"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id_trayecto), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id_trimestre), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].seccion.nombre), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].uc.nombre), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].profesor.nombre, " ", estudiante.academico[id_trayecto][id_trimestre][id_notas].profesor.apellido), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].uc.duracion), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].uc.u_credito)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
-        colSpan: "4"
-      }, "Modo"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
-        colSpan: "3"
-      }, "Puntuaci\xF3n")), estudiante.academico[id_trayecto][id_trimestre][id_notas].notas.map(function (e, i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-          key: i
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-          colSpan: "4",
-          className: "h3"
-        }, e.modo), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-          colSpan: "3",
-          className: "h1"
-        }, e.puntos));
-      }))) : Object.keys(estudiante.academico).map(function (e, i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-          className: "table",
-          key: i
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-          colSpan: "5",
-          className: "h1 text-center"
-        }, e)), Object.keys(estudiante.academico[e]).map(function (ee, ii) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
-            key: i + ii
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Secci\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Unidad Curricular"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Profesor"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Duraci\xF3n(Semanas)"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "UC")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-            rowSpan: estudiante.academico[e][ee].length + 1,
-            className: "h3 text-center"
-          }, ee)), estudiante.academico[e][ee].map(function (eee, iii) {
-            return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-              key: i + ii + iii,
-              onClick: function onClick() {
-                return _this3.changeState({
-                  id_notas: iii,
-                  id_trayecto: e,
-                  id_trimestre: ee
-                });
-              },
-              className: (eee.inscripcion ? eee.notas.length ? "table-success" : "table-primary" : "table-warning") + " hover"
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.seccion.nombre), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.uc.nombre), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.profesor.nombre, " ", eee.profesor.apellido), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.uc.duracion), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.uc.u_credito));
-          }));
-        })));
-      }));
-    }
-  }]);
-
-  return App;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (App);
-
-/***/ }),
-
-/***/ "./resources/js/components/academico/estudiante/head.estudiante.jsx":
-/*!**************************************************************************!*\
-  !*** ./resources/js/components/academico/estudiante/head.estudiante.jsx ***!
-  \**************************************************************************/
-/*! exports provided: Headestudiante, Generalestudiante */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Headestudiante", function() { return Headestudiante; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Generalestudiante", function() { return Generalestudiante; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _this = undefined;
-
-
-var Headestudiante = function Headestudiante(prop) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "container-fluid"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row mb-2"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col-md-auto"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    title: prop.estudiante.id,
-    src: "".concat(prop.loc, "/").concat(prop.estudiante.file_foto),
-    alt: "Foto de perfil",
-    className: "img-lg"
-  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col align-items-center d-flex"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: ""
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: ""
-  }, prop.estudiante.cedula), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
-    className: ""
-  }, prop.estudiante.nombre, " ", prop.estudiante.apellido), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "badge badge-secondary"
-  }, prop.estudiante.nombrecarrera.nombre))))));
-};
-var Generalestudiante = function Generalestudiante(props) {
-  var loc = props.loc,
-      modo = props.modo,
-      estudiante = props.estudiante;
-  var nombre = estudiante.nombre,
-      apellido = estudiante.apellido,
-      cedula = estudiante.cedula,
-      nacionalidad = estudiante.nacionalidad,
-      genero = estudiante.genero,
-      estado_civil = estudiante.estado_civil,
-      direccion = estudiante.direccion,
-      fecha_nacimiento = estudiante.fecha_nacimiento,
-      telefono_1 = estudiante.telefono_1,
-      telefono_2 = estudiante.telefono_2,
-      correo = estudiante.correo,
-      cuenta_bancaria = estudiante.cuenta_bancaria,
-      observacion = estudiante.observacion,
-      n_carnet = estudiante.n_carnet,
-      calzado = estudiante.calzado,
-      gorra = estudiante.gorra,
-      camisa = estudiante.camisa,
-      pantalon = estudiante.pantalon,
-      file_cedula = estudiante.file_cedula,
-      file_foto = estudiante.file_foto,
-      trabaja = estudiante.trabaja,
-      file_notas = estudiante.file_notas,
-      file_fondo_negro = estudiante.file_fondo_negro,
-      categoria = estudiante.categoria,
-      cargo = estudiante.cargo,
-      dedicacion = estudiante.dedicacion,
-      estado = estudiante.estado,
-      estatus = estudiante.estatus,
-      grado_instruccion = estudiante.grado_instruccion,
-      fecha_ingreso = estudiante.fecha_ingreso,
-      caja_ahorro = estudiante.caja_ahorro,
-      antiguedad_otros_ieu = estudiante.antiguedad_otros_ieu,
-      hrs_nocturnas = estudiante.hrs_nocturnas,
-      hrs_feriadas = estudiante.hrs_feriadas,
-      hrs_diurnas = estudiante.hrs_diurnas,
-      hrs_feriadas_nocturnas = estudiante.hrs_feriadas_nocturnas,
-      profesion = estudiante.profesion,
-      departamento_adscrito = estudiante.departamento_adscrito,
-      cargo_departamento = estudiante.cargo_departamento,
-      file_sintesis = estudiante.file_sintesis,
-      hijos = estudiante.hijos;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "container-fluid"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "row"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "col"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-    className: "table"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-    className: "head-division-estudiante"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    colSpan: "2",
-    className: "text-center tr-separate-sections-table"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: ""
-  }, "Datos personales"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Nombres"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, nombre)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Apellidos"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, apellido)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "C\xE9dula de Identidad"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, cedula)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "N\xB0 Carnet de la Patria"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, n_carnet)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Nacionalidad"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, nacionalidad)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "G\xE9nero"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, genero)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Fecha de Nacimiento"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, fecha_nacimiento)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Estado Civil"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, estado_civil)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Cuenta Bancaria"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, cuenta_bancaria)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Obeservaci\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, observacion)), modo === "estudiante" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "\xBFTrabaja?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, trabaja ? "Sí" : "No")) : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-    className: "head-division-estudiante"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    colSpan: "2",
-    className: "text-center tr-separate-sections-table"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: ""
-  }, "Contacto"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Direcci\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, direccion)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-phone"
-  }), " Tel\xE9fono 1"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, telefono_1)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-phone"
-  }), " Tel\xE9fono 2"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, telefono_2)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-envelope"
-  }), " Correo Electr\xF3nico"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, correo)), modo === "trabajador" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-    className: "head-division-estudiante"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    colSpan: "2",
-    className: "text-center tr-separate-sections-table"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: ""
-  }, "Datos institucionales"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Categor\xEDa"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, categoria)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Cargo"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, cargo)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Dedicaci\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, dedicacion)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Estado"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, estado)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Estatus"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, estatus)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Grado de Instrucci\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, grado_instruccion)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Departamento Adscrito"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, departamento_adscrito)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Cargo desempe\xF1ado en el departamento"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, cargo_departamento)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Profesi\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, profesion)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "\xBFAplica Caja de Ahorro?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, caja_ahorro ? "Sí" : "No")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Fecha de Ingreso"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: ""
-  }, fecha_ingreso)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "A\xF1os en otros (IEU)"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, antiguedad_otros_ieu)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Horas Nocturnas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hrs_nocturnas)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Horas Feriadas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hrs_feriadas)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Horas Diurnas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hrs_diurnas)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Horas Feriadas nocturnas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hrs_feriadas_nocturnas))) : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-    className: "head-division-estudiante"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    colSpan: "2",
-    className: "text-center tr-separate-sections-table"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: ""
-  }, "Tallas"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Camisa"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, camisa)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Pantal\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, pantalon)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Gorra"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, gorra)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    className: "cabezera-tabla-vertical text-right font-weight-bold"
-  }, "Calzado"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, calzado)), modo === "trabajador" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-    className: "head-division-estudiante"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    colSpan: "2",
-    className: "text-center tr-separate-sections-table"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Familiares ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-plus hover",
-    onClick: function onClick() {
-      return _this.updateMode("hijos", null, null, "addNew");
-    }
-  })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    colSpan: "2"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-    className: "table"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Parentesco"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nombres"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Apellidos"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "G\xE9nero"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Fecha de nacimiento"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "C\xE9dula"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Correo Electr\xF3nico"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Tel\xE9fono"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\xBFDiscapacidad?"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\xBFEstudia?"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, hijos.map(function (fa, ifa) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-      key: ifa,
-      className: fa.type === "delete" ? "opacity-md" : ""
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-      className: "form-control",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      value: fa.parentesco,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "parentesco");
-      }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-      value: "Hijo/a"
-    }, "Hijo/a"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-      value: "Madre"
-    }, "Madre"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-      value: "Padre"
-    }, "Padre"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      placeholder: "Nombres",
-      type: "text",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      className: "form-control",
-      value: fa.nombre,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "nombre");
-      }
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      placeholder: "Apellidos",
-      type: "text",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      className: "form-control",
-      value: fa.apellido,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "apellido");
-      }
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-      className: "form-control",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      value: fa.genero,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "genero");
-      }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-      value: "Masculino"
-    }, "Masculino"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-      value: "Femenino"
-    }, "Femenino"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      type: "date",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      className: "form-control",
-      value: fa.fecha_nacimiento,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "fecha_nacimiento");
-      }
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      placeholder: "C\xE9dula",
-      type: "text",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      className: "form-control",
-      value: fa.cedula,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "cedula");
-      }
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      placeholder: "Correo Electr\xF3nico",
-      type: "text",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      className: "form-control",
-      value: fa.correo,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "correo");
-      }
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-      placeholder: "Tel\xE9fono de Contacto",
-      type: "text",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      className: "form-control",
-      value: fa.telefono_1,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "telefono_1");
-      }
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-      className: "form-control",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      value: fa.discapacidad,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "genero");
-      }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-      value: "1"
-    }, "S\xED"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-      value: "0"
-    }, "No"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-      className: "form-control",
-      disabled: !fa.type || fa.type === "delete" ? true : false,
-      value: fa.estudia,
-      onChange: function onChange(e) {
-        return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "genero");
-      }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-      value: "1"
-    }, "S\xED"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-      value: "0"
-    }, "No"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: "input-group-append"
-    }, !fa.type ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      className: "btn btn-warning",
-      onClick: function onClick() {
-        return _this.updateMode("hijos", null, ifa, "update");
-      }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-      className: "fa fa-pencil"
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      className: "btn btn-danger",
-      onClick: function onClick() {
-        return _this.updateMode("hijos", null, ifa, "delMode");
-      }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-      className: "fa fa-trash"
-    }))) : null, fa.type === "new" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      className: "btn btn-danger",
-      onClick: function onClick() {
-        return _this.updateMode("hijos", null, ifa, "delNew");
-      }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-      className: "fa fa-times"
-    })) : null, fa.type === "update" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      className: "btn btn-warning",
-      onClick: function onClick() {
-        return _this.updateMode("hijos", null, ifa, "delModeUpdateDelete");
-      }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-      className: "fa fa-times"
-    })) : null, fa.type === "delete" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-      className: "btn btn-danger",
-      onClick: function onClick() {
-        return _this.updateMode("hijos", null, ifa, "delModeUpdateDelete");
-      }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-      className: "fa fa-arrow-left"
-    })) : null)));
-  })))))) : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-    className: "head-division-estudiante"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    colSpan: "2",
-    className: "text-center tr-separate-sections-table"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: ""
-  }, "Documentos"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
-    colSpan: "2"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: loc + "/" + file_foto,
-    className: "btn btn-block m-1",
-    target: "blank"
-  }, "Foto ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-send"
-  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: loc + "/" + file_cedula,
-    className: "btn btn-block m-1",
-    target: "blank"
-  }, "C\xE9dula escaneada", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-send"
-  })), modo === "estudiante" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: loc + "/" + file_fondo_negro,
-    className: "btn btn-block m-1",
-    target: "blank"
-  }, "Fondo negro ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-send"
-  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: loc + "/" + file_notas,
-    className: "btn btn-block m-1",
-    target: "blank"
-  }, "Notas ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-send"
-  }))) : null, modo === "trabajador" ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: loc + "/" + file_sintesis,
-    className: "btn btn-block m-1",
-    target: "blank"
-  }, "S\xEDntesis Curricular ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-    className: "fa fa-send"
-  })) : null)))))));
-};
-Generalestudiante.defaultProps = {
-  modo: "estudiante"
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/academico/estudiantes.academico.jsx":
-/*!*********************************************************************!*\
-  !*** ./resources/js/components/academico/estudiantes.academico.jsx ***!
-  \*********************************************************************/
+/***/ "./resources/js/components/academico/estudiante.academico.jsx":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/academico/estudiante.academico.jsx ***!
+  \********************************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -32841,41 +32173,1297 @@ function (_Component) {
       var _this$state = this.state,
           estudiante = _this$state.estudiante,
           viewE = _this$state.viewE;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "container-fluid"
-      }, Object.keys(estudiante).length ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_estudiante_head_estudiante_jsx__WEBPACK_IMPORTED_MODULE_3__["Headestudiante"], {
-        estudiante: estudiante,
-        loc: this.loc
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "btn-group mb-4 mt-4"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-" + (viewE === 0 ? "success" : "primary"),
-        onClick: function onClick() {
-          return _this5.changeState({
-            viewE: 0
-          });
-        }
-      }, "General"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "btn btn-" + (viewE === 1 ? "success" : "primary"),
-        onClick: function onClick() {
-          return _this5.changeState({
-            viewE: 1
-          });
-        }
-      }, "Materias")), viewE === 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_estudiante_head_estudiante_jsx__WEBPACK_IMPORTED_MODULE_3__["Generalestudiante"], {
-        estudiante: estudiante,
-        loc: this.loc
-      }), viewE === 1 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_estudiante_estudiante_notas_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        estudiante: estudiante,
-        inscribir: this.inscribir
-      })) : null);
+      return (
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "container-fluid"
+        }, Object.keys(estudiante).length ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_estudiante_head_estudiante_jsx__WEBPACK_IMPORTED_MODULE_3__["Headestudiante"], {
+          estudiante: estudiante,
+          loc: this.loc
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "btn-group mb-4 mt-4"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-" + (viewE === 0 ? "success" : "primary"),
+          onClick: function onClick() {
+            return _this5.changeState({
+              viewE: 0
+            });
+          }
+        }, "General"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-" + (viewE === 1 ? "success" : "primary"),
+          onClick: function onClick() {
+            return _this5.changeState({
+              viewE: 1
+            });
+          }
+        }, "Materias")), viewE === 0 &&
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_estudiante_head_estudiante_jsx__WEBPACK_IMPORTED_MODULE_3__["Generalestudiante"], {
+          estudiante: estudiante,
+          loc: this.loc
+        }), viewE === 1 &&
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_estudiante_estudiante_notas_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          estudiante: estudiante,
+          inscribir: this.inscribir
+        })) : null)
+      );
     }
   }]);
 
   return App;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
+Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(
+/*#__PURE__*/
+react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
+
+/***/ }),
+
+/***/ "./resources/js/components/academico/estudiante/estudiante.notas.jsx":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/academico/estudiante/estudiante.notas.jsx ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
+
+function _typeof(obj) {
+  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+    _typeof = function _typeof(obj) {
+      return _typeof2(obj);
+    };
+  } else {
+    _typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+
+
+var App =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(App, _Component);
+
+  function App() {
+    var _this;
+
+    _classCallCheck(this, App);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this));
+    _this.state = {
+      id_notas: null,
+      id_trimestre: null,
+      id_trayecto: null
+    };
+    _this.changeState = _this.changeState.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(App, [{
+    key: "changeState",
+    value: function changeState(newState) {
+      var _this2 = this;
+
+      return new Promise(function (solve) {
+        return _this2.setState(newState, solve);
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var _this$state = this.state,
+          id_notas = _this$state.id_notas,
+          id_trimestre = _this$state.id_trimestre,
+          id_trayecto = _this$state.id_trayecto;
+      var _this$props = this.props,
+          estudiante = _this$props.estudiante,
+          inscribir = _this$props.inscribir;
+
+      if (!estudiante.academico) {
+        estudiante.academico = {};
+      }
+
+      return (
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, id_notas !== null && id_trayecto !== null && id_trimestre !== null && estudiante && estudiante.academico[id_trayecto] && estudiante.academico[id_trayecto][id_trimestre].length ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+          className: "table"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          colSpan: "7"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+          className: "text-right"
+        }, estudiante.academico[id_trayecto][id_trimestre][id_notas].inscripcion === 0 ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: ""
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "badge badge-warning"
+        }, "Materia Ofertada"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          href: "#",
+          className: "h6 badge-dark badge",
+          onClick: inscribir ? function () {
+            return inscribir(estudiante.academico[id_trayecto][id_trimestre][id_notas].id);
+          } : null
+        }, " ",
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-pencil"
+        })))) : estudiante.academico[id_trayecto][id_trimestre][id_notas].notas.length ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "badge badge-success"
+        }, "Notas cargadas") :
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "badge badge-primary"
+        }, "Materia inscrita")))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+          colSpan: "7",
+          className: "text-danger"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-times hover",
+          onClick: function onClick() {
+            return _this3.changeState({
+              id_notas: null,
+              id_trayecto: null,
+              id_trimestre: null
+            });
+          }
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Trayecto"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Trimestre"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Secci\xF3n"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Unidad Curricular"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Profesor"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Duraci\xF3n(Semanas)"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "UC")),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+          className: estudiante.academico[id_trayecto][id_trimestre][id_notas].inscripcion ? estudiante.academico[id_trayecto][id_trimestre][id_notas].notas.length ? "table-success" : "table-primary" : "table-warning"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id_trayecto),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, id_trimestre),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].seccion.nombre),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].uc.nombre),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].profesor.nombre, " ", estudiante.academico[id_trayecto][id_trimestre][id_notas].profesor.apellido),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].uc.duracion),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, estudiante.academico[id_trayecto][id_trimestre][id_notas].uc.u_credito)),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+          colSpan: "4"
+        }, "Modo"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+          colSpan: "3"
+        }, "Puntuaci\xF3n")), estudiante.academico[id_trayecto][id_trimestre][id_notas].notas.map(function (e, i) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+              key: i
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+              colSpan: "4",
+              className: "h3"
+            }, e.modo),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+              colSpan: "3",
+              className: "h1"
+            }, e.puntos))
+          );
+        }))) : Object.keys(estudiante.academico).map(function (e, i) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+              className: "table",
+              key: i
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null,
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+              colSpan: "5",
+              className: "h1 text-center"
+            }, e)), Object.keys(estudiante.academico[e]).map(function (ee, ii) {
+              return (
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, {
+                  key: i + ii
+                },
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null),
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Secci\xF3n"),
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Unidad Curricular"),
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Profesor"),
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Duraci\xF3n(Semanas)"),
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "UC")),
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+                /*#__PURE__*/
+                react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+                  rowSpan: estudiante.academico[e][ee].length + 1,
+                  className: "h3 text-center"
+                }, ee)), estudiante.academico[e][ee].map(function (eee, iii) {
+                  return (
+                    /*#__PURE__*/
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+                      key: i + ii + iii,
+                      onClick: function onClick() {
+                        return _this3.changeState({
+                          id_notas: iii,
+                          id_trayecto: e,
+                          id_trimestre: ee
+                        });
+                      },
+                      className: (eee.inscripcion ? eee.notas.length ? "table-success" : "table-primary" : "table-warning") + " hover"
+                    },
+                    /*#__PURE__*/
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.seccion.nombre),
+                    /*#__PURE__*/
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.uc.nombre),
+                    /*#__PURE__*/
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.profesor.nombre, " ", eee.profesor.apellido),
+                    /*#__PURE__*/
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.uc.duracion),
+                    /*#__PURE__*/
+                    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, eee.uc.u_credito))
+                  );
+                }))
+              );
+            })))
+          );
+        }))
+      );
+    }
+  }]);
+
+  return App;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (App);
+
+/***/ }),
+
+/***/ "./resources/js/components/academico/estudiante/head.estudiante.jsx":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/academico/estudiante/head.estudiante.jsx ***!
+  \**************************************************************************/
+/*! exports provided: Headestudiante, Generalestudiante */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Headestudiante", function() { return Headestudiante; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Generalestudiante", function() { return Generalestudiante; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+var _this = undefined;
+
+
+var Headestudiante = function Headestudiante(prop) {
+  return (
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "container-fluid"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "row mb-2"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "col-md-auto"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      title: prop.estudiante.id,
+      src: "".concat(prop.loc, "/").concat(prop.estudiante.file_foto),
+      alt: "Foto de perfil",
+      className: "img-lg"
+    })),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "col align-items-center d-flex"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: ""
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: ""
+    }, prop.estudiante.cedula),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+      className: ""
+    }, prop.estudiante.nombre, " ", prop.estudiante.apellido),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "badge badge-secondary"
+    }, prop.estudiante.nombrecarrera ? prop.estudiante.nombrecarrera.nombre : "Sin carrera")), prop.estudiante.verificado ?
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+      className: " badge-success badge"
+    }, "Verificado") :
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+      className: " badge-primary badge"
+    }, "Pendiente de verificaci\xF3n")))))
+  );
+};
+var Generalestudiante = function Generalestudiante(props) {
+  var loc = props.loc,
+      modo = props.modo,
+      estudiante = props.estudiante;
+  var nombre = estudiante.nombre,
+      apellido = estudiante.apellido,
+      cedula = estudiante.cedula,
+      nacionalidad = estudiante.nacionalidad,
+      genero = estudiante.genero,
+      estado_civil = estudiante.estado_civil,
+      direccion = estudiante.direccion,
+      fecha_nacimiento = estudiante.fecha_nacimiento,
+      telefono_1 = estudiante.telefono_1,
+      telefono_2 = estudiante.telefono_2,
+      correo = estudiante.correo,
+      cuenta_bancaria = estudiante.cuenta_bancaria,
+      observacion = estudiante.observacion,
+      n_carnet = estudiante.n_carnet,
+      calzado = estudiante.calzado,
+      gorra = estudiante.gorra,
+      camisa = estudiante.camisa,
+      pantalon = estudiante.pantalon,
+      file_cedula = estudiante.file_cedula,
+      file_foto = estudiante.file_foto,
+      trabaja = estudiante.trabaja,
+      file_notas = estudiante.file_notas,
+      file_fondo_negro = estudiante.file_fondo_negro,
+      categoria = estudiante.categoria,
+      cargo = estudiante.cargo,
+      dedicacion = estudiante.dedicacion,
+      estado = estudiante.estado,
+      estatus = estudiante.estatus,
+      grado_instruccion = estudiante.grado_instruccion,
+      fecha_ingreso = estudiante.fecha_ingreso,
+      caja_ahorro = estudiante.caja_ahorro,
+      antiguedad_otros_ieu = estudiante.antiguedad_otros_ieu,
+      hrs_nocturnas = estudiante.hrs_nocturnas,
+      hrs_feriadas = estudiante.hrs_feriadas,
+      hrs_diurnas = estudiante.hrs_diurnas,
+      hrs_feriadas_nocturnas = estudiante.hrs_feriadas_nocturnas,
+      profesion = estudiante.profesion,
+      departamento_adscrito = estudiante.departamento_adscrito,
+      cargo_departamento = estudiante.cargo_departamento,
+      file_sintesis = estudiante.file_sintesis,
+      hijos = estudiante.hijos;
+  return (
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "container-fluid"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "row"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "col"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+      className: "table"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      className: "head-division-estudiante"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      colSpan: "2",
+      className: "text-center tr-separate-sections-table"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: ""
+    }, "Datos personales"))),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Nombres"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, nombre)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Apellidos"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, apellido)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "C\xE9dula de Identidad"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, cedula)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "N\xB0 Carnet de la Patria"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, n_carnet)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Nacionalidad"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, nacionalidad)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "G\xE9nero"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, genero)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Fecha de Nacimiento"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, fecha_nacimiento)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Estado Civil"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, estado_civil)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Cuenta Bancaria"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, cuenta_bancaria)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Obeservaci\xF3n"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, observacion)), modo === "estudiante" ?
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "\xBFTrabaja?"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, trabaja ? "Sí" : "No")) : null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      className: "head-division-estudiante"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      colSpan: "2",
+      className: "text-center tr-separate-sections-table"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: ""
+    }, "Contacto"))),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Direcci\xF3n"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, direccion)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-phone"
+    }), " Tel\xE9fono 1"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, telefono_1)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-phone"
+    }), " Tel\xE9fono 2"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, telefono_2)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-envelope"
+    }), " Correo Electr\xF3nico"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, correo)), modo === "trabajador" ?
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      className: "head-division-estudiante"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      colSpan: "2",
+      className: "text-center tr-separate-sections-table"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: ""
+    }, "Datos institucionales"))),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Categor\xEDa"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, categoria)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Cargo"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, cargo)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Dedicaci\xF3n"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, dedicacion)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Estado"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, estado)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Estatus"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, estatus)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Grado de Instrucci\xF3n"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, grado_instruccion)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Departamento Adscrito"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, departamento_adscrito)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Cargo desempe\xF1ado en el departamento"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, cargo_departamento)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Profesi\xF3n"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, profesion)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "\xBFAplica Caja de Ahorro?"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, caja_ahorro ? "Sí" : "No")),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Fecha de Ingreso"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: ""
+    }, fecha_ingreso)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "A\xF1os en otros (IEU)"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, antiguedad_otros_ieu)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Horas Nocturnas"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hrs_nocturnas)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Horas Feriadas"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hrs_feriadas)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Horas Diurnas"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hrs_diurnas)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Horas Feriadas nocturnas"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, hrs_feriadas_nocturnas))) : null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      className: "head-division-estudiante"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      colSpan: "2",
+      className: "text-center tr-separate-sections-table"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: ""
+    }, "Tallas"))),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Camisa"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, camisa)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Pantal\xF3n"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, pantalon)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Gorra"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, gorra)),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      className: "cabezera-tabla-vertical text-right font-weight-bold"
+    }, "Calzado"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, calzado)), modo === "trabajador" ?
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      className: "head-division-estudiante"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      colSpan: "2",
+      className: "text-center tr-separate-sections-table"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Familiares ",
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-plus hover",
+      onClick: function onClick() {
+        return _this.updateMode("hijos", null, null, "addNew");
+      }
+    })))),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      colSpan: "2"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+      className: "table"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Parentesco"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nombres"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Apellidos"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "G\xE9nero"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Fecha de nacimiento"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "C\xE9dula"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Correo Electr\xF3nico"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Tel\xE9fono"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\xBFDiscapacidad?"),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "\xBFEstudia?"))),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, hijos.map(function (fa, ifa) {
+      return (
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+          key: ifa,
+          className: fa.type === "delete" ? "opacity-md" : ""
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "form-control",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          value: fa.parentesco,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "parentesco");
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "Hijo/a"
+        }, "Hijo/a"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "Madre"
+        }, "Madre"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "Padre"
+        }, "Padre"))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          placeholder: "Nombres",
+          type: "text",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          className: "form-control",
+          value: fa.nombre,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "nombre");
+          }
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          placeholder: "Apellidos",
+          type: "text",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          className: "form-control",
+          value: fa.apellido,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "apellido");
+          }
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "form-control",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          value: fa.genero,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "genero");
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "Masculino"
+        }, "Masculino"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "Femenino"
+        }, "Femenino"))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "date",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          className: "form-control",
+          value: fa.fecha_nacimiento,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "fecha_nacimiento");
+          }
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          placeholder: "C\xE9dula",
+          type: "text",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          className: "form-control",
+          value: fa.cedula,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "cedula");
+          }
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          placeholder: "Correo Electr\xF3nico",
+          type: "text",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          className: "form-control",
+          value: fa.correo,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "correo");
+          }
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          placeholder: "Tel\xE9fono de Contacto",
+          type: "text",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          className: "form-control",
+          value: fa.telefono_1,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "telefono_1");
+          }
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "form-control",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          value: fa.discapacidad,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "genero");
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "1"
+        }, "S\xED"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "0"
+        }, "No"))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "form-control",
+          disabled: !fa.type || fa.type === "delete" ? true : false,
+          value: fa.estudia,
+          onChange: function onChange(e) {
+            return _this.updateMode("hijos", e.target.value, ifa, "changeInput", "genero");
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "1"
+        }, "S\xED"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "0"
+        }, "No"))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group-append"
+        }, !fa.type ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-warning",
+          onClick: function onClick() {
+            return _this.updateMode("hijos", null, ifa, "update");
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-pencil"
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-danger",
+          onClick: function onClick() {
+            return _this.updateMode("hijos", null, ifa, "delMode");
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-trash"
+        }))) : null, fa.type === "new" ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-danger",
+          onClick: function onClick() {
+            return _this.updateMode("hijos", null, ifa, "delNew");
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-times"
+        })) : null, fa.type === "update" ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-warning",
+          onClick: function onClick() {
+            return _this.updateMode("hijos", null, ifa, "delModeUpdateDelete");
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-times"
+        })) : null, fa.type === "delete" ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn btn-danger",
+          onClick: function onClick() {
+            return _this.updateMode("hijos", null, ifa, "delModeUpdateDelete");
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-arrow-left"
+        })) : null)))
+      );
+    })))))) : null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+      className: "head-division-estudiante"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      colSpan: "2",
+      className: "text-center tr-separate-sections-table"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: ""
+    }, "Documentos"))),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+      colSpan: "2"
+    },
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      href: loc + "/" + file_foto,
+      className: "btn btn-block m-1",
+      target: "blank"
+    }, "Foto ",
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-send"
+    })),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      href: loc + "/" + file_cedula,
+      className: "btn btn-block m-1",
+      target: "blank"
+    }, "C\xE9dula escaneada",
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-send"
+    })), modo === "estudiante" ?
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      href: loc + "/" + file_fondo_negro,
+      className: "btn btn-block m-1",
+      target: "blank"
+    }, "Fondo negro ",
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-send"
+    })),
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      href: loc + "/" + file_notas,
+      className: "btn btn-block m-1",
+      target: "blank"
+    }, "Notas ",
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-send"
+    }))) : null, modo === "trabajador" ?
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      href: loc + "/" + file_sintesis,
+      className: "btn btn-block m-1",
+      target: "blank"
+    }, "S\xEDntesis Curricular ",
+    /*#__PURE__*/
+    react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-send"
+    })) : null)))))))
+  );
+};
+Generalestudiante.defaultProps = {
+  modo: "estudiante"
+};
 
 /***/ }),
 
@@ -32926,14 +33514,14 @@ var Notification = function Notification() {
 
 /***/ }),
 
-/***/ 6:
-/*!***************************************************************************!*\
-  !*** multi ./resources/js/components/academico/estudiantes.academico.jsx ***!
-  \***************************************************************************/
+/***/ 8:
+/*!**************************************************************************!*\
+  !*** multi ./resources/js/components/academico/estudiante.academico.jsx ***!
+  \**************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\uptaapc\resources\js\components\academico\estudiantes.academico.jsx */"./resources/js/components/academico/estudiantes.academico.jsx");
+module.exports = __webpack_require__(/*! D:\uptaapc\resources\js\components\academico\estudiante.academico.jsx */"./resources/js/components/academico/estudiante.academico.jsx");
 
 
 /***/ })

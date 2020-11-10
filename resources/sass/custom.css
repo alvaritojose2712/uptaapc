@@ -1,9 +1,9 @@
 
 /*Global*/
-html{
-}
+
 html, body {
   font-family: 'Nunito', sans-serif;
+  background: linear-gradient(45deg, rgba(10,47,92,1) 0%, rgba(36,97,130,1) 16%, rgba(12,210,245,1) 53%, rgba(36,97,130,1) 82%, rgba(10,47,92,1) 100%);
 }
 
 input:focus::-webkit-input-placeholder { color:transparent; }
@@ -50,6 +50,10 @@ button {
 
 button:hover {
   cursor: pointer;
+}
+.mh-500{
+  max-height: 900px;
+  overflow-y: auto;
 }
 .title-welcome{
   display: flex;

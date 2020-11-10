@@ -16,7 +16,7 @@ class SeccionController extends Controller
             foreach (["nombre"] as $val) {
                 $q->orWhere($val,"LIKE",$req->q."%");
             }
-        })->take(10)->orderBy("id_carrera","asc")->get();
+        })->orderBy("id_carrera","asc")->get();
         
         return Response::json( $data );
     }

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {formatCedula} from '../../assets/custom.js'
+import {formatCedula,searchParams} from '../../assets/custom.js'
 const loc = window.location.origin
 function TrEstudiante({estudiante,carrera,onClick,index,selects}){
 	return (
@@ -10,7 +10,8 @@ function TrEstudiante({estudiante,carrera,onClick,index,selects}){
 				</td>
 				<td className="table-nombre-estudiante">{estudiante.nombre} {estudiante.apellido}</td>
 				<td className="table-cedula-estudiante">{formatCedula(estudiante.cedula)}</td>
-				<td className="table-cedula-estudiante">{estudiante.nombrecarrera.nombre}</td>
+
+				<td className="table-cedula-estudiante">{estudiante.nombrecarrera?estudiante.nombrecarrera.nombre:"Sin carrera"}</td>
 				
 	  	</tr>
 	)
@@ -21,7 +22,7 @@ const EstudianteList = ({estudiantes,loc,getIdEstudiante,selects,filtro,busqueda
 			{
 				estudiantes.length===undefined
 				?
-				<div className="tnz-file-tree">
+				<div className="tnz-file-tree mh-500">
 					{Object.entries(estudiantes).map((carrera,indexCarrera)=>
 						<label className="tnz-file-tree-item year" key={indexCarrera}>
 							<input className="tnz-file-tree-cb" type="checkbox"/>
@@ -32,12 +33,8 @@ const EstudianteList = ({estudiantes,loc,getIdEstudiante,selects,filtro,busqueda
 										<tbody>
 										{	
 											carrera[1].map((estudiante,indexEstudiante)=>
-												busqueda===""||
-												estudiante.nombre.toString().substr(0,busqueda.length).toLowerCase()===busqueda.toLowerCase()||
-												estudiante.apellido.toString().substr(0,busqueda.length).toLowerCase()===busqueda.toLowerCase()||
-												estudiante.cedula.toString().substr(0,busqueda.length).toLowerCase()===busqueda.toLowerCase()
-												// estudiante.genero.toString().substr(0,busqueda.length).toLowerCase()===busqueda.toLowerCase()
-												?
+												searchParams(busqueda,estudiante,["nombre","apellido","cedula"])
+												&&
 												<React.Fragment key={estudiante.id}>
 													{filtro==="todos"?
 														<TrEstudiante selects={selects} index={indexEstudiante} estudiante={estudiante} carrera={carrera[0]} onClick={getIdEstudiante}/>
@@ -55,8 +52,6 @@ const EstudianteList = ({estudiantes,loc,getIdEstudiante,selects,filtro,busqueda
 														<TrEstudiante selects={selects} index={indexEstudiante} estudiante={estudiante} carrera={carrera[0]} onClick={getIdEstudiante}/>
 													:null}
 												</React.Fragment>
-												:null
-
 											)
 										}
 										</tbody>

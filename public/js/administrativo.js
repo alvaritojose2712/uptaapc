@@ -86390,7 +86390,7 @@ function extend() {
 /*!***************************************!*\
   !*** ./resources/js/assets/custom.js ***!
   \***************************************/
-/*! exports provided: formatCedula, formatMoneda, formatPartida, diffFecha, diffdatefull, inputMoneda, removeMoneda, getDiaSemana, retDivisa, getTodayDate, getDataForm, leerTxt, lenValLimit */
+/*! exports provided: formatCedula, formatMoneda, formatPartida, diffFecha, diffdatefull, inputMoneda, removeMoneda, getDiaSemana, retDivisa, getTodayDate, getDataForm, leerTxt, lenValLimit, searchParams, today, estatusNota */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -86408,6 +86408,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDataForm", function() { return getDataForm; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "leerTxt", function() { return leerTxt; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lenValLimit", function() { return lenValLimit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "searchParams", function() { return searchParams; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "today", function() { return today; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "estatusNota", function() { return estatusNota; });
 function formatMoneda(value) {
   var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
   var separators = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ['.', ".", ','];
@@ -86620,6 +86623,44 @@ function lenValLimit(val, len) {
   return val;
 }
 
+var searchParams = function searchParams(q, e, searchKeys) {
+  var ret = false;
+  searchKeys.map(function (key) {
+    if (e[key].toString().toLowerCase().startsWith(q.toLowerCase())) ret = true;
+  });
+  return ret;
+};
+
+function estatusNota(estatus) {
+  switch (estatus) {
+    case "reprobado":
+      return "danger";
+      break;
+
+    case "repite":
+      return "warning";
+      break;
+
+    case "especial":
+      return "primary";
+      break;
+
+    case "aprobado":
+      return "success";
+      break;
+  }
+}
+
+var getToday = function getToday() {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+
+  var yyyy = today.getFullYear();
+  return yyyy + '-' + mm + '-' + dd;
+};
+
+var today = getToday();
 
 
 /***/ }),
@@ -88121,7 +88162,6 @@ function _setPrototypeOf(o, p) {
 
 
 
- // import Recursoshumanoscrud from './recursos_humanos/crud/';
 
 
 
@@ -88154,14 +88194,20 @@ function (_Component) {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Switch"], null,
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
-          path: "/recursoshumanos/nominas/",
-          component: _recursos_humanos_nomina___WEBPACK_IMPORTED_MODULE_5__["default"]
+          path: "/rrhh/administrar/nominas/"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_recursos_humanos_nomina___WEBPACK_IMPORTED_MODULE_5__["default"], null)),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
+          path: "/rrhh/administrar/personal"
         }),
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
-          path: "/presupuesto",
-          component: _presupuesto___WEBPACK_IMPORTED_MODULE_6__["default"]
-        }))),
+          path: "/presupuesto"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_presupuesto___WEBPACK_IMPORTED_MODULE_6__["default"], null)))),
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_s_alert__WEBPACK_IMPORTED_MODULE_4___default.a, {
           stack: false,
@@ -88178,7 +88224,7 @@ function (_Component) {
 
 Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(
 /*#__PURE__*/
-react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Index, null), document.getElementById('appreact')); // <Route path='/recursoshumanos/personal/' component={Recursoshumanoscrud}/>
+react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Index, null), document.getElementById('appreact'));
 
 /***/ }),
 
@@ -90900,244 +90946,6 @@ var initialState = {
 
 /***/ }),
 
-/***/ "./resources/js/components/administrativo/recursos_humanos/crud/actions/types.js":
-/*!***************************************************************************************!*\
-  !*** ./resources/js/components/administrativo/recursos_humanos/crud/actions/types.js ***!
-  \***************************************************************************************/
-/*! exports provided: BUSCAR_PERSONAL, AGREGAR_PERSONAL, SELECT_PERSONAL, GET_VALORES_GLOBALES, EDIT_USER, EMPTY_EDITUSER */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BUSCAR_PERSONAL", function() { return BUSCAR_PERSONAL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AGREGAR_PERSONAL", function() { return AGREGAR_PERSONAL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SELECT_PERSONAL", function() { return SELECT_PERSONAL; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_VALORES_GLOBALES", function() { return GET_VALORES_GLOBALES; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_USER", function() { return EDIT_USER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EMPTY_EDITUSER", function() { return EMPTY_EDITUSER; });
-var BUSCAR_PERSONAL = "BUSCAR_PERSONAL";
-var AGREGAR_PERSONAL = "AGREGAR_PERSONAL";
-var SELECT_PERSONAL = "SELECT_PERSONAL";
-var GET_VALORES_GLOBALES = "GET_VALORES_GLOBALES";
-var EDIT_USER = "EDIT_USER";
-var EMPTY_EDITUSER = "EMPTY_EDITUSER";
-
-/***/ }),
-
-/***/ "./resources/js/components/administrativo/recursos_humanos/crud/reducers/busquedaReducer.js":
-/*!**************************************************************************************************!*\
-  !*** ./resources/js/components/administrativo/recursos_humanos/crud/reducers/busquedaReducer.js ***!
-  \**************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/types */ "./resources/js/components/administrativo/recursos_humanos/crud/actions/types.js");
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
-}
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
-}
-
-function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
-}
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  }
-}
-
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-
-var initialState = {
-  personals: [],
-  persona: null,
-  valores_globales: [],
-  editUser: {
-    antiguedad_otros_ieu: "",
-    apellido: "",
-    caja_ahorro: "",
-    cargo: "",
-    cargo_departamento: "",
-    categoria: "",
-    cedula: "",
-    correo: "",
-    cuenta_bancaria: "",
-    dedicacion: "",
-    departamento_adscrito: "",
-    estatus: "",
-    estado: "",
-    fecha_ingreso: "",
-    fecha_nacimiento: "",
-    genero: "",
-    grado_instruccion: "",
-    hrs_diurnas: "",
-    hrs_feriadas: "",
-    hrs_feriadas_nocturnas: "",
-    hrs_nocturnas: "",
-    nacionalidad: "",
-    nombre: "",
-    profesion: "",
-    telefono_1: "",
-    telefono_2: "",
-    hijos: []
-  }
-};
-/* harmony default export */ __webpack_exports__["default"] = (function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-
-  var _ref = arguments.length > 1 ? arguments[1] : undefined,
-      type = _ref.type,
-      payload = _ref.payload;
-
-  switch (type) {
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["BUSCAR_PERSONAL"]:
-      return _objectSpread({}, state, {
-        personals: payload,
-        persona: null
-      });
-
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["SELECT_PERSONAL"]:
-      return _objectSpread({}, state, {
-        persona: payload
-      });
-
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_VALORES_GLOBALES"]:
-      return _objectSpread({}, state, {
-        valores_globales: payload
-      });
-
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["EDIT_USER"]:
-      if (payload.type === "onChangeInputs") {
-        return _objectSpread({}, state, {
-          editUser: _objectSpread({}, state.editUser, _defineProperty({}, payload.data.target.name, payload.data.target.value))
-        });
-      } else if (payload.type === "modificarHijos") {
-        var copy = _toConsumableArray(state.editUser.hijos);
-
-        copy[payload.dataHijos.index][payload.dataHijos.name] = payload.dataHijos.value;
-        return _objectSpread({}, state, {
-          editUser: _objectSpread({}, state.editUser, {
-            hijos: copy
-          })
-        });
-      } else if (payload.type === "addHijos") {
-        return _objectSpread({}, state, {
-          editUser: _objectSpread({}, state.editUser, {
-            hijos: [].concat(_toConsumableArray(state.editUser.hijos), [payload.dataHijos])
-          })
-        });
-      } else if (payload.type === "removeHijos") {
-        return _objectSpread({}, state, {
-          editUser: _objectSpread({}, state.editUser, {
-            hijos: _toConsumableArray(state.editUser.hijos).filter(function (e, i) {
-              return i !== payload.dataHijos;
-            })
-          })
-        });
-      } else if (payload.type === "removeHijosExit") {
-        var _copy = _toConsumableArray(state.editUser.hijos);
-
-        _copy[payload.index].remove = true;
-        return _objectSpread({}, state, {
-          editUser: _objectSpread({}, state.editUser, {
-            hijos: _copy
-          })
-        });
-      } else if (payload.type === "cancelRemoveHijosExit") {
-        var _copy2 = _toConsumableArray(state.editUser.hijos);
-
-        delete _copy2[payload.index].remove;
-        return _objectSpread({}, state, {
-          editUser: _objectSpread({}, state.editUser, {
-            hijos: _copy2
-          })
-        });
-      } else if (payload.type === "modoEditHijos" || payload.type === "cancelEditHijos") {
-        var _copy3 = _toConsumableArray(state.editUser.hijos);
-
-        _copy3[payload.dataHijos.index].type = payload.dataHijos.accion;
-        return _objectSpread({}, state, {
-          editUser: _objectSpread({}, state.editUser, {
-            hijos: _copy3
-          })
-        });
-      } else {
-        return _objectSpread({}, state, {
-          editUser: payload
-        });
-      }
-
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["EMPTY_EDITUSER"]:
-      return _objectSpread({}, state, {
-        editUser: _objectSpread({}, initialState.editUser),
-        persona: null
-      });
-
-    default:
-      return state;
-  }
-});
-
-/***/ }),
-
 /***/ "./resources/js/components/administrativo/recursos_humanos/nomina/Flotante.js":
 /*!************************************************************************************!*\
   !*** ./resources/js/components/administrativo/recursos_humanos/nomina/Flotante.js ***!
@@ -92694,10 +92502,10 @@ var initialState = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 /* harmony import */ var _recursos_humanos_nomina_reducers_nominaReducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./recursos_humanos/nomina/reducers/nominaReducer */ "./resources/js/components/administrativo/recursos_humanos/nomina/reducers/nominaReducer.js");
-/* harmony import */ var _recursos_humanos_crud_reducers_busquedaReducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./recursos_humanos/crud/reducers/busquedaReducer */ "./resources/js/components/administrativo/recursos_humanos/crud/reducers/busquedaReducer.js");
-/* harmony import */ var _presupuesto_reducers_partidasReducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./presupuesto/reducers/partidasReducer */ "./resources/js/components/administrativo/presupuesto/reducers/partidasReducer.js");
-/* harmony import */ var _presupuesto_reducers_accionesProyectosReducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./presupuesto/reducers/accionesProyectosReducer */ "./resources/js/components/administrativo/presupuesto/reducers/accionesProyectosReducer.js");
-/* harmony import */ var _presupuesto_reducers_formsReducer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./presupuesto/reducers/formsReducer */ "./resources/js/components/administrativo/presupuesto/reducers/formsReducer.js");
+/* harmony import */ var _presupuesto_reducers_partidasReducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./presupuesto/reducers/partidasReducer */ "./resources/js/components/administrativo/presupuesto/reducers/partidasReducer.js");
+/* harmony import */ var _presupuesto_reducers_accionesProyectosReducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./presupuesto/reducers/accionesProyectosReducer */ "./resources/js/components/administrativo/presupuesto/reducers/accionesProyectosReducer.js");
+/* harmony import */ var _presupuesto_reducers_formsReducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./presupuesto/reducers/formsReducer */ "./resources/js/components/administrativo/presupuesto/reducers/formsReducer.js");
+/* harmony import */ var _utilidadReducer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utilidadReducer */ "./resources/js/components/administrativo/utilidadReducer.js");
 
 
 
@@ -92705,10 +92513,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
-  partidas: _presupuesto_reducers_partidasReducer__WEBPACK_IMPORTED_MODULE_3__["default"],
-  busqueda: _recursos_humanos_crud_reducers_busquedaReducer__WEBPACK_IMPORTED_MODULE_2__["default"],
-  accionesProyectos: _presupuesto_reducers_accionesProyectosReducer__WEBPACK_IMPORTED_MODULE_4__["default"],
-  formsPresupuesto: _presupuesto_reducers_formsReducer__WEBPACK_IMPORTED_MODULE_5__["default"],
+  partidas: _presupuesto_reducers_partidasReducer__WEBPACK_IMPORTED_MODULE_2__["default"],
+  accionesProyectos: _presupuesto_reducers_accionesProyectosReducer__WEBPACK_IMPORTED_MODULE_3__["default"],
+  formsPresupuesto: _presupuesto_reducers_formsReducer__WEBPACK_IMPORTED_MODULE_4__["default"],
+  utilidad: _utilidadReducer__WEBPACK_IMPORTED_MODULE_5__["default"],
   nomina: _recursos_humanos_nomina_reducers_nominaReducer__WEBPACK_IMPORTED_MODULE_1__["default"]
 }));
 
@@ -92734,6 +92542,142 @@ var middleware = [redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"]];
 var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_rootReducer__WEBPACK_IMPORTED_MODULE_2__["default"], initialstate, Object(redux__WEBPACK_IMPORTED_MODULE_0__["compose"])(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"].apply(void 0, middleware) // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 ));
 /* harmony default export */ __webpack_exports__["default"] = (store);
+
+/***/ }),
+
+/***/ "./resources/js/components/administrativo/utilidadReducer.js":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/administrativo/utilidadReducer.js ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
+
+function _typeof(obj) {
+  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+    _typeof = function _typeof(obj) {
+      return _typeof2(obj);
+    };
+  } else {
+    _typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+var defaultState = {
+  notificacion: {
+    active: false,
+    cargando: false,
+    color: "",
+    msj: ""
+  },
+  modal: false
+};
+
+var utilidadReducer = function utilidadReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
+
+  var _ref = arguments.length > 1 ? arguments[1] : undefined,
+      type = _ref.type,
+      payload = _ref.payload;
+
+  switch (type) {
+    case "OPEN_NOTIFICACION":
+      return _objectSpread({}, state, {
+        notificacion: {
+          active: true,
+          cargando: true,
+          color: "warning",
+          msj: ""
+        }
+      });
+
+    case "FINISH_NOTIFICACION":
+      return _objectSpread({}, state, {
+        notificacion: {
+          active: true,
+          cargando: false,
+          color: payload.code == "200" ? "success" : "danger",
+          msj: _typeof(payload.msj) === "object" ? JSON.stringify(payload.msj) : payload.msj
+        }
+      });
+
+    case "INITIAL_NOTIFICACION":
+      return _objectSpread({}, state, {
+        notificacion: defaultState.notificacion
+      });
+
+    case "OPEN_MODAL":
+      return _objectSpread({}, state, {
+        modal: true
+      });
+
+    case "CLOSE_MODAL":
+      return _objectSpread({}, state, {
+        modal: false
+      });
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (utilidadReducer);
 
 /***/ }),
 

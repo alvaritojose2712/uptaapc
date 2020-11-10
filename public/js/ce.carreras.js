@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -28731,6 +28731,7 @@ function (_Component) {
     _this.state = {
       carreras: [],
       uc: [],
+      escalas: [],
       carreras_id: null,
       categoria_id: null,
       uc_id: null,
@@ -28740,8 +28741,10 @@ function (_Component) {
       u_credito: "",
       duracion: "",
       trayecto: "I",
+      escala: "",
       ucSelectPrela: 0,
       nombreSeccion: "",
+      newUc: false,
       section: null //0 Unidades Curricular 1 Secciones
 
     };
@@ -28757,6 +28760,7 @@ function (_Component) {
     value: function componentDidMount() {
       this.getApiData(null, "/controlEstudios/carreras", "carreras");
       this.getApiData(null, "/controlEstudios/carreras/uc", "uc");
+      this.getApiData(null, "/controlEstudios/escalas/evaluacion", "escalas");
     }
   }, {
     key: "getApiData",
@@ -28909,6 +28913,7 @@ function (_Component) {
             u_credito: this.state.u_credito,
             duracion: this.state.duracion,
             trayecto: this.state.trayecto,
+            escala: this.state.escala,
             id_categoria: this.state.carreras[this.state.carreras_id].categorias[this.state.categoria_id].id
           };
           break;
@@ -28956,6 +28961,7 @@ function (_Component) {
       var _this$state = this.state,
           carreras = _this$state.carreras,
           uc = _this$state.uc,
+          escalas = _this$state.escalas,
           carreras_id = _this$state.carreras_id,
           categoria_id = _this$state.categoria_id,
           uc_id = _this$state.uc_id,
@@ -28965,376 +28971,732 @@ function (_Component) {
           u_credito = _this$state.u_credito,
           duracion = _this$state.duracion,
           trayecto = _this$state.trayecto,
+          escala = _this$state.escala,
           ucSelectPrela = _this$state.ucSelectPrela,
           nombreSeccion = _this$state.nombreSeccion,
+          newUc = _this$state.newUc,
           section = _this$state.section;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "container-fluid"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-2"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        placeholder: "Buscar...",
-        onChange: function onChange(e) {
-          return _this7.getApiData(e, "/controlEstudios/carreras", "carreras");
+      return (
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "container-fluid"
         },
-        className: "form-control mb-3"
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: "form-control",
-        placeholder: "Agregar carrera...",
-        value: nombreCarrera,
-        onChange: function onChange(e) {
-          return _this7.changeUniqueState({
-            nombreCarrera: e.target.value
-          });
-        }
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group-append"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
-          return _this7.addItem("carrera");
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row"
         },
-        className: "btn btn-outline-success",
-        type: "button"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-plus"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-        className: "table"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, carreras.map(function (e, i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-          key: i,
-          className: (carreras_id === i ? "alert-success" : "") + " hover",
-          onClick: function onClick() {
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-md-auto"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          placeholder: "Buscar...",
+          onChange: function onChange(e) {
+            return _this7.getApiData(e, "/controlEstudios/carreras", "carreras");
+          },
+          className: "form-control mb-3"
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: "form-control",
+          placeholder: "Agregar carrera...",
+          value: nombreCarrera,
+          onChange: function onChange(e) {
             return _this7.changeUniqueState({
-              categoria_id: null
-            }).then(function () {
-              return _this7.changeUniqueState({
-                carreras_id: i
-              });
+              nombreCarrera: e.target.value
             });
           }
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.nombre), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "btn-group w-100"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "btn btn-sm"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-pencil",
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group-append"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           onClick: function onClick() {
-            return _this7.updItem(e.id, "carrera");
-          }
-        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "btn btn-sm"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-trash",
-          onClick: function onClick() {
-            return _this7.delItem(e.id, "carrera");
-          }
-        })))));
-      })))), carreras[carreras_id] && carreras_id !== null && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-header"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "h2",
-        "aria-current": "page"
-      }, carreras[carreras_id].nombre), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "text-success h3",
-        "aria-current": "page"
-      }, section === 1 ? " / Secciones" : null, section === 0 ? " / Unidades Curriculares" : null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-body"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "container-fluid"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-auto d-flex justify-content-center flex-column"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        tittle: "Unidades Curriculares",
-        onClick: function onClick() {
-          return _this7.changeUniqueState({
-            section: 0
-          });
+            return _this7.addItem("carrera");
+          },
+          className: "btn btn-outline-success",
+          type: "button"
         },
-        className: (section === 0 ? "btn-success" : "btn-primary") + " btn btn-xl btn-circle"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-book"
-      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        tittle: "Secciones",
-        onClick: function onClick() {
-          return _this7.changeUniqueState({
-            section: 1
-          });
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-plus"
+        })))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+          className: "table"
         },
-        className: (section === 1 ? "btn-success" : "btn-primary") + " btn btn-xl btn-circle"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-university"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col justify-content-center d-flex"
-      }, section === 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "m-3 rounded border border-dark w-25 p-2"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Categor\xEDas"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group mb-3"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: "form-control",
-        placeholder: "Agregar categor\xEDa...",
-        value: nombreCategoria,
-        onChange: function onChange(e) {
-          return _this7.changeUniqueState({
-            nombreCategoria: e.target.value
-          });
-        }
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group-append"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
-          return _this7.addItem("categoria");
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, carreras.map(function (e, i) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+              key: i,
+              className: (carreras_id === i ? "alert-success" : "") + " hover",
+              onClick: function onClick() {
+                return _this7.changeUniqueState({
+                  categoria_id: null
+                }).then(function () {
+                  return _this7.changeUniqueState({
+                    carreras_id: i
+                  });
+                });
+              }
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.nombre),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+              className: "btn-group w-100"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn btn-sm"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-pencil",
+              onClick: function onClick() {
+                return _this7.updItem(e.id, "carrera");
+              }
+            })),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn btn-sm"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-trash",
+              onClick: function onClick() {
+                return _this7.delItem(e.id, "carrera");
+              }
+            })))))
+          );
+        })))), carreras[carreras_id] && carreras_id !== null &&
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col"
         },
-        className: "btn btn-outline-success",
-        type: "button"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-plus"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-        className: "table table-borderless"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, carreras[carreras_id].categorias.map(function (e, i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-header"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "h2",
+          "aria-current": "page"
+        }, carreras[carreras_id].nombre),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "text-success h3",
+          "aria-current": "page"
+        }, section === 1 ? " / Secciones" : null, section === 0 ? " / Unidades Curriculares" : null)),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "card-body"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "container-fluid"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col-md-auto d-flex justify-content-center flex-column"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          tittle: "Unidades Curriculares",
           onClick: function onClick() {
             return _this7.changeUniqueState({
-              categoria_id: i,
-              ucSelectPrela: "null"
+              section: 0
             });
           },
-          key: i,
-          className: (categoria_id === i ? "alert-success" : "") + " hover"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, e.nombre)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "btn-group w-100"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "btn btn-sm"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-pencil",
-          onClick: function onClick() {
-            return _this7.updItem(e.id, "categoria");
-          }
-        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "btn btn-sm"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-trash",
-          onClick: function onClick() {
-            return _this7.delItem(e.id, "categoria");
-          }
-        })))));
-      })))), carreras[carreras_id].categorias[categoria_id] && categoria_id !== null ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "m-3 rounded border border-dark p-2"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "container-fluid"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "UC's"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group mb-3"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: "form-control",
-        placeholder: "Unidad Curricular...",
-        value: nombreUc,
-        onChange: function onChange(e) {
-          return _this7.changeUniqueState({
-            nombreUc: e.target.value
-          });
-        }
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "number",
-        className: "form-control",
-        placeholder: "Unidades Cr\xE9dito...",
-        value: u_credito,
-        onChange: function onChange(e) {
-          return _this7.changeUniqueState({
-            u_credito: e.target.value
-          });
-        }
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "number",
-        className: "form-control",
-        placeholder: "Duraci\xF3n.. Semanas",
-        value: duracion,
-        onChange: function onChange(e) {
-          return _this7.changeUniqueState({
-            duracion: e.target.value
-          });
-        }
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        className: "form-control",
-        value: trayecto,
-        onChange: function onChange(e) {
-          return _this7.changeUniqueState({
-            trayecto: e.target.value
-          });
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "I"
-      }, "I"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "II"
-      }, "II"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "III"
-      }, "III"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "IV"
-      }, "IV"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "V"
-      }, "V"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "VI"
-      }, "VI")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group-append"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
-          return _this7.addItem("uc");
+          className: (section === 0 ? "btn-success" : "btn-primary") + " btn btn-xl btn-circle"
         },
-        className: "btn btn-outline-success",
-        type: "button"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-plus"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-        className: "table table-borderless"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, carreras[carreras_id].categorias[categoria_id].ucs.map(function (e, i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-          key: i,
-          className: (uc_id === i ? "alert-success" : "") + " hover",
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-book"
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          tittle: "Secciones",
           onClick: function onClick() {
             return _this7.changeUniqueState({
-              uc_id: i,
-              ucSelectPrela: "null"
+              section: 1
+            });
+          },
+          className: (section === 1 ? "btn-success" : "btn-primary") + " btn btn-xl btn-circle"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-university"
+        })))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col justify-content-center d-flex"
+        }, section === 0 ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "m-3 rounded border border-dark w-25 p-2"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Categor\xEDas"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group mb-3"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: "form-control",
+          placeholder: "Agregar categor\xEDa...",
+          value: nombreCategoria,
+          onChange: function onChange(e) {
+            return _this7.changeUniqueState({
+              nombreCategoria: e.target.value
             });
           }
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.nombre), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.u_credito), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.duracion), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.trayecto), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-trash",
-          onClick: function onClick() {
-            return _this7.delItem(e.id, "uc");
-          }
-        })));
-      })))), uc_id !== null && carreras[carreras_id].categorias[categoria_id].ucs[uc_id] ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Prelaciones  ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "text-success"
-      }, " / ", carreras[carreras_id].categorias[categoria_id].ucs[uc_id].nombre)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group mb-3"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: "form-control",
-        placeholder: "Buscar..",
-        onChange: function onChange(e) {
-          return _this7.getApiData(e, "/controlEstudios/carreras/uc", "uc");
-        }
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
-        className: "form-control",
-        value: ucSelectPrela,
-        onChange: function onChange(e) {
-          return _this7.changeUniqueState({
-            ucSelectPrela: e.target.value
-          });
-        }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-        value: "null"
-      }, "--Seleccione--"), uc.filter(function (e) {
-        return carreras[carreras_id].categorias.map(function (e) {
-          return e.id;
-        }).indexOf(e.id_categoria) !== -1;
-      }).map(function (e, i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
-          value: e.id,
-          key: i
-        }, e.nombre, " / Tray. ", e.trayecto);
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group-append"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
-          return _this7.addItem("prela");
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group-append"
         },
-        disabled: ucSelectPrela !== "null" && uc.filter(function (e) {
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: function onClick() {
+            return _this7.addItem("categoria");
+          },
+          className: "btn btn-outline-success",
+          type: "button"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-plus"
+        })))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+          className: "table table-borderless"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, carreras[carreras_id].categorias.map(function (e, i) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+              onClick: function onClick() {
+                return _this7.changeUniqueState({
+                  categoria_id: i,
+                  ucSelectPrela: "null"
+                });
+              },
+              key: i,
+              className: (categoria_id === i ? "alert-success" : "") + " hover"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, e.nombre)),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+              className: "btn-group w-100"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn btn-sm"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-pencil",
+              onClick: function onClick() {
+                return _this7.updItem(e.id, "categoria");
+              }
+            })),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn btn-sm"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-trash",
+              onClick: function onClick() {
+                return _this7.delItem(e.id, "categoria");
+              }
+            })))))
+          );
+        })))), carreras[carreras_id].categorias[categoria_id] && categoria_id !== null ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "m-3 rounded border border-dark p-2"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "container-fluid"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "UC's ",
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "btn-success btn",
+          onClick: function onClick() {
+            return _this7.changeUniqueState({
+              newUc: !newUc
+            });
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-plus"
+        }))), newUc &&
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "form-group"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Unidad Curricular"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: "form-control",
+          placeholder: "Unidad Curricular...",
+          value: nombreUc,
+          onChange: function onChange(e) {
+            return _this7.changeUniqueState({
+              nombreUc: e.target.value
+            });
+          }
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "form-group"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Unidades Cr\xE9dito"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "number",
+          className: "form-control",
+          placeholder: "Unidades Cr\xE9dito...",
+          value: u_credito,
+          onChange: function onChange(e) {
+            return _this7.changeUniqueState({
+              u_credito: e.target.value
+            });
+          }
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "form-group"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Duraci\xF3n en semanas"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "number",
+          className: "form-control",
+          placeholder: "Duraci\xF3n.. Semanas",
+          value: duracion,
+          onChange: function onChange(e) {
+            return _this7.changeUniqueState({
+              duracion: e.target.value
+            });
+          }
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "form-group"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Trayecto"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "form-control",
+          value: trayecto,
+          onChange: function onChange(e) {
+            return _this7.changeUniqueState({
+              trayecto: e.target.value
+            });
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "I"
+        }, "I"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "II"
+        }, "II"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "III"
+        }, "III"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "IV"
+        }, "IV"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "V"
+        }, "V"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "VI"
+        }, "VI"))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "form-group"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Escala de evaluaci\xF3n"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "form-control",
+          value: escala,
+          onChange: function onChange(e) {
+            return _this7.changeUniqueState({
+              escala: e.target.value
+            });
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: ""
+        }, "--Seleccione--"), escalas.map(function (e) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+              value: e.id,
+              key: e.id
+            }, e.reprobado, " /", e.repite, " /", e.especial, " /", e.aprobado)
+          );
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "form-group"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          onClick: function onClick() {
+            return _this7.addItem("uc");
+          },
+          className: "btn btn-outline-success btn-bloc",
+          type: "button"
+        }, "Agregar"))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+          className: "table table-borderless"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Unidad Curricular"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Unidades Cr\xE9dito"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Duraci\xF3n.. Semanas"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Trayecto"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Escala de evaluaci\xF3n"))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, carreras[carreras_id].categorias[categoria_id].ucs.map(function (e, i) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+              key: i,
+              className: (uc_id === i ? "alert-success" : "") + " hover",
+              onClick: function onClick() {
+                return _this7.changeUniqueState({
+                  uc_id: i,
+                  ucSelectPrela: "null"
+                });
+              }
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.nombre),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.u_credito),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.duracion),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, e.trayecto),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+              className: "btn-group"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn-sm btn btn-danger"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-times"
+            }), " ", e.escala.reprobado),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn-sm btn btn-warning"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-minus"
+            }), " ", e.escala.repite),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn-sm btn btn-primary"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-minus"
+            }), " ", e.escala.especial),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn-sm btn btn-success"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-check"
+            }), " ", e.escala.aprobado))),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-trash",
+              onClick: function onClick() {
+                return _this7.delItem(e.id, "uc");
+              }
+            })))
+          );
+        }))))), uc_id !== null && carreras[carreras_id].categorias[categoria_id].ucs[uc_id] ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Prelaciones  ",
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "text-success"
+        }, " / ", carreras[carreras_id].categorias[categoria_id].ucs[uc_id].nombre)),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group mb-3"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: "form-control",
+          placeholder: "Buscar..",
+          onChange: function onChange(e) {
+            return _this7.getApiData(e, "/controlEstudios/carreras/uc", "uc");
+          }
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+          className: "form-control",
+          value: ucSelectPrela,
+          onChange: function onChange(e) {
+            return _this7.changeUniqueState({
+              ucSelectPrela: e.target.value
+            });
+          }
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: "null"
+        }, "--Seleccione--"), uc.filter(function (e) {
           return carreras[carreras_id].categorias.map(function (e) {
             return e.id;
           }).indexOf(e.id_categoria) !== -1;
-        }).length ? false : true,
-        className: "btn btn-outline-success",
-        type: "button"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-plus"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
-        className: "list-group"
-      }, carreras[carreras_id].categorias[categoria_id].ucs[uc_id].prela.map(function (e, i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-          key: i,
-          className: "list-items-group d-flex justify-content-between"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, e.uc.nombre, " / Tray. ", e.uc.trayecto), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-trash hover",
-          onClick: function onClick() {
-            return _this7.delItem(e.id, "prela");
-          }
-        }));
-      }))) : null))) : null) : null, section === 1 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "m-3 rounded border border-dark w-25 p-2"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group mb-3"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        type: "text",
-        className: "form-control",
-        placeholder: "Agregar Secci\xF3n...",
-        value: nombreSeccion,
-        onChange: function onChange(e) {
-          return _this7.changeUniqueState({
-            nombreSeccion: e.target.value
-          });
-        }
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "input-group-append"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        onClick: function onClick() {
-          return _this7.addItem("seccion");
+        }).map(function (e, i) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+              value: e.id,
+              key: i
+            }, e.nombre, " / Tray. ", e.trayecto)
+          );
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group-append"
         },
-        className: "btn btn-outline-success",
-        type: "button"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-        className: "fa fa-plus"
-      })))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
-        className: "table table-borderless"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, carreras[carreras_id].secciones.map(function (e, i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
-          key: i
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, e.nombre)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "btn-group w-100"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "btn btn-sm"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-pencil",
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           onClick: function onClick() {
-            return _this7.updItem(e.id, "seccion");
+            return _this7.addItem("prela");
+          },
+          disabled: ucSelectPrela !== "null" && uc.filter(function (e) {
+            return carreras[carreras_id].categorias.map(function (e) {
+              return e.id;
+            }).indexOf(e.id_categoria) !== -1;
+          }).length ? false : true,
+          className: "btn btn-outline-success",
+          type: "button"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-plus"
+        })))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
+          className: "list-group"
+        }, carreras[carreras_id].categorias[categoria_id].ucs[uc_id].prela.map(function (e, i) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+              key: i,
+              className: "list-items-group d-flex justify-content-between"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, e.uc.nombre, " / Tray. ", e.uc.trayecto),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-trash hover",
+              onClick: function onClick() {
+                return _this7.delItem(e.id, "prela");
+              }
+            }))
+          );
+        })))) : null)) : null) : null, section === 1 ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null,
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "m-3 rounded border border-dark w-25 p-2"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group mb-3"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          className: "form-control",
+          placeholder: "Agregar Secci\xF3n...",
+          value: nombreSeccion,
+          onChange: function onChange(e) {
+            return _this7.changeUniqueState({
+              nombreSeccion: e.target.value
+            });
           }
-        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-          className: "btn btn-sm"
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
-          className: "fa fa-trash",
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "input-group-append"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           onClick: function onClick() {
-            return _this7.delItem(e.id, "seccion");
-          }
-        })))));
-      }))))) : null))))))));
+            return _this7.addItem("seccion");
+          },
+          className: "btn btn-outline-success",
+          type: "button"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-plus"
+        })))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+          className: "table table-borderless"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, carreras[carreras_id].secciones.map(function (e, i) {
+          return (
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+              key: i
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, e.nombre)),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null,
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+              className: "btn-group w-100"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn btn-sm"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-pencil",
+              onClick: function onClick() {
+                return _this7.updItem(e.id, "seccion");
+              }
+            })),
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+              className: "btn btn-sm"
+            },
+            /*#__PURE__*/
+            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+              className: "fa fa-trash",
+              onClick: function onClick() {
+                return _this7.delItem(e.id, "seccion");
+              }
+            })))))
+          );
+        }))))) : null))))))))
+      );
     }
   }]);
 
   return App;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
+Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(
+/*#__PURE__*/
+react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /*!*****************************************************************!*\
   !*** multi ./resources/js/components/academico/ce.carreras.jsx ***!
   \*****************************************************************/

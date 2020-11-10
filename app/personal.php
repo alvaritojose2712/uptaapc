@@ -35,6 +35,7 @@ class personal extends Model
             "departamento_adscrito",
             "cargo_departamento",
         ];
+    
     public function hijos() { 
         return $this->hasMany('App\hijos_personal',"cedula_representante","cedula"); 
     }

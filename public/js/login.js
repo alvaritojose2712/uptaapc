@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -32260,74 +32260,121 @@ function (_Component) {
     value: function render() {
       var _this5 = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "login"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_handleNotification_jsx__WEBPACK_IMPORTED_MODULE_3__["Notification"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "wrap-login100"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
-        className: "login100-form validate-form",
-        onSubmit: this.submit
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "login100-form-logo"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-        src: this.loc + "/images/uptaapc/logo1.png",
-        alt: ""
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "login100-form-title pt-3 pb-3"
-      }, "Iniciar Sesi\xF3n"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "wrap-input100 validate-input",
-        "data-validate": "Introduzca Usuario"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        className: "input100",
-        type: "text",
-        value: this.state.username,
-        name: "username",
-        onChange: function onChange(event) {
-          return _this5.changeUniqueState({
-            username: event.target.value
-          });
+      return (
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "login"
         },
-        placeholder: "Usuario",
-        required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "focus-input100",
-        "data-placeholder": "U"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "wrap-input100 validate-input",
-        "data-validate": "Introduzca Contrase\xF1a"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        className: "input100",
-        type: "password",
-        value: this.state.pass,
-        name: "pass",
-        onChange: function onChange(event) {
-          return _this5.changeUniqueState({
-            pass: event.target.value
-          });
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_handleNotification_jsx__WEBPACK_IMPORTED_MODULE_3__["Notification"], null),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "wrap-login100"
         },
-        placeholder: "Contrase\xF1a",
-        required: true
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "focus-input100",
-        "data-placeholder": "C"
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "container-login100-form-btn"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        className: "login100-form-btn"
-      }, "Iniciar")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_cargando__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        active: this.state.activeLoading
-      }))));
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+          className: "login100-form validate-form",
+          onSubmit: this.submit
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "login100-form-logo"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          src: this.loc + "/images/uptaapc/logo1.png",
+          alt: ""
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "login100-form-title pt-3 pb-3"
+        }, "Iniciar Sesi\xF3n"),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "wrap-input100 validate-input",
+          "data-validate": "Introduzca Usuario"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          className: "input100",
+          type: "text",
+          value: this.state.username,
+          name: "username",
+          onChange: function onChange(event) {
+            return _this5.changeUniqueState({
+              username: event.target.value
+            });
+          },
+          placeholder: "Usuario",
+          required: true
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "focus-input100",
+          "data-placeholder": "U"
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "wrap-input100 validate-input",
+          "data-validate": "Introduzca Contrase\xF1a"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          className: "input100",
+          type: "password",
+          value: this.state.pass,
+          name: "pass",
+          onChange: function onChange(event) {
+            return _this5.changeUniqueState({
+              pass: event.target.value
+            });
+          },
+          placeholder: "Contrase\xF1a",
+          required: true
+        }),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "focus-input100",
+          "data-placeholder": "C"
+        })),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "container-login100-form-btn"
+        },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          className: "login100-form-btn"
+        }, "Iniciar")),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_cargando__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          active: this.state.activeLoading
+        }))),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "text-muted mt-4 text-center"
+        }, "Powered by",
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null),
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          src: "/images/sinapsis/sinapsis.svg",
+          alt: "logo sinapsis",
+          height: "50px"
+        })))
+      );
     }
   }]);
 
   return App;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
+Object(react_dom__WEBPACK_IMPORTED_MODULE_1__["render"])(
+/*#__PURE__*/
+react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(App, null), document.getElementById('appreact'));
 
 /***/ }),
 
-/***/ 8:
+/***/ 12:
 /*!***********************************************************!*\
   !*** multi ./resources/js/components/academico/login.jsx ***!
   \***********************************************************/

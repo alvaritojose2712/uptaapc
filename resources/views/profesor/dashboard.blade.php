@@ -1,6 +1,7 @@
 @extends('layouts.app')
-@section('content')
-@include('profesor.nav')
-
+@section('nav')
+	@include("profesor.nav")
 @endsection
-
+@section('content')
+		<script src="{{ asset('js/profesor.dashboard.js') }}"></script>
+@endsection

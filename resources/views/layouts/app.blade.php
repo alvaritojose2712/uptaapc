@@ -49,7 +49,12 @@
                                 <a class="dropdown-item bg-success text-light">Verificado</a>
                             @else
                                 <a class="dropdown-item bg-primary text-light">En espera</a>
+                                <a class="dropdown-item" href="/estudiante/modificar">Modificar mis datos <i className="fa fa-pencil hover pointer"></i></a>
                             @endif
+                                <a class="dropdown-item" href="/estudiante/constancia" target="_blank">Constancia de estudio <i className="fa fa-download hover pointer"></i></a>
+
+
+                            
                         @endif
                         <a class="dropdown-item text-muted" href="#">
                             

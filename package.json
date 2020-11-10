@@ -31,6 +31,7 @@
         "audit": "0.0.6",
         "chart.js": "^2.7.3",
         "cleave.js": "^1.4.7",
+        "clonedeep": "^2.0.0",
         "fix": "0.0.6",
         "font-awesome": "^4.7.0",
         "js-cookie": "^2.2.0",

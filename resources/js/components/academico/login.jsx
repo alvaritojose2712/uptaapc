@@ -95,6 +95,10 @@ class App extends Component{
 						
 					</form>
 				</div>
+				<span className="text-muted mt-4 text-center">
+					Powered by<br/>
+					<img src="/images/sinapsis/sinapsis.svg" alt="logo sinapsis" height="50px"/>
+				</span>
 			</div>
 		);
 	}

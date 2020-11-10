@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import ReactDOM, {render} from 'react-dom';
 import {Headestudiante,Generalestudiante} from './estudiante/head.estudiante.jsx';
+import {formatCedula,searchParams} from '../../assets/custom.js'
+
 import Notasestudiante from './estudiante/estudiante.notas.jsx';
-import EstudiantesList from './ce.estudiantesList.jsx';
 
 import {handleNotification,Notification} from './handleNotification.jsx';
 
 
 
+const loc = window.location.origin
 
 
 
@@ -35,13 +37,13 @@ class App extends Component{
 			filtro:"todos",
 			busqueda:"",
 		}
-		this.loc = window.location.origin
 		this.getApiData = this.getApiData.bind(this)
 
 		this.changeState = this.changeState.bind(this)
 		this.getIdEstudiante = this.getIdEstudiante.bind(this)
 		this.verificar = this.verificar.bind(this)
 		this.calcNum = this.calcNum.bind(this)
+		this.filtrado = this.filtrado.bind(this)
 
 
 
@@ -101,6 +103,30 @@ class App extends Component{
 			inscripcionpen:recalc.filter(e=>!e.inscrito).length, 
 		});
 	}
+	filtrado(estudiante,type=null){
+		if (!type) {
+			type = this.state.filtro
+		}
+		switch(type){
+			case "todos":
+				return true
+			break;
+
+			case "verificados":
+				return estudiante.verificado?true:false
+			break;
+
+			case "porverificar":
+				return !estudiante.verificado&&estudiante.inscrito?true:false
+
+			break;
+
+			case "inscripcionpen":
+
+				return !estudiante.inscrito?true:false
+			break;
+		}
+	}
 
 
 	
@@ -125,7 +151,13 @@ class App extends Component{
 		return(
 			<div className="container-fluid">
 				<div className="row">
-					<div className="col-4">
+					<div className="col p-4">
+						<h3>Gestión de</h3>
+						<h1>Estudiantes</h1>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-4 mh-500">
 						<div className="form-group">
 							<input type="text" className="form-control" placeholder="Buscar..." onChange={event=>this.changeState({busqueda:event.target.value})}/>
 							<hr/>
@@ -136,12 +168,44 @@ class App extends Component{
 								<h6 className={("hover d-inline mr-2 ")+(filtro=="inscripcionpen"?"h4":"")} onClick={()=>this.changeState({filtro:"inscripcionpen"})}><span className="badge alert-danger">Inscripción pendiente {inscripcionpen}</span></h6>
 							<hr/>
 						</div>
-						<EstudiantesList estudiantes={estudiantes} loc={this.loc} getIdEstudiante={this.getIdEstudiante} filtro={filtro} busqueda={busqueda}/>
+
+						<div>
+							<div className="tnz-file-tree">
+								{Object.entries(estudiantes).map((carrera,indexCarrera)=>
+									<label className="tnz-file-tree-item year" key={indexCarrera}>
+										<input className="tnz-file-tree-cb" type="checkbox"/>
+				        		<span className="tnz-file-tree-label">{carrera[0]} <span className="badge alert-primary">{carrera[1].filter(estudiante=>(searchParams(busqueda,estudiante,["nombre","apellido","cedula"])&&this.filtrado(estudiante))).length}</span></span>
+										<div className="tnz-file-tree-branches">
+											<label>
+												<table className="table table-borderless">
+													<tbody>
+													{	
+														carrera[1].map((estudiante,indexEstudiante)=>
+															(searchParams(busqueda,estudiante,["nombre","apellido","cedula"])&&this.filtrado(estudiante))
+															&&
+															<tr data-index={indexEstudiante} key={indexEstudiante} data-carrera={carrera[0]} onClick={this.getIdEstudiante} className={(id_carrera==carrera[0]&&id_estudiante==indexEstudiante?"table-dark":"")+" hover"}>
+																<td>
+																	<img src={`${loc}/${estudiante.file_foto}`} className={("mr-1 img-sm border ")+(estudiante.verificado?"border-success":(estudiante.inscrito?"border-warning":"border-danger"))} />
+																</td>
+																<td className="table-nombre-estudiante">{estudiante.nombre} {estudiante.apellido}</td>
+																<td className="table-cedula-estudiante">{formatCedula(estudiante.cedula)}</td>
+																<td className="table-cedula-estudiante">{estudiante.nombrecarrera?estudiante.nombrecarrera.nombre:"Sin carrera"}</td>
+													  	</tr>
+														)
+													}
+													</tbody>
+												</table>
+											</label>
+										</div>
+									</label>
+								)}
+							</div>
+						</div>
 					</div>
 					<div className="col">
 						{id_carrera!==null&&id_estudiante!==null&&estudiantes[id_carrera][id_estudiante]&&
 							<React.Fragment>
-									<Headestudiante estudiante={estudiantes[id_carrera][id_estudiante]} loc={this.loc}/>
+									<Headestudiante estudiante={estudiantes[id_carrera][id_estudiante]} loc={loc}/>
 									<div className="mb-2 mt-2 text-right">
 										{!estudiantes[id_carrera][id_estudiante].inscrito?
 										<button className="btn btn-danger"><i className="fa fa-times"></i> Pendiente formalizar inscripción</button>
@@ -167,7 +231,7 @@ class App extends Component{
 										<button className={"btn btn-"+(viewE===0?"success":"primary")} onClick={()=>this.changeState({viewE:0})}>General</button>
 										<button className={"btn btn-"+(viewE===1?"success":"primary")} onClick={()=>this.changeState({viewE:1})}>Notas</button>
 									</div>
-								{viewE===0&&<Generalestudiante estudiante={estudiantes[id_carrera][id_estudiante]} loc={this.loc}/>}
+								{viewE===0&&<Generalestudiante estudiante={estudiantes[id_carrera][id_estudiante]} loc={loc}/>}
 								{viewE===1&&<Notasestudiante	estudiante={estudiantes[id_carrera][id_estudiante]} />}
 							</React.Fragment>
 						}
@@ -179,34 +243,3 @@ class App extends Component{
 }
 render(<App/>,document.getElementById('appreact'));
 
-
-// <h3>Estudiantes</h3>
-// <div className="form-group-search">
-// 	<input type="text" placeholder="Buscar..." onChange={e=>this.getApiData(e,"/controlEstudios/estudiantes","estudiantes")} className="form-control"/>
-// </div>
-// <div className="tnz-file-tree">	
-// 	{Object.entries(estudiantes).map((carrera,i)=>
-// 		// searchuc===""||uc[0].toString().substr(0,searchuc.length).toLowerCase()===searchuc.toLowerCase()?
-// 		<label className="tnz-file-tree-item year" key={i}>
-// 			<input className="tnz-file-tree-cb" type="checkbox"/>
-// 			<span className="tnz-file-tree-label hover">{carrera[0]}</span>
-// 			<div  className="tnz-file-tree-branches">
-// 				<label>
-// 					<table className="table table-borderless">
-// 						<tbody>
-// 						{carrera[1].map((estudiante,i)=>
-// 					  	<tr key={estudiante.id} onClick={()=>this.changeState({id_estudiante:i,id_carrera:carrera[0]})} className={(id_estudiante===i&&"alert-success")+" hover"}>
-// 				  			<td><div className="mr-1 img-sm" style={{backgroundImage: `url('${this.loc}/${estudiante.file_foto}')` }}></div></td>
-// 				  			<td>{estudiante.nombre} {estudiante.apellido}</td>
-// 				  			<td>{estudiante.cedula}</td>
-// 				  			<td>{estudiante.nombrecarrera.nombre}</td>
-// 					  	</tr>
-// 						)}
-// 						</tbody>
-// 					</table>
-// 				</label>
-// 			</div>
-// 		</label>
-// 		// :null
-// 	)}
-// </div>

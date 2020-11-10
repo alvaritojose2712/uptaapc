@@ -53,8 +53,13 @@ class LoginController extends Controller
     {
         try {
 
-           
-            $d = personal::with("nombrecarrera")->where("cedula","=",$req->username)->orWhere("correo","=",$req->username)->first();
+            $d = personal::with("nombrecarrera")
+            ->where(function($query) use ($req){
+                $query->orWhere('nombre', $req->username);
+                $query->orWhere('correo', $req->username);
+                $query->orWhere('cedula', $req->username);
+            })
+            ->first();
             
             if ($d&&Hash::check($req->pass, $d->password)) {
                 \App\Traits\RestoreSession::restoreSession($d);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\personal;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Storage;
 use Response;
 
 
@@ -22,50 +23,105 @@ class personalController extends Controller
             foreach (["id","cedula","apellido","nombre"] as $val) {
                 $q->orWhere($val,"LIKE",$req->q."%");
             }
-        })->take(10)->orderBy("created_at","desc")->get();
+        })->orderBy("created_at","desc")->get();
         
         return Response::json( $data );
     }
     public function store(Request $req){
-        try {
-            $c = new personal;
-            // $c->id_uc = $req->id_uc;
-            // $c->id_profesor = $req->id_profesor;
-            // $c->id_estudiante = $req->id_estudiante;
-            // $c->id_seccion = $req->id_seccion;
-            $c->save();
+        try{
+            // $this->validate($req, [
+            //     'file_foto' => 'nullable|sometimes|image|mimes:jpg,jpeg,png',
+            //     'file_cedula' => 'nullable|sometimes|image|mimes:jpg,jpeg,png',
+            // ]);
             
-            return Response::json( ["msj"=>"¡Operación exitosa!"] );
-        } catch (\Exception $e) {
-            return Response::json( ["error"=>$e->getMessage()] );
-        }
-
-    }
-    
-    public function update(Request $req){
-        try {
-            $c = personal::find($req->id);
-            // $c->id_uc = $req->id_uc;
-            // $c->id_profesor = $req->id_profesor;
-            // $c->id_estudiante = $req->id_estudiante;
-            // $c->id_seccion = $req->id_seccion;
-            $c->save();
+            if ($req->modo==="update") {
+                $cli = personal::find($req->idupdate);
+            }else{
+                $cli = new personal;
+            }
+           
             
-            return Response::json( ["msj"=>"¡Operación exitosa!"] );
-        } catch (\Exception $e) {
-            return Response::json( ["error"=>$e->getMessage()] );
-        }
-    }
+            $cli->nombre = $req->nombre;
+            
+            $cli->nombre = $req->nombre;
+            $cli->apellido = $req->apellido;
+            $cli->cedula = $req->cedula;
+            $cli->n_carnet = $req->n_carnet;
+            $cli->nacionalidad = $req->nacionalidad;
+            $cli->genero = $req->genero;
+            $cli->fecha_nacimiento = $req->fecha_nacimiento;
+            $cli->estado_civil = $req->estado_civil;
+            $cli->direccion = $req->direccion;
+            $cli->telefono_1 = $req->telefono_1;
+            $cli->telefono_2 = $req->telefono_2;
+            $cli->correo = $req->correo;
+            $cli->cuenta_bancaria = $req->cuenta_bancaria;
+            $cli->observacion = $req->observacion;
+            $cli->calzado = $req->calzado;
+            $cli->gorra = $req->gorra;
+            $cli->camisa = $req->camisa;
+            $cli->pantalon = $req->pantalon;
+            $cli->trabaja = $req->trabaja;
+            $cli->categoria = $req->categoria;
+            $cli->cargo = $req->cargo;
+            $cli->dedicacion = $req->dedicacion;
+            $cli->estado = $req->estado;
+            $cli->estatus = $req->estatus;
+            $cli->grado_instruccion = $req->grado_instruccion;
+            $cli->departamento_adscrito = $req->departamento_adscrito;
+            $cli->cargo_departamento = $req->cargo_departamento;
+            $cli->profesion = $req->profesion;
+            $cli->fecha_ingreso = $req->fecha_ingreso;
+            $cli->caja_ahorro = $req->caja_ahorro;
+            $cli->antiguedad_otros_ieu = $req->antiguedad_otros_ieu;
+            $cli->hrs_nocturnas = $req->hrs_nocturnas;
+            $cli->hrs_feriadas = $req->hrs_feriadas;
+            $cli->hrs_diurnas = $req->hrs_diurnas;
+            $cli->hrs_feriadas_nocturnas = $req->hrs_feriadas_nocturnas;
 
-    public function destroy(Request $req){
-        try {
-            personal::find($req->id)->delete();
-            return Response::json( ["msj"=>"¡Operación exitosa!"] );
+            // $cli->password = Hash::make($req->password);
+
+           
+            
+            
+            if ($cli->save()) {
+                $path = "public/docsPersonal/".$cli->id;
+                $obj_files = personal::find($cli->id);
+
+                if ($req->hasFile('file_foto')) {
+                    $obj_files->file_foto = str_replace("public","storage",$req->file('file_foto')->storeAs($path,"file_foto.".$req->file('file_foto')->extension()));
+                }
+                if ($req->hasFile('file_cedula')) {
+                    $obj_files->file_cedula = str_replace("public","storage",$req->file('file_cedula')->storeAs($path,"file_cedula.".$req->file('file_cedula')->extension()));
+                }
+                $obj_files->save();
+
+                // foreach ($req->hijos as $e) {
+                //     $h = new hijos_personal;
+
+                //     parentesco
+                //     nombre
+                //     apellido
+                //     genero
+                //     fecha_nacimiento
+                //     cedula
+                //     correo
+                //     telefono_1
+                //     estudia
+                //     discapacidad
+                //     cedula_representante
+                // }
+                
+            }
+                
+                
+            return Response::json( ["estado"=>true,"msj"=>"¡Éxito!"] );
         } catch (\Exception $e) {
-            return Response::json( ["error"=>$e->getMessage()] );
+            return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
         }
 
     }
+   
     // public function index()
     // {
     //     return personal::with("hijos")->get();
@@ -104,13 +160,10 @@ class personalController extends Controller
     //  * @param  int  $id
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function show($id)
-    // {
-    //     return personal::with("hijos")->where("cedula","LIKE","$id%")
-    //         ->orWhere("nombre","LIKE","$id%")
-    //         ->orWhere("apellido","LIKE","$id%")
-    //         ->get();
-    // }
+    public function show($id)
+    {
+        return personal::with("hijos")->find(session()->get("id"));
+    }
 
     // /**
     //  * Show the form for editing the specified resource.
@@ -124,62 +177,32 @@ class personalController extends Controller
     //     //     ->with('user', personal::find($id));
     // }
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, $id)
-    // {
-    //     try{
-    //         $per = personal::find($id);
-    //         #Actualizar representante
-    //         $per->update($request->data_padre);
-    //         #Ingresar hijos
-    //         $per->hijos()->createMany(array_filter($request->hijos,function($val){
-    //             return !isset($val['id'])&&!isset($val['remove']);
-    //         }));
-            
-    //         #Actualizar hijos existentes
-    //         $hijos_old = array_filter($request->hijos,function($val){
-    //             return isset($val['id'])&&isset($val['type'])&&!isset($val['remove']);
-    //         });
-    //         foreach ($hijos_old as $val) {
-    //             unset($val['type']);
-    //             unset($val['cedula_representante']);
-    //             $per->hijos()->where("id",$val['id'])->update($val);
-    //         }
-
-    //         #Borrar hijos
-    //         $hijos_remove = array_filter($request->hijos,function($val){
-    //             return isset($val['remove']);
-    //         });
-    //         foreach ($hijos_remove as $val) {
-    //             $per->hijos()->where("id",$val['id'])->delete();
-    //         }
-
-    //         return response(["code"=>200,"msj"=>"¡Éxito al editar!"],200);
-    //     }catch(\Exception $e){
-    //        return response(["code"=>500,"msj"=>$e->getMessage()],200);
-    //     }
-    // }
-
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  int  $id
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy($id)
-    // {
+   
+    public function destroy(Request $req)
+    {
         
-    //     try{
-    //         personal::find($id)->delete();
-    //         return response(["code"=>200,"msj"=>"¡Éxito al eliminar!"],200);
-    //     }catch(\Exception $e){
-    //        return response(["code"=>500,"msj"=>$e->getMessage()],200);
-    //     }
-    // }
+       try{
+            $obj = personal::find($req->id);
+
+            $file_foto =  str_replace("storage","public",$obj->file_foto);
+            $file_cedula =  str_replace("storage","public",$obj->file_cedula);
+            $file_sintesis =  str_replace("storage","public",$obj->file_sintesis);
+            $file_fondo_negro =  str_replace("storage","public",$obj->file_fondo_negro);
+            $file_notas =  str_replace("storage","public",$obj->file_notas);
+
+            if ($obj->delete()) {
+
+                Storage::delete($file_foto);
+                Storage::delete($file_cedula);
+                Storage::delete($file_fondo_negro);
+                Storage::delete($file_sintesis);
+                Storage::delete($file_notas);
+
+                Storage::deleteDirectory("public/docsPersonal/".$req->id);
+            }
+            return Response::json( ["estado"=>true,"msj"=>"¡Éxito!"] );
+        }catch(\Exception $e){
+            return Response::json( ["estado"=>false,"error"=>$e->getMessage()] );
+        }
+    }
 }

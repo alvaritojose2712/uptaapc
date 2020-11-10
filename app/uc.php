@@ -12,4 +12,7 @@ class uc extends Model
     public function categoria() { 
         return $this->hasOne('App\categoria',"id","id_categoria"); 
     }
+    public function escala() { 
+        return $this->hasOne('App\escala_evaluacion',"id","id_escala"); 
+    }
 }

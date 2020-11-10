@@ -3,12 +3,16 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/js/ce.carreras.js": "/js/ce.carreras.js",
+    "/js/ce.dashboard.js": "/js/ce.dashboard.js",
     "/js/ce.estudiantes.js": "/js/ce.estudiantes.js",
     "/js/ce.trayecto.js": "/js/ce.trayecto.js",
     "/js/estudiante.primerainscripcion.js": "/js/estudiante.primerainscripcion.js",
     "/js/estudiantes.academico.js": "/js/estudiantes.academico.js",
+    "/js/estudiantes.dashboard.js": "/js/estudiantes.dashboard.js",
     "/js/login.js": "/js/login.js",
     "/js/pre-inscripcion.js": "/js/pre-inscripcion.js",
     "/js/presupuesto.cruds.js": "/js/presupuesto.cruds.js",
-    "/js/profesor.cargarnotas.js": "/js/profesor.cargarnotas.js"
+    "/js/profesor.cargarnotas.js": "/js/profesor.cargarnotas.js",
+    "/js/profesor.dashboard.js": "/js/profesor.dashboard.js",
+    "/js/rrhh.personal.js": "/js/rrhh.personal.js"
 }

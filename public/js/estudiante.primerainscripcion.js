@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 14);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -36055,6 +36055,7 @@ function _setPrototypeOf(o, p) {
 
 
 
+var loc = window.location.pathname;
 
 var App =
 /*#__PURE__*/
@@ -36069,7 +36070,7 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this));
     _this.state = {
       // modo:"trabajador",//trabajador|estudiante
-      modo: "estudiante",
+      modo: loc.includes("requisitos") ? "estudiante" : "trabajador",
       //trabajador|estudiante
       nombrecarrera: "",
       user: {
@@ -36151,7 +36152,8 @@ function (_Component) {
       cargo_departamentoArr: [],
       carreraArr: [],
       idInSession: null,
-      activeLoading: false
+      activeLoading: false,
+      updateOrCreate: "create"
     };
     _this.loc = window.location.origin;
     _this.getApiData = _this.getApiData.bind(_assertThisInitialized(_this));
@@ -36209,19 +36211,62 @@ function (_Component) {
           });
         }
       });
-      axios.post("getAuthId").then(function (data) {
+      axios.post("/getAuthId").then(function (data) {
         if (data.data.id) {
+          var obj = {
+            user: _objectSpread({}, _this2.state.user, {
+              nombre: data.data.nombre,
+              apellido: data.data.apellido,
+              cedula: data.data.cedula,
+              telefono_1: data.data.telefono_1,
+              correo: data.data.correo
+            }),
+            nombrecarrera: data.data.nombrecarrera ? data.data.nombrecarrera.nombre : ""
+          };
+
+          if (loc.includes("modificar")) {
+            obj.updateOrCreate = "update";
+            obj.user = _objectSpread({}, obj.user, {
+              n_carnet: data.data.n_carnet,
+              nacionalidad: data.data.nacionalidad,
+              genero: data.data.genero,
+              fecha_nacimiento: data.data.fecha_nacimiento,
+              estado_civil: data.data.estado_civil,
+              direccion: data.data.direccion,
+              telefono_2: data.data.telefono_2,
+              cuenta_bancaria: data.data.cuenta_bancaria,
+              observacion: data.data.observacion,
+              calzado: data.data.calzado,
+              gorra: data.data.gorra,
+              camisa: data.data.camisa,
+              pantalon: data.data.pantalon,
+              // file_cedula: data.data.file_cedula,
+              // file_foto: data.data.file_foto,
+              // file_notas: data.data.file_notas,
+              // file_fondo_negro: data.data.file_fondo_negro,
+              // file_sintesis: data.data.file_sintesis,
+              trabaja: data.data.trabaja,
+              categoria: data.data.categoria,
+              cargo: data.data.cargo,
+              dedicacion: data.data.dedicacion,
+              estado: data.data.estado,
+              estatus: data.data.estatus,
+              grado_instruccion: data.data.grado_instruccion,
+              departamento_adscrito: data.data.departamento_adscrito,
+              cargo_departamento: data.data.cargo_departamento,
+              profesion: data.data.profesion,
+              fecha_ingreso: data.data.fecha_ingreso,
+              caja_ahorro: data.data.caja_ahorro,
+              antiguedad_otros_ieu: data.data.antiguedad_otros_ieu,
+              hrs_nocturnas: data.data.hrs_nocturnas,
+              hrs_feriadas: data.data.hrs_feriadas,
+              hrs_diurnas: data.data.hrs_diurnas,
+              hrs_feriadas_nocturnas: data.data.hrs_feriadas_nocturnas
+            });
+          }
+
           _this2.setState(function (st) {
-            return {
-              user: _objectSpread({}, st.user, {
-                nombre: data.data.nombre,
-                apellido: data.data.apellido,
-                cedula: data.data.cedula,
-                telefono_1: data.data.telefono_1,
-                correo: data.data.correo
-              }),
-              nombrecarrera: data.data.nombrecarrera ? data.data.nombrecarrera.nombre : ""
-            };
+            return obj;
           });
         }
       });
@@ -36387,7 +36432,7 @@ function (_Component) {
         if (field === "hijos") val = JSON.stringify(val);
         formData.append(field, val);
       });
-      formData.append("type", "create");
+      formData.append("type", this.state.updateOrCreate);
       axios.post("/requisitos", formData, config).then(function (data) {
         _this6.setState({
           activeLoading: false
@@ -36475,7 +36520,20 @@ function (_Component) {
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "panel-pre-inscripcion"
+        }, this.state.updateOrCreate === "update" ?
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "btn-group"
         },
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          className: "btn btn-outline-primary",
+          href: "/estudiante"
+        }, "Inicio ",
+        /*#__PURE__*/
+        react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+          className: "fa fa-home"
+        }))) : null,
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
           onSubmit: this.submit
@@ -36505,7 +36563,7 @@ function (_Component) {
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
           src: this.loc + "/images/uptaapc/logo1.png",
           alt: ""
-        })), "Inscripci\xF3n ",
+        })), this.state.updateOrCreate === "update" ? "Modificar datos" : "Inscripción", " ",
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
           className: "badge badge-secondary m-2"
@@ -36556,8 +36614,7 @@ function (_Component) {
           type: "file",
           className: "form-control-file",
           name: "file_foto",
-          onChange: this.changeInput,
-          required: true
+          onChange: this.changeInput
         }),
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), file_foto ? "" :
@@ -36580,8 +36637,7 @@ function (_Component) {
           type: "file",
           className: "form-control-file",
           name: "file_cedula",
-          onChange: this.changeInput,
-          required: true
+          onChange: this.changeInput
         }),
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), file_cedula ? "" :
@@ -36606,8 +36662,7 @@ function (_Component) {
           type: "file",
           className: "form-control-file",
           name: "file_notas",
-          onChange: this.changeInput,
-          required: true
+          onChange: this.changeInput
         }),
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), file_notas ? "" :
@@ -36630,8 +36685,7 @@ function (_Component) {
           type: "file",
           className: "form-control-file",
           name: "file_fondo_negro",
-          onChange: this.changeInput,
-          required: true
+          onChange: this.changeInput
         }),
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), file_fondo_negro ? "" :
@@ -36654,8 +36708,7 @@ function (_Component) {
           type: "file",
           className: "form-control-file",
           name: "file_sintesis",
-          onChange: this.changeInput,
-          required: true
+          onChange: this.changeInput
         }),
         /*#__PURE__*/
         react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), file_sintesis ? "" :
@@ -37855,7 +37908,7 @@ var Notification = function Notification() {
 
 /***/ }),
 
-/***/ 10:
+/***/ 14:
 /*!***********************************************************************************!*\
   !*** multi ./resources/js/components/academico/estudiante.primerainscripcion.jsx ***!
   \***********************************************************************************/

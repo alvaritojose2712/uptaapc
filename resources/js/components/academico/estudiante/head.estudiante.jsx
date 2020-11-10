@@ -13,8 +13,11 @@ export const Headestudiante = prop => (
 					<h2 className="">
 						{ prop.estudiante.nombre } { prop.estudiante.apellido }
 					</h2>
-					<h3><span className="badge badge-secondary">{ prop.estudiante.nombrecarrera.nombre }</span></h3>
-					
+					<h3><span className="badge badge-secondary">{prop.estudiante.nombrecarrera?prop.estudiante.nombrecarrera.nombre:"Sin carrera"}</span></h3>
+					{prop.estudiante.verificado
+						?<h5 className=" badge-success badge">Verificado</h5>
+						:<h5 className=" badge-primary badge">Pendiente de verificación</h5>
+					}
 				</div>
 			</div>
 		</div>

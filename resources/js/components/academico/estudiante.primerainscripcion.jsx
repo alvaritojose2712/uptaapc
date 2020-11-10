@@ -6,6 +6,7 @@ import cloneDeep from 'lodash/cloneDeep';
 
 
 import {handleNotification,Notification} from './handleNotification.jsx';
+const loc = window.location.pathname;
 
 
 class App extends Component{
@@ -13,7 +14,7 @@ class App extends Component{
 		super()
 		this.state = {
 			// modo:"trabajador",//trabajador|estudiante
-			modo:"estudiante",//trabajador|estudiante
+			modo:loc.includes("requisitos")?"estudiante":"trabajador",//trabajador|estudiante
 			nombrecarrera:"",
 			user:{
 				// Globals	
@@ -93,6 +94,8 @@ class App extends Component{
 			idInSession:null,
 
 			activeLoading:false,
+
+			updateOrCreate:"create",
 		}
 		this.loc = window.location.origin
 		this.getApiData = this.getApiData.bind(this)
@@ -105,7 +108,7 @@ class App extends Component{
 	}
 	componentDidMount() {
 
-
+		
 		axios
 		.get("/config/valores")
 		.then(data=>{
@@ -127,14 +130,12 @@ class App extends Component{
 			}
 		})
 
-
-
 		axios
-		.post("getAuthId")
+		.post("/getAuthId")
 		.then(data=>{
 			if (data.data.id) {
-				this.setState(st=>({
-					user: {...st.user, 
+				let obj = {
+					user: {...this.state.user, 
 						nombre:data.data.nombre,
 						apellido:data.data.apellido,
 						cedula:data.data.cedula,
@@ -142,7 +143,54 @@ class App extends Component{
 						correo:data.data.correo,
 					},
 					nombrecarrera:data.data.nombrecarrera?data.data.nombrecarrera.nombre:"",
-				}));
+				}
+
+				if (loc.includes("modificar")) {
+					
+					obj.updateOrCreate = "update"
+
+					obj.user = {
+						...obj.user,
+						n_carnet: data.data.n_carnet,
+						nacionalidad: data.data.nacionalidad,
+						genero: data.data.genero,
+						fecha_nacimiento: data.data.fecha_nacimiento,
+						estado_civil: data.data.estado_civil,
+						direccion: data.data.direccion,
+						telefono_2: data.data.telefono_2,
+						cuenta_bancaria: data.data.cuenta_bancaria,
+						observacion: data.data.observacion,
+						calzado: data.data.calzado,
+						gorra: data.data.gorra,
+						camisa: data.data.camisa,
+						pantalon: data.data.pantalon,
+						// file_cedula: data.data.file_cedula,
+						// file_foto: data.data.file_foto,
+						// file_notas: data.data.file_notas,
+						// file_fondo_negro: data.data.file_fondo_negro,
+						// file_sintesis: data.data.file_sintesis,
+						trabaja: data.data.trabaja,
+						categoria: data.data.categoria,
+						cargo: data.data.cargo,
+						dedicacion: data.data.dedicacion,
+						estado: data.data.estado,
+						estatus: data.data.estatus,
+						grado_instruccion: data.data.grado_instruccion,
+						departamento_adscrito: data.data.departamento_adscrito,
+						cargo_departamento: data.data.cargo_departamento,
+						profesion: data.data.profesion,
+						fecha_ingreso: data.data.fecha_ingreso,
+						caja_ahorro: data.data.caja_ahorro,
+						antiguedad_otros_ieu: data.data.antiguedad_otros_ieu,
+						hrs_nocturnas: data.data.hrs_nocturnas,
+						hrs_feriadas: data.data.hrs_feriadas,
+						hrs_diurnas: data.data.hrs_diurnas,
+						hrs_feriadas_nocturnas: data.data.hrs_feriadas_nocturnas,
+					}
+				}
+
+				
+				this.setState(st=>(obj));
 			}
 		})
 	}
@@ -271,7 +319,7 @@ class App extends Component{
 			if ( field === "hijos") val = JSON.stringify(val)
 			formData.append(field,val)
 		})
-		formData.append("type","create")
+		formData.append("type",this.state.updateOrCreate)
 		axios
 		.post("/requisitos",formData,config)
 		.then((data)=>{
@@ -366,6 +414,13 @@ class App extends Component{
 			<div className="wraper-panel-pre-inscripcion">
 				<Notification/>
 				<div className="panel-pre-inscripcion">
+				{this.state.updateOrCreate==="update"?
+					<div className="btn-group">
+						<a className="btn btn-outline-primary" href="/estudiante">
+							Inicio <i className="fa fa-home"></i>
+						</a>
+					</div>
+				:null}
 					<form onSubmit={this.submit}>
 						<div className="boton-fixed">
 							<button
@@ -378,7 +433,7 @@ class App extends Component{
 							<div className="header-register-logo">
 								<img src={this.loc+"/images/uptaapc/logo1.png"} alt=""/>
 							</div>
-							Inscripción <span className="badge badge-secondary m-2">{nombrecarrera}</span>
+							{this.state.updateOrCreate==="update"?"Modificar datos":"Inscripción"} <span className="badge badge-secondary m-2">{nombrecarrera}</span>
 						</header>
 						
 						<Cargando active={this.state.activeLoading}/>
@@ -397,7 +452,7 @@ class App extends Component{
 											<img src={file_foto?URL.createObjectURL(file_foto):""} alt="" className="m-2 img-md bg-dark"/>
 										</div>
 
-										<input type="file" className="form-control-file" name="file_foto" onChange={this.changeInput} required/>
+										<input type="file" className="form-control-file" name="file_foto" onChange={this.changeInput} />
 										<hr/>
 										{(file_foto?"":<h5 className="text-danger">Seleccione un archivo .png | .jpg | .pdf | Max: 500Kb</h5>)}
 									</td>
@@ -406,7 +461,7 @@ class App extends Component{
 								<tr>
 									<td className="text-right font-weight-bold">Cédula escaneada</td>
 									<td className="">
-										<input type="file" className="form-control-file" name="file_cedula" onChange={this.changeInput} required/>
+										<input type="file" className="form-control-file" name="file_cedula" onChange={this.changeInput} />
 										<hr/>
 										{(file_cedula?"":<h5 className="text-danger">Seleccione un archivo .png | .jpg | .pdf | Max: 500Kb</h5>)}
 									</td>
@@ -417,7 +472,7 @@ class App extends Component{
 										<tr>
 											<td className="text-right font-weight-bold">Notas certificadas</td>
 											<td className="">
-												<input type="file" className="form-control-file" name="file_notas" onChange={this.changeInput} required/>
+												<input type="file" className="form-control-file" name="file_notas" onChange={this.changeInput} />
 												<hr/>
 												{(file_notas?"":<h5 className="text-danger">Seleccione un archivo .png | .jpg | .pdf | Max: 500Kb</h5>)}
 											</td>
@@ -426,7 +481,7 @@ class App extends Component{
 										<tr>
 											<td className="text-right font-weight-bold">Fondo negro del Título</td>
 											<td className="">
-												<input type="file" className="form-control-file" name="file_fondo_negro" onChange={this.changeInput} required/>
+												<input type="file" className="form-control-file" name="file_fondo_negro" onChange={this.changeInput} />
 												<hr/>
 												{(file_fondo_negro?"":<h5 className="text-danger">Seleccione un archivo .png | .jpg | .pdf | Max: 500Kb</h5>)}
 											</td>
@@ -438,7 +493,7 @@ class App extends Component{
 									<tr>
 										<td className="text-right font-weight-bold">Síntesis Curricular</td>
 										<td className="">
-											<input type="file" className="form-control-file" name="file_sintesis" onChange={this.changeInput} required/>
+											<input type="file" className="form-control-file" name="file_sintesis" onChange={this.changeInput} />
 											<hr/>
 											{(file_sintesis?"":<h5 className="text-danger">Seleccione un archivo .png | .jpg | .pdf | Max: 500Kb</h5>)}
 										</td>

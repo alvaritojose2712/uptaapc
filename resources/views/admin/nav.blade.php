@@ -1,5 +1,8 @@
 <ul class="nav justify-content-center">
   <li class="nav-item">
+    <a class="nav-link active" href="/admin">Inicio</a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link active" href="{{ route('ce.estudiantes.index') }}">Estudiantes</a>
   </li>
   <li class="nav-item dropdown">
@@ -14,7 +17,7 @@
     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">RR.HH</a>
     <div class="dropdown-menu">
       <a class="dropdown-item" href="{{ route('rrhh.personal') }}">Personal</a>
-      <a class="dropdown-item" href="/recursoshumanos/nomina/">Nómina</a>
+      <a class="dropdown-item" href="{{ route('nominas') }}">Nómina</a>
      
     </div>
   </li>
@@ -25,6 +28,4 @@
      
     </div>
   </li>
-  
-  
 </ul>
